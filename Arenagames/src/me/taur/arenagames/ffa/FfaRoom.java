@@ -43,6 +43,16 @@ public class FfaRoom extends Room {
 		
 	}
 	
+	public String getMapNameFancy() {
+		return FfaConfig.get().getString("ffa.maps." + this.getMapName() + ".info.map-name");
+		
+	}
+	
+	public String getMapAuthor() {
+		return FfaConfig.get().getString("ffa.maps." + this.getMapName() + ".info.author");
+		
+	}
+	
 	public String getWinningPlayer() {
 		String player = "";
 		boolean firstLoop = true;
@@ -211,6 +221,9 @@ public class FfaRoom extends Room {
 	public void startGame() {
 		for (Player p : this.getPlayers()) {
 			p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- THE GAME HAS STARTED! ---");
+			p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "Map: " + this.getMapNameFancy() + " by " + this.getMapAuthor());
+			p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- --------------------- ---");
+			
 			p.teleport(FfaConfig.getPossibleSpawnLocation(this));
 			scoreboard.put(p.getName(), 0);
 			

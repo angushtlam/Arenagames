@@ -75,7 +75,7 @@ public class FfaConfig {
 			
 		}
 		
-		return new Location(Bukkit.getWorld(w), x, y, z); 
+		return new Location(Bukkit.getWorld(w), x + 0.5, y, z + 0.5);
 	}
 	
 	public static Location getLobby() {
@@ -84,7 +84,7 @@ public class FfaConfig {
 		double y = get().getInt("ffa.lobby.y");
 		double z = get().getInt("ffa.lobby.z");
 		
-		return new Location(Bukkit.getWorld(w), x, y, z);
+		return new Location(Bukkit.getWorld(w), x + 0.5, y, z + 0.5);
 		
 	}
 	

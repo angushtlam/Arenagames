@@ -43,10 +43,13 @@ public class Config {
 		}
 		
 		FileConfiguration ffaConfig = FfaConfig.get();
-		ffaConfig.addDefault("example", false);
+		ffaConfig.addDefault("generate-default-config", false);
 		
-		if (ffaConfig.getBoolean("example")) {
-			ffaConfig.set("example", false);
+		if (ffaConfig.getBoolean("generate-default-config")) {
+			ffaConfig.set("generate-default-config", false);
+			
+			ffaConfig.addDefault("ffa.maps.edit.info.map-name", "Lame Arena");
+			ffaConfig.addDefault("ffa.maps.edit.info.author", "Taur and the Animals");
 			
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-0.spawn.world", "world");
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-0.spawn.x", -50.0);
@@ -131,7 +134,7 @@ public class Config {
 		double y = Arenagames.plugin.getConfig().getInt("global.lobby.y");
 		double z = Arenagames.plugin.getConfig().getInt("global.lobby.z");
 		
-		return new Location(Bukkit.getWorld(w), x, y, z);
+		return new Location(Bukkit.getWorld(w), x + 0.5, y, z + 0.5);
 		
 	}
 	

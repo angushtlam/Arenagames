@@ -54,11 +54,10 @@ public class RoomListener implements Listener {
 						((FfaRoom) room).resetRoom(true);
 						
 					}
-					
 				}
 				
 			} else { // Left the queue
-				if (room.getPlayers()[0] != null) {
+				if (room.getPlayers() != null) {
 					for (Player other : room.getPlayers()) {
 						other.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + p.getName() + " has left this queue.");
 					}
