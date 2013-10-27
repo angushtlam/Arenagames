@@ -98,10 +98,19 @@ public class FfaListener implements Listener {
 		FfaRoom room = (FfaRoom) r;
 		String roomId = room.getRoomId();
 		
+		Player[] other = room.getPlayers(); // Get players that are in the room before the player is added.
 		room.addPlayer(p);
 		Room.PLAYERS.put(p, roomId);
 		
 		p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You joined Free For All queue " + roomId + ". ");
+		
+		if (other != null) { // Make sure it wasn't empty before the player joined.
+			for (Player pl : other) {
+				pl.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + p.getName() + " joined your queue. Queue " + room.getPlayers().length + "/"
+						+ Config.getPlayerLimit(RoomType.FFA));
+				
+			}
+		}
 		
 		int needed = room.getPlayersInRoom();
 		if (needed > Config.getMinPlayersInWait(RoomType.FFA) - 1) {
