@@ -80,7 +80,7 @@ public class RoomCommand implements CommandExecutor {
 						Room.PLAYERS.remove(p);
 						room.removePlayer(p);
 						
-						if (room.getPlayers()[0] != null) {
+						if (room.getPlayers() != null) {
 							for (Player other : room.getPlayers()) {
 								other.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + p.getName() + " has left this queue.");
 								

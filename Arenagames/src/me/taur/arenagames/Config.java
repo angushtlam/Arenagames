@@ -1,5 +1,8 @@
 package me.taur.arenagames;
 
+import java.util.Arrays;
+import java.util.List;
+
 import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.util.RoomType;
 
@@ -67,6 +70,18 @@ public class Config {
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-2.spawn.z", 50.0);
 			
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-3.spawn.world", "world");
+			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-3.spawn.x", 50.0);
+			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-3.spawn.y", 70.0);
+			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-3.spawn.z", -50.0);
+			
+			ffaConfig.addDefault("ffa.maps.edit.items.kit-0.kit-name", "Fighter");
+			List<String> fighterItems = Arrays.asList("267:100|KNOCKBACK:1,DAMAGE_ALL:1#1", "272:100|FIRE_ASPECT:1#1", "299:241|DURABILITY:10#1", "357#32", "322:1#1");
+			ffaConfig.addDefault("ffa.maps.edit.items.kit-0.items", fighterItems);
+			
+			ffaConfig.addDefault("ffa.maps.edit.items.kit-1.kit-name", "Archer");
+			List<String> archerItems = Arrays.asList("261:100|ARROW_KNOCKBACK:3,ARROW_INFINITE:1#1", "", "303:241|DURABILITY:10#1", "357#32", "322:1#1");
+			ffaConfig.addDefault("ffa.maps.edit.items.kit-1.items", archerItems);
+			
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-3.spawn.x", 50.0);
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-3.spawn.y", 70.0);
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-3.spawn.z", -50.0);
