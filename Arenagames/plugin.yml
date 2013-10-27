@@ -1,0 +1,13 @@
+name: Arenagames
+version: 1.0.0
+description: Custom plugin for ProGaming.
+author: Taurhuzz
+website: http://taurhuzz.me
+
+main: me.taur.arenagames.Arenagames
+database: false
+
+commands:
+  queue:
+    description: Leaves the queue.
+    aliases: [q]
