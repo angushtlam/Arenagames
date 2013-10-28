@@ -77,13 +77,13 @@ public class Config {
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-3.spawn.y", 70.0);
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-3.spawn.z", -50.0);
 			
-			ffaConfig.addDefault("ffa.maps.edit.items.kit-0.kit-name", "Fighter");
+			ffaConfig.addDefault("ffa.items.kit-0.kit-name", "Fighter");
 			List<String> fighterItems = Arrays.asList("IRON_SWORD|KNOCKBACK:1,DAMAGE_ALL:1#1", "STONE_SWORD|FIRE_ASPECT:1#1", "IRON_CHESTPLATE:241|DURABILITY:10#1", "COOKIE#32", "GOLDEN_APPLE:1#1");
-			ffaConfig.addDefault("ffa.maps.edit.items.kit-0.items", fighterItems);
+			ffaConfig.addDefault("ffa.items.kit-0.items", fighterItems);
 			
-			ffaConfig.addDefault("ffa.maps.edit.items.kit-1.kit-name", "Archer");
+			ffaConfig.addDefault("ffa.items.kit-1.kit-name", "Archer");
 			List<String> archerItems = Arrays.asList("BOW|ARROW_KNOCKBACK:2,ARROW_INFINITE:1#1", "BOW:40|ARROW_KNOCKBACK:5#1", "CHAINMAIL_CHESTPLATE:241|DURABILITY:10#1", "COOKIE#32", "GOLDEN_APPLE:1#1");
-			ffaConfig.addDefault("ffa.maps.edit.items.kit-1.items", archerItems);
+			ffaConfig.addDefault("ffa.items.kit-1.items", archerItems);
 			
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-3.spawn.x", 50.0);
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-3.spawn.y", 70.0);

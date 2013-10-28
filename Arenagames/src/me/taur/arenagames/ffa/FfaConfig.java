@@ -96,12 +96,12 @@ public class FfaConfig {
 	}
 	
 	public static List<String> getKitItems(int kit) {
-		return get().getStringList("ffa.maps.edit.items.kit-" + kit + ".items");
+		return get().getStringList("ffa.items.kit-" + kit + ".items");
 		
 	}
 	
 	public static String getKitName(int kit) {
-		return get().getString("ffa.maps.edit.items.kit-" + kit + ".kit-name");
+		return get().getString("ffa.items.kit-" + kit + ".kit-name");
 		
 	}
 	
