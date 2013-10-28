@@ -1,5 +1,6 @@
 package me.taur.arenagames.util;
 
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -47,7 +48,6 @@ public class RoomScheduler {
 								}
 								
 								continue;
-								
 							}
 						}
 						
@@ -69,8 +69,8 @@ public class RoomScheduler {
 						if (waitcount > -1) {
 							room.setWaitTimer(waitcount - 1);
 							
-							if (waitcount == 0) {
-								// Game start
+							if (waitcount == 0) { // Game start
+								// What happens when the room is Free-For-All
 								if (room.getRoomType() == RoomType.FFA) {
 									FfaRoom r = (FfaRoom) room;
 									
@@ -80,6 +80,7 @@ public class RoomScheduler {
 										
 										// Fancy loop to make sure rooms are available and only 1 queue can join 1 arena.
 										int tries = 0;
+										Set<Integer> alreadyused = new HashSet<Integer>();
 										boolean breakloop = false;
 										while (!breakloop) {
 											if (tries == maps.size()) {
@@ -111,41 +112,67 @@ public class RoomScheduler {
 											}
 											
 											Random rand = new Random();
-											int map = rand.nextInt(maps.size());
+											int map = 0;
 											
-											boolean match = false;
-											for (Room vroom : Room.ROOMS.values()) {
-												if (vroom.getRoomType() == RoomType.FFA) {
-													FfaRoom froom = (FfaRoom) vroom;
-													if (froom.getMapName() == maps.toArray()[map]) {
-														match = true;
+											boolean tryfornew = true;
+											while (tryfornew) {
+												map = rand.nextInt(maps.size());
+												
+												if (!alreadyused.contains(map)) { // If the number is already checked, loop again.
+													boolean premium = r.isPremium();
+													String mapname = ((String) maps.toArray()[map]);
+													
+													if (premium) {
+														if (!FfaConfig.canPremiumPlayMap(mapname)) { // If the premium room cannot play the map
+															alreadyused.add(map);
+															tries++;
+															continue;
+															
+														}
+													} else {
+														if (!FfaConfig.canNormalPlayMap(mapname)) { // If the normal room cannot play the map
+															alreadyused.add(map);
+															tries++;
+															continue;
+															
+														}
+													}
+													
+													boolean match = false; // Make sure arenas are not used by more than 1 queue
+													for (Room vroom : Room.ROOMS.values()) {
+														if (vroom.getRoomType() == RoomType.FFA) {
+															FfaRoom froom = (FfaRoom) vroom;
+															if (froom.getMapName() == maps.toArray()[map]) {
+																match = true;
+																
+															}
+														}
+													}
+													
+													if (!match) { // Block of code to run when the game is really starting.
+														r.setMapName((String) maps.toArray()[map]);
+														r.startGame();
+														room.setGameInWaiting(false);
+														room.setGameInProgress(true);
+														breakloop = true;
+														tryfornew = false;
 														
 													}
+													
+													alreadyused.add(map);
+													tries++;
+													
 												}
 											}
-											
-											if (!match) {
-												r.setMapName((String) maps.toArray()[map]);
-												r.startGame();
-												room.setGameInWaiting(false);
-												room.setGameInProgress(true);
-												breakloop = true;
-												
-											}
-											
-											tries++;
 										}
 										
 									} else {
-										Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "An error has occured in " + room.getRoomId()
-												+ ": Maps cannot be loaded.");
-										Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Free For All match " + room.getRoomId()
-												+ " has ended.");
+										Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "An error has occured in " + room.getRoomId() + ": Maps cannot be loaded.");
+										Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Free For All match " + room.getRoomId() + " has ended.");
 										
 										r.resetRoom(true);
 										
 									}
-									
 								}
 								
 								continue;

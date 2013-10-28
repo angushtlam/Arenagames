@@ -26,12 +26,12 @@ public class Config {
 			for (int i = 0; i < gamemode.length; i++) {
 				String gm = gamemode[i];
 				config.addDefault("gamemode." + gm + ".enabled", true);
-				config.addDefault("gamemode." + gm + ".countdown.round-in-seconds", 60 * 5);
-				config.addDefault("gamemode." + gm + ".countdown.wait-in-seconds", 30);
+				config.addDefault("gamemode." + gm + ".countdown.round-in-seconds", 240);
+				config.addDefault("gamemode." + gm + ".countdown.wait-in-seconds", 45);
 				config.addDefault("gamemode." + gm + ".countdown.min-players-to-start-wait", 2);
 				config.addDefault("gamemode." + gm + ".rooms.normal", 2);
 				config.addDefault("gamemode." + gm + ".rooms.premium", 1);
-				config.addDefault("gamemode." + gm + ".player-limit", 24);
+				config.addDefault("gamemode." + gm + ".player-limit", 18);
 				
 			}
 			
@@ -51,8 +51,11 @@ public class Config {
 		if (ffaConfig.getBoolean("generate-default-config")) {
 			ffaConfig.set("generate-default-config", false);
 			
-			ffaConfig.addDefault("ffa.maps.edit.info.map-name", "Lame Arena");
+			ffaConfig.addDefault("ffa.maps.edit.info.map-name", "Llamarena");
 			ffaConfig.addDefault("ffa.maps.edit.info.author", "Taur and the Animals");
+			
+			ffaConfig.addDefault("ffa.maps.edit.info.premium-mode-pool", false);
+			ffaConfig.addDefault("ffa.maps.edit.info.normal-mode-pool", true);
 			
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-0.spawn.world", "world");
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-0.spawn.x", -50.0);
@@ -75,11 +78,11 @@ public class Config {
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-3.spawn.z", -50.0);
 			
 			ffaConfig.addDefault("ffa.maps.edit.items.kit-0.kit-name", "Fighter");
-			List<String> fighterItems = Arrays.asList("267:100|KNOCKBACK:1,DAMAGE_ALL:1#1", "272:100|FIRE_ASPECT:1#1", "299:241|DURABILITY:10#1", "357#32", "322:1#1");
+			List<String> fighterItems = Arrays.asList("IRON_SWORD|KNOCKBACK:1,DAMAGE_ALL:1#1", "STONE_SWORD|FIRE_ASPECT:1#1", "IRON_CHESTPLATE:241|DURABILITY:10#1", "COOKIE#32", "GOLDEN_APPLE:1#1");
 			ffaConfig.addDefault("ffa.maps.edit.items.kit-0.items", fighterItems);
 			
 			ffaConfig.addDefault("ffa.maps.edit.items.kit-1.kit-name", "Archer");
-			List<String> archerItems = Arrays.asList("261:100|ARROW_KNOCKBACK:3,ARROW_INFINITE:1#1", "", "303:241|DURABILITY:10#1", "357#32", "322:1#1");
+			List<String> archerItems = Arrays.asList("BOW|ARROW_KNOCKBACK:2,ARROW_INFINITE:1#1", "BOW:40|ARROW_KNOCKBACK:5#1", "CHAINMAIL_CHESTPLATE:241|DURABILITY:10#1", "COOKIE#32", "GOLDEN_APPLE:1#1");
 			ffaConfig.addDefault("ffa.maps.edit.items.kit-1.items", archerItems);
 			
 			ffaConfig.addDefault("ffa.maps.edit.spawns.loc-3.spawn.x", 50.0);

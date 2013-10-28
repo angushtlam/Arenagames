@@ -1,13 +1,16 @@
 package me.taur.arenagames.util;
 
+import java.util.Arrays;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class Items {
-	@SuppressWarnings("deprecation")
 	public static ItemStack convertToItemStack(String blob) {
-		int id = 0;
+		Material material = Material.SPONGE; // For error checking
 		int dmg = 0;
 		int amt = 0;
 		String dataBlob = null;
@@ -41,25 +44,27 @@ public class Items {
 			
 		}
 				
-		try { // Make sure the id is a valid material.
-			id = Integer.parseInt(blob);
-			
-		} catch (NumberFormatException e) {
-			Material mat = Material.getMaterial(id); // I don't care if it's deprecated. It's important.
-			
-			if (mat == null) {
-				id = Material.SPONGE.getId(); // Lol sponge. Error checking at it's finest.
+		Material mat = Material.getMaterial(blob); // Check if the material is a real material
+		if (mat != null) {
+			material = mat;
 				
-			}
 		}
 		
 		if (dataBlob != null) { // Damage value on item.
             dmg = Integer.valueOf(dataBlob);
             
+        } else {
+        	String name = material.name();
+        	
+        	if (name.contains("SWORD") || name.contains("HELMET") || name.contains("CHESTPLATE") || name.contains("LEGGINGS") || name.contains("BOOTS") || name.contains("BOW")) {
+        		dmg = material.getMaxDurability();
+        		
+        	}
+        	
         }
 		
 		// Create the ItemStack with basic info.
-		ItemStack i = new ItemStack(id, amt, (short) dmg);
+		ItemStack i = new ItemStack(material, amt, (short) dmg);
 		
 		if (enchantmentBlob != null) {
             String[] enchantments = enchantmentBlob.split(",");
@@ -97,6 +102,16 @@ public class Items {
         }
 		
 		return i;
+	}
+	
+	public static ItemStack getKitSelector() {
+		ItemStack i = new ItemStack(Material.NETHER_STAR, 1);
+		ItemMeta im = i.getItemMeta();
+		im.setDisplayName(ChatColor.GOLD + "Kit Selector");
+		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to select your kit."));
+		
+		return i;
+		
 	}
 	
 }

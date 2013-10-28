@@ -4,7 +4,7 @@ import me.taur.arenagames.Config;
 import me.taur.arenagames.util.Room;
 import me.taur.arenagames.util.RoomType;
 
-public class FfaPrep {
+public class FfaUtil {
 	public static void enable() {
 		for (int i = 0; i < Config.getNormalRooms(RoomType.FFA); i++) {
 			String roomId = "ffa-n" + i;
@@ -26,5 +26,7 @@ public class FfaPrep {
 		
 		
 	}
+	
+	
 	
 }

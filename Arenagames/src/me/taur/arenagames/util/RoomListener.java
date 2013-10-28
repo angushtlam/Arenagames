@@ -89,7 +89,7 @@ public class RoomListener implements Listener {
 		p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60, 1));
 		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60, 100));
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 60, 100));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 2));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 2));
 		
 		
 		if (Room.PLAYERS.containsKey(p)) { // If player is in a room

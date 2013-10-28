@@ -3,6 +3,7 @@ package me.taur.arenagames.ffa;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -10,6 +11,7 @@ import me.taur.arenagames.Arenagames;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -53,7 +55,7 @@ public class FfaConfig {
 	
 	public static Location getPossibleSpawnLocation(FfaRoom room) {
 		String map = room.getMapName();
-		int spawns = FfaConfig.get().getConfigurationSection("ffa.maps." + map + ".spawns").getKeys(false).size();
+		int spawns = get().getConfigurationSection("ffa.maps." + map + ".spawns").getKeys(false).size();
 		
 		String w;
 		double x, y, z;
@@ -76,6 +78,31 @@ public class FfaConfig {
 		}
 		
 		return new Location(Bukkit.getWorld(w), x + 0.5, y, z + 0.5);
+	}
+	
+	public static boolean canPremiumPlayMap(String map) {
+		return get().getBoolean("ffa.maps." + map + ".info.premium-mode-pool", false);
+		
+	}
+	
+	public static boolean canNormalPlayMap(String map) {
+		return get().getBoolean("ffa.maps." + map + ".info.normal-mode-pool", false);
+		
+	}
+	
+	public static ConfigurationSection getKits(int kit) {
+		return get().getConfigurationSection("ffa.maps.edit.items");
+		
+	}
+	
+	public static List<String> getKitItems(int kit) {
+		return get().getStringList("ffa.maps.edit.items.kit-" + kit + ".items");
+		
+	}
+	
+	public static String getKitName(int kit) {
+		return get().getString("ffa.maps.edit.items.kit-" + kit + ".kit-name");
+		
 	}
 	
 	public static Location getLobby() {

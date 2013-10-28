@@ -1,6 +1,7 @@
 package me.taur.arenagames.ffa;
 
 import me.taur.arenagames.Config;
+import me.taur.arenagames.util.Items;
 import me.taur.arenagames.util.Room;
 import me.taur.arenagames.util.RoomType;
 
@@ -129,6 +130,13 @@ public class FfaListener implements Listener {
 			room.setGameInWaiting(false);
 			
 		}
+		
+		// Reminder for players to choose their kits.
+		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "Remember to pick your kit by right clicking on the Kit Selector (Nether Star) item!");
+		p.getInventory().setArmorContents(null);
+		p.getInventory().clear();
+		
+		p.getInventory().addItem(Items.getKitSelector());
 		
 	}
 	

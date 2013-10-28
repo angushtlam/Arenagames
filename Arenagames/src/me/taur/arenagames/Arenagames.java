@@ -1,6 +1,6 @@
 package me.taur.arenagames;
 
-import me.taur.arenagames.ffa.FfaPrep;
+import me.taur.arenagames.ffa.FfaUtil;
 import me.taur.arenagames.ffa.FfaListener;
 import me.taur.arenagames.util.RoomListener;
 import me.taur.arenagames.util.RoomScheduler;
@@ -38,7 +38,7 @@ public class Arenagames extends JavaPlugin {
 		
 		for (int i = 0; i < gm.length; i++) {
 			if (gm[i].contains("ffa")) {
-				FfaPrep.enable();
+				FfaUtil.enable();
 				
 			}
 			
