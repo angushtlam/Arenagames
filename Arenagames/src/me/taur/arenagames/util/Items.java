@@ -109,6 +109,7 @@ public class Items {
 		ItemMeta im = i.getItemMeta();
 		im.setDisplayName(ChatColor.GOLD + "Kit Selector");
 		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to select your kit."));
+		i.setItemMeta(im);
 		
 		return i;
 		

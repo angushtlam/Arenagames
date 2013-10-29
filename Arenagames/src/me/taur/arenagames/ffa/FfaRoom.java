@@ -255,7 +255,7 @@ public class FfaRoom extends Room {
 				p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been given a " + kitname + " kit.");
 				
 			} else { // If the player didn't pick a kit, give them a random one.
-				ConfigurationSection cs = FfaConfig.get().getConfigurationSection("ffa.maps." + this.getRoomId() + ".items");
+				ConfigurationSection cs = FfaConfig.getKits();
 				int kits = cs.getKeys(false).size();
 				
 				Random rand = new Random();
