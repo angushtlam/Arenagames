@@ -81,6 +81,7 @@ public class RoomScheduler {
 										// Fancy loop to make sure rooms are available and only 1 queue can join 1 arena.
 										int tries = 0;
 										Set<Integer> alreadyused = new HashSet<Integer>();
+										
 										boolean breakloop = false;
 										while (!breakloop) {
 											if (tries == maps.size()) {
@@ -122,7 +123,7 @@ public class RoomScheduler {
 													boolean premium = r.isPremium();
 													String mapname = ((String) maps.toArray()[map]);
 													
-													if (premium) {
+													if (premium) { // If the queue is premium
 														if (!FfaConfig.canPremiumPlayMap(mapname)) { // If the premium room cannot play the map
 															alreadyused.add(map);
 															tries++;

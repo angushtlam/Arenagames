@@ -1,5 +1,7 @@
 package me.taur.arenagames.ffa;
 
+import java.util.HashMap;
+
 import me.taur.arenagames.Config;
 import me.taur.arenagames.util.Items;
 import me.taur.arenagames.util.Room;
@@ -15,17 +17,82 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class FfaListener implements Listener {	
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void joinRoomSign(PlayerInteractEvent evt) {
-		Block b = evt.getClickedBlock();
-		if (evt.getAction() != Action.RIGHT_CLICK_BLOCK) {
+	public void kitSelector(PlayerInteractEvent evt) {
+		if (evt.isCancelled()) { // Make sure the event went through properly.
 			return;
+			
 		}
 		
+		if (evt.getAction() != Action.RIGHT_CLICK_BLOCK || evt.getAction() != Action.RIGHT_CLICK_AIR) {
+			return;
+			
+		}
+		
+		ItemStack i = evt.getItem();
+		if (!i.equals(Items.getKitSelector())) { // Make sure the item they're holding is the kit item.
+			return;
+			
+		}
+		
+		Player p = evt.getPlayer();
+		if (!Room.PLAYERS.containsKey(p)) { // If the player is not in a game and has the kit selector.
+			p.getInventory().removeItem(i); // Remove it
+			return;
+			
+		}
+		
+		Room r = Room.ROOMS.get(Room.PLAYERS.get(p));
+		
+		if (r == null) { // If the room doesn't exist
+			p.getInventory().removeItem(i); // Remove it
+			return;
+			
+		}
+		
+		if (r.getRoomType() != RoomType.FFA) { // If the player isn't in a FFA room.
+			p.getInventory().removeItem(i); // Remove it
+			return;
+			
+		}
+		
+		if (r.isGameInProgress()) { // If the game is in progress.
+			p.getInventory().removeItem(i); // Remove it
+			return;
+			
+		}
+		
+		FfaRoom room = (FfaRoom) r; // Made sure the room is an FFA room through check earlier.
+		HashMap<Player, Integer> kitlist = room.getKit();
+		
+		if (kitlist.containsKey(p)) {
+			
+			
+		}
+		
+		room.setKit(kitlist);
+		
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void joinRoomSign(PlayerInteractEvent evt) {
+		if (evt.isCancelled()) { // Make sure the event went through properly.
+			return;
+			
+		}
+		
+		if (evt.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+			
+		}
+		
+		Block b = evt.getClickedBlock();
 		if (b.getType() != Material.WALL_SIGN) {
 			return;
+			
 		}
 		
 		Sign sign = (Sign) b.getState();
@@ -60,7 +127,6 @@ public class FfaListener implements Listener {
 				return;
 				
 			}
-			
 		}
 		
 		if (r.getRoomType() != RoomType.FFA) {
@@ -75,7 +141,6 @@ public class FfaListener implements Listener {
 				return;
 				
 			}
-			
 		}
 		
 		if (r.isPlayerInRoom(p)) {
@@ -107,8 +172,7 @@ public class FfaListener implements Listener {
 		
 		if (other != null) { // Make sure it wasn't empty before the player joined.
 			for (Player pl : other) {
-				pl.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + p.getName() + " joined your queue. Queue " + room.getPlayers().length + "/"
-						+ Config.getPlayerLimit(RoomType.FFA));
+				pl.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + p.getName() + " joined your queue. Queue " + room.getPlayers().length + "/" + Config.getPlayerLimit(RoomType.FFA));
 				
 			}
 		}
@@ -124,7 +188,6 @@ public class FfaListener implements Listener {
 				room.waitStartMessage(p, RoomType.FFA);
 				
 			}
-			
 		} else {
 			room.waitCancelledMessage(RoomType.FFA);
 			room.setGameInWaiting(false);
@@ -139,5 +202,4 @@ public class FfaListener implements Listener {
 		p.getInventory().addItem(Items.getKitSelector());
 		
 	}
-	
 }

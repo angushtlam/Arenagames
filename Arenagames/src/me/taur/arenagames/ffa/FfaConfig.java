@@ -11,6 +11,7 @@ import me.taur.arenagames.Arenagames;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -90,8 +91,8 @@ public class FfaConfig {
 		
 	}
 	
-	public static ConfigurationSection getKits(int kit) {
-		return get().getConfigurationSection("ffa.maps.edit.items");
+	public static ConfigurationSection getKits() {
+		return get().getConfigurationSection("ffa.items");
 		
 	}
 	
@@ -102,6 +103,29 @@ public class FfaConfig {
 	
 	public static String getKitName(int kit) {
 		return get().getString("ffa.items.kit-" + kit + ".kit-name");
+		
+	}
+	
+	public static String getKitDescription(int kit) {
+		return get().getString("ffa.items.kit-" + kit + ".kit-description");
+		
+	}
+	
+	public static Material getKitMenuIcon(int kit) {
+		String mat = get().getString("ffa.items.kit-" + kit + ".kit-menu-icon");
+		Material material = Material.getMaterial(mat);
+		
+		if (material != null) { // Make sure the material is a valid material.
+			return material;
+			
+		}
+		
+		return Material.SPONGE; // Debug check
+		
+	}
+	
+	public static boolean isKitPremium(int kit) {
+		return get().getBoolean("ffa.items.kit-" + kit + ".premium-only");
 		
 	}
 	
