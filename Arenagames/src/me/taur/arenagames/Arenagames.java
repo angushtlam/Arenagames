@@ -19,10 +19,9 @@ public class Arenagames extends JavaPlugin {
 		plugin = this;
 		
 		Config.startCheck();
-		loadGamemodes();
 		
-		regAllCmds();
-		regAllEvents();
+		regCmd("queue", new RoomCommand());
+		loadGamemodes();
 		
 		RoomScheduler.start();
 		
@@ -39,6 +38,7 @@ public class Arenagames extends JavaPlugin {
 		for (int i = 0; i < gm.length; i++) {
 			if (gm[i].contains("ffa")) {
 				FfaUtil.enable();
+				regFfa();
 				
 			}
 			
@@ -56,14 +56,9 @@ public class Arenagames extends JavaPlugin {
 		
 	}
 
-	private static void regAllEvents() {
+	private static void regFfa() {
 		regEvent(new FfaListener());
 		regEvent(new RoomListener());
-		
-	}
-
-	private static void regAllCmds() {
-		regCmd("queue", new RoomCommand());
 		
 	}
 	
