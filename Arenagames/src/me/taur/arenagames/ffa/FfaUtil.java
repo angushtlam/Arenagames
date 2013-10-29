@@ -33,7 +33,7 @@ public class FfaUtil {
 		final int kitamt = FfaConfig.getKits().getKeys(false).size();
 		
 		// Gets how many lines the plugin needs.
-		int lines = (kitamt / 9) + 1;
+		int lines = ((kitamt / 9) + 1) * 9;
 		
 		ffaKitMenu = new IconMenu("Select A Kit", lines, new IconMenu.OptionClickEventHandler() {
             @Override
