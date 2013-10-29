@@ -1,5 +1,7 @@
 package me.taur.arenagames.ffa;
 
+import java.util.HashMap;
+
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.util.IconMenu;
@@ -46,22 +48,34 @@ public class FfaUtil {
                 	
                 }
                 
-                if (Room.ROOMS.get(Room.PLAYERS.get(p)) == null) { // Null check 
+                Room r = Room.ROOMS.get(Room.PLAYERS.get(p));
+                
+                if (r == null) { // Null check 
                 	menuevt.setWillClose(true);
                 	return;
                 	
                 }
                 
+                if (r.getRoomType() != RoomType.FFA) {
+                	menuevt.setWillClose(true);
+                	return;
+                	
+                }
+                
+                FfaRoom room = (FfaRoom) r;
                 String kitname = ChatColor.stripColor(menuevt.getName()); // Clear colors because we add colors in the menu name.
                 
                 for (String kits : FfaConfig.getKits().getKeys(false)) {
                 	int i = Integer.valueOf(kits.split("-")[1]);
                 	
                 	String check = FfaConfig.getKitName(i);
-                	
                 	if (check != null) { // Make sure the kit exists
                 		if (check.equalsIgnoreCase(kitname)) {
                 			p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "You have selected the " + check + " kit for your next round.");
+                			
+                			HashMap<Player, Integer> kit = room.getKit();
+                			kit.put(p, i);
+                			room.setKit(kit);
                         	break;
                 			
                 		}
