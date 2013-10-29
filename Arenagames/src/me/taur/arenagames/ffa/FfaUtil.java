@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class FfaUtil {
-	public static IconMenu ffaKitMenu;
+	public static IconMenu ffaKitMenu = null;
 	
 	public static void enable() {
 		for (int i = 0; i < Config.getNormalRooms(RoomType.FFA); i++) {
@@ -38,8 +38,6 @@ public class FfaUtil {
 		ffaKitMenu = new IconMenu("Select A Kit", lines, new IconMenu.OptionClickEventHandler() {
             @Override
             public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
-            	menuevt.setWillDestroy(true); // Destroy the object so it doesn't get used again
-            	
                 Player p = menuevt.getPlayer();
                 
                 if (!Room.PLAYERS.containsKey(p)) {
@@ -64,45 +62,52 @@ public class FfaUtil {
                 
                 FfaRoom room = (FfaRoom) r;
                 String kitname = ChatColor.stripColor(menuevt.getName()); // Clear colors because we add colors in the menu name.
+
+                int id = menuevt.getPosition();
                 
-                for (String kits : FfaConfig.getKits().getKeys(false)) {
-                	int i = Integer.valueOf(kits.split("-")[1]);
-                	
-                	String check = FfaConfig.getKitName(i);
-                	if (check != null) { // Make sure the kit exists
-                		if (check.equalsIgnoreCase(kitname)) {
-                			p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "You have selected the " + check + " kit for your next round.");
-                			
-                			HashMap<Player, Integer> kit = room.getKit();
-                			kit.put(p, i);
-                			room.setKit(kit);
-                        	break;
-                			
-                		}
-                	}
-                	
-                	p.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "The kit you selected is invalid.");
-                	break;
+                if (FfaConfig.isKitPremium(id)) {
+        			if (!p.hasPermission("arenagames.premium")) {
+        				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You don't have permission to use this kit.");
+        				menuevt.setWillClose(true);
+        				return;
+        			}
+        		}
+                
+                if (FfaConfig.getKitName(id).equals(kitname)) {
+                	p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have selected the " + kitname + " kit for your next round of this queue.");
+        			
+        			HashMap<Player, Integer> kit = room.getKit();
+        			kit.put(p, id);
+        			room.setKit(kit);
+        			menuevt.setWillClose(true);
+    				return;
                 	
                 }
                 
+                p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "The kit you selected is invalid.");
                 menuevt.setWillClose(true);
+				return;
+                
             }
         }, Arenagames.plugin);
 		
 		
 		
 		for (int i = 0; i < kitamt; i++) {
-			String info = FfaConfig.getKitDescription(i);
-			String premium = ChatColor.GREEN + "Normal Kit";
-			
-			if (FfaConfig.isKitPremium(i)) {
-				premium = ChatColor.GOLD + "Premium Kit";
+			if (FfaConfig.getKitName(i) != null) { // Make sure the kit exists. It'll leave spaces for the kits that are nameless.
+				String info = FfaConfig.getKitDescription(i);
+				String premium = ChatColor.GREEN + "Normal Kit";
+				
+				if (FfaConfig.isKitPremium(i)) {
+					premium = ChatColor.GOLD + "Premium Kit";
+					
+				}
+				
+				String name = ChatColor.RESET + "" + ChatColor.BOLD + FfaConfig.getKitName(i);
+				String lore = ChatColor.GRAY + "" + ChatColor.ITALIC + info;
+				ffaKitMenu.setOption(i, new ItemStack(FfaConfig.getKitMenuIcon(i), 1), name, premium, lore);
 				
 			}
-			
-			String lore = premium + "\n" + ChatColor.RESET + ChatColor.GRAY + "" + ChatColor.ITALIC + info;
-			ffaKitMenu.setOption(i, new ItemStack(FfaConfig.getKitMenuIcon(i), 1), FfaConfig.getKitName(i), lore);
 			
 		}
 		

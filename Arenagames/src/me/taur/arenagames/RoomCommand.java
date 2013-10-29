@@ -85,7 +85,27 @@ public class RoomCommand implements CommandExecutor {
 								other.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + p.getName() + " has left this queue.");
 								
 							}
-							
+						}
+						
+						// Only applies if the room is an FFA room.
+						if (room.getRoomType() == RoomType.FFA) {
+							// Check if there are enough people in the room.
+							int needed = room.getPlayersInRoom();
+							if (needed > Config.getMinPlayersInWait(RoomType.FFA) - 1) {
+								if (!room.isGameInWaiting()) {
+									room.waitStartMessage(RoomType.FFA);
+									room.setGameInWaiting(true);
+									room.setWaitTimer(Config.getWaitTimer(RoomType.FFA));
+								
+								} else {
+									room.waitStartMessage(p, RoomType.FFA);
+									
+								}
+							} else {
+								room.waitCancelledMessage(RoomType.FFA);
+								room.setGameInWaiting(false);
+								
+							}
 						}
 						
 						return true;

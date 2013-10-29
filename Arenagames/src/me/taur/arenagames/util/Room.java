@@ -158,7 +158,6 @@ public class Room {
 				return true;
 				
 			}
-			
 		}
 		
 		return false;
@@ -185,7 +184,7 @@ public class Room {
 		}
 		
 		for (Player p : Bukkit.getOnlinePlayers()) {
-			if (!this.getPlayers().toString().contains(p.toString())) { // Lazy ass method
+			if (!isPlayerInRoom(p)) {
 				p.sendMessage(ChatColor.AQUA + winner + ChatColor.ITALIC + " won the match in " + this.getRoomId() + ".");
 				
 			}

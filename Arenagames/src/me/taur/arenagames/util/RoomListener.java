@@ -145,6 +145,9 @@ public class RoomListener implements Listener {
 					
 				}
 			}
+		} else { // If the player is not in a game room and died.
+			p.teleport(Config.getGlobalLobby());
+			
 		}
 	}
 	

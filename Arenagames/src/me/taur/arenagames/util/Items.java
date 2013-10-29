@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -53,13 +54,36 @@ public class Items {
 		if (dataBlob != null) { // Damage value on item.
             dmg = Integer.valueOf(dataBlob);
             
+            String name = material.name();
+            if (dmg < 0) {
+            	dmg = 0;
+            	
+            }
+            
+            if (dmg == 0) {
+            	if (name.contains("_SWORD")) {
+            		dmg = material.getMaxDurability();
+            		
+            	} else if (name.contains("_HELMET")) {
+            		dmg = material.getMaxDurability();
+            		
+            	} else if (name.contains("_CHESTPLATE")) {
+            		dmg = material.getMaxDurability();
+            		
+            	} else if (name.contains("_LEGGINGS")) {
+            		dmg = material.getMaxDurability();
+            		
+            	} else if (name.contains("_BOOTS")) {
+            		dmg = material.getMaxDurability();
+            		
+            	} else if (name.equals("BOW")) {
+            		dmg = material.getMaxDurability();
+            		
+            	}
+            }
+            
         } else {
-        	String name = material.name();
-        	
-        	if (name.contains("SWORD") || name.contains("HELMET") || name.contains("CHESTPLATE") || name.contains("LEGGINGS") || name.contains("BOOTS") || name.contains("BOW")) {
-        		dmg = material.getMaxDurability();
-        		
-        	}
+        	dmg = 0;
         	
         }
 		
@@ -115,4 +139,9 @@ public class Items {
 		
 	}
 	
+	@SuppressWarnings("deprecation")
+	public static void updatePlayerInv(Player p) {
+		p.updateInventory();
+		
+	}
 }

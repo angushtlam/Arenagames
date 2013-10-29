@@ -1,7 +1,5 @@
 package me.taur.arenagames.ffa;
 
-import java.util.HashMap;
-
 import me.taur.arenagames.Config;
 import me.taur.arenagames.util.Items;
 import me.taur.arenagames.util.Room;
@@ -18,22 +16,37 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class FfaListener implements Listener {	
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.HIGH) // Make it run after the sign check so the menu doesn't pop up randomly
 	public void kitSelector(PlayerInteractEvent evt) {
 		if (evt.isCancelled()) { // Make sure the event went through properly.
 			return;
 			
 		}
 		
-		if (evt.getAction() != Action.RIGHT_CLICK_BLOCK || evt.getAction() != Action.RIGHT_CLICK_AIR) {
+		if (!evt.getAction().name().contains("RIGHT_CLICK_")) {
 			return;
 			
 		}
 		
-		ItemStack i = evt.getItem();
-		if (!i.equals(Items.getKitSelector())) { // Make sure the item they're holding is the kit item.
+		ItemStack i = evt.getPlayer().getItemInHand();
+		if (i.getType() == Material.AIR) {
+			return;
+			
+		}
+		
+		if (!i.hasItemMeta()) {
+			return;
+			
+		}
+		
+		ItemMeta im = i.getItemMeta();
+		String kitsel = Items.getKitSelector().getItemMeta().getDisplayName();
+		
+		if (!im.getDisplayName().equals(kitsel)) { // Make sure the item they're holding is the kit item.
 			return;
 			
 		}
@@ -65,16 +78,7 @@ public class FfaListener implements Listener {
 			
 		}
 		
-		FfaRoom room = (FfaRoom) r; // Made sure the room is an FFA room through check earlier.
-		HashMap<Player, Integer> kitlist = room.getKit();
-		
-		if (kitlist.containsKey(p)) {
-			
-			
-		}
-		
-		room.setKit(kitlist);
-		
+		FfaUtil.ffaKitMenu.open(p);
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -196,10 +200,12 @@ public class FfaListener implements Listener {
 		
 		// Reminder for players to choose their kits.
 		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "Remember to pick your kit by right clicking on the Kit Selector (Nether Star) item!");
-		p.getInventory().setArmorContents(null);
-		p.getInventory().clear();
+		PlayerInventory inv = p.getInventory();
 		
-		p.getInventory().addItem(Items.getKitSelector());
+		inv.setArmorContents(null);
+		inv.clear();
+		inv.addItem(Items.getKitSelector());
 		
+		Items.updatePlayerInv(p);
 	}
 }

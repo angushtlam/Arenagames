@@ -39,6 +39,9 @@ public class RoomScheduler {
 									
 									for (Player p : vroom.getPlayers()) {
 										p.teleport(FfaConfig.getLobby());
+										p.getInventory().setArmorContents(null);
+										p.getInventory().clear();
+										Items.updatePlayerInv(p);
 										Room.PLAYERS.remove(p);
 										
 									}

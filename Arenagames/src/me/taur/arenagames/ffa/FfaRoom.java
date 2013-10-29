@@ -60,6 +60,60 @@ public class FfaRoom extends Room {
 	public void setKit(HashMap<Player, Integer> kit) {
 		this.kit = kit;
 	}
+	
+	public void giveKit(Player p, int kitnum) {
+		String kitname = FfaConfig.getKitName(kit.get(p));
+		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been given a " + kitname + " kit.");
+		
+		int playerkit = kit.get(p); // Get what kit the player has.
+		for (String item : FfaConfig.getKitItems(playerkit)) {
+			PlayerInventory inv = p.getInventory();
+			
+			ItemStack i = Items.convertToItemStack(item); 
+
+			// Automatically set the player's armor if the item is an armor, and they don't have the armor on.
+			if (inv.getHelmet() == null && i.getType().name().contains("HELMET")) {
+				inv.setHelmet(i);
+				continue;
+			}
+			
+			if (inv.getHelmet() == null && (i.getType().name().equals(Material.PUMPKIN) || i.getType().name().equals(Material.JACK_O_LANTERN))) {
+				inv.setHelmet(i);
+				continue;
+			}
+			
+			if (inv.getChestplate() == null && i.getType().name().contains("CHESTPLATE")) {
+				inv.setChestplate(i);
+				continue;
+			}
+			
+			if (inv.getLeggings() == null && i.getType().name().contains("LEGGINGS")) {
+				inv.setLeggings(i);
+				continue;
+			}
+			
+			if (inv.getBoots() == null && i.getType().name().contains("BOOTS")) {
+				inv.setBoots(i);
+				continue;
+			}
+			
+			inv.addItem(i);
+			
+		}
+		
+		Items.updatePlayerInv(p);
+		
+	}
+	
+	public void resetKit(Player p) {
+		int kitnum = kit.get(p); // Get what kit the player has.
+		p.getInventory().setArmorContents(null);
+		p.getInventory().clear();
+		giveKit(p, kitnum);
+		
+		Items.updatePlayerInv(p);
+		
+	}
 
 	public String getMapNameFancy() {
 		return FfaConfig.get().getString("ffa.maps." + this.getMapName() + ".info.map-name");
@@ -98,6 +152,13 @@ public class FfaRoom extends Room {
 
 	}
 	
+	public void respawnPlayer(Player p) {
+		resetKit(p);
+		p.teleport(FfaConfig.getPossibleSpawnLocation(this));
+		p.setHealth(p.getMaxHealth());
+		
+	}
+	
 	public void playerDied(Player p, Player killer) {
 		int died = scoreboard.get(p.getName());
 		int kill = scoreboard.get(killer.getName());
@@ -118,8 +179,7 @@ public class FfaRoom extends Room {
 		scoreboard.put(killer.getName(), kill + 3);
 		killer.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have gained 3 points by slaying " + p.getName() + ".");
 		
-		p.teleport(FfaConfig.getPossibleSpawnLocation(this));
-		p.setHealth(p.getMaxHealth());
+		respawnPlayer(p);
 		
 	}
 	
@@ -140,8 +200,7 @@ public class FfaRoom extends Room {
 			scoreboard.put(p.getName(), 0);
 		}
 		
-		p.teleport(FfaConfig.getPossibleSpawnLocation(this));
-		p.setHealth(p.getMaxHealth());
+		respawnPlayer(p);
 		
 	}
 	
@@ -209,8 +268,7 @@ public class FfaRoom extends Room {
 			scoreboard.put(p.getName(), 0);
 		}
 		
-		p.teleport(FfaConfig.getPossibleSpawnLocation(this));
-		p.setHealth(p.getMaxHealth());
+		respawnPlayer(p);
 		
 	}
 	
@@ -231,8 +289,7 @@ public class FfaRoom extends Room {
 			scoreboard.put(p.getName(), 0);
 		}
 		
-		p.teleport(FfaConfig.getPossibleSpawnLocation(this));
-		p.setHealth(p.getMaxHealth());
+		respawnPlayer(p);
 		
 	}
 	
@@ -240,7 +297,7 @@ public class FfaRoom extends Room {
 		for (Player p : this.getPlayers()) {
 			p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- THE GAME HAS STARTED! ---");
 			p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "Map: " + this.getMapNameFancy() + " by " + this.getMapAuthor() + ".");
-			p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- --------------------- ---");
+			p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- -------------------- ---");
 			
 			p.setFireTicks(0);
 			p.getActivePotionEffects().clear();
@@ -248,13 +305,12 @@ public class FfaRoom extends Room {
 			p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60, 1));
 			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60, 100));
 			p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 60, 100));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 2));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 3));
 			
-			if (kit.containsKey(p.getName())) {
-				String kitname = FfaConfig.getKitName(kit.get(p));
-				p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been given a " + kitname + " kit.");
-				
-			} else { // If the player didn't pick a kit, give them a random one.
+			p.getInventory().setArmorContents(null);
+			p.getInventory().clear();
+			
+			if (!kit.containsKey(p)) { // If the player didn't pick a kit, give them a random one.
 				ConfigurationSection cs = FfaConfig.getKits();
 				int kits = cs.getKeys(false).size();
 				
@@ -262,53 +318,19 @@ public class FfaRoom extends Room {
 				int r = rand.nextInt(kits);
 				
 				kit.put(p, r);
-				String kitname = FfaConfig.getKitName(r);
-				p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You forgot to set your kit while in queue. ");
-				p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been randomly given a " + kitname + " kit.");
+				p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You forgot to set your kit while in queue. Here's a random one.");
 				
 			}
 			
-			for (String item : FfaConfig.getKitItems(this.kit.get(p.getName()))) {
-				PlayerInventory inv = p.getInventory();
-				
-				ItemStack i = Items.convertToItemStack(item); 
-
-				// Automatically set the player's armor if the item is an armor, and they don't have the armor on.
-				if (inv.getHelmet() == null && i.getType().name().contains("HELMET")) {
-					inv.setHelmet(i);
-					continue;
-				}
-				
-				if (inv.getHelmet() == null && (i.getType().name().equals(Material.PUMPKIN) || i.getType().name().equals(Material.JACK_O_LANTERN))) {
-					inv.setHelmet(i);
-					continue;
-				}
-				
-				if (inv.getChestplate() == null && i.getType().name().contains("CHESTPLATE")) {
-					inv.setChestplate(i);
-					continue;
-				}
-				
-				if (inv.getLeggings() == null && i.getType().name().contains("LEGGINGS")) {
-					inv.setLeggings(i);
-					continue;
-				}
-				
-				if (inv.getBoots() == null && i.getType().name().contains("BOOTS")) {
-					inv.setBoots(i);
-					continue;
-				}
-				
-				inv.addItem(i);
-				
-			}
+			int playerkit = kit.get(p); 
+			giveKit(p, playerkit);
 			
 			p.teleport(FfaConfig.getPossibleSpawnLocation(this));
 			scoreboard.put(p.getName(), 0);
 			
 		}
 		
-		this.setCountdownTimer(Config.getCountdown(RoomType.FFA));
+		setCountdownTimer(Config.getCountdown(RoomType.FFA));
 		
 	}
 	
@@ -320,8 +342,8 @@ public class FfaRoom extends Room {
 			kit = null;
 			kit = new HashMap<Player, Integer>();
 			
-			this.setMapName(null);
-			this.resetRoomBasics(areYouSure);
+			setMapName(null);
+			resetRoomBasics(areYouSure);
 			
 		}
 		
