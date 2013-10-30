@@ -167,8 +167,9 @@ public class FfaListener implements Listener {
 		
 		if (other != null) { // Make sure it wasn't empty before the player joined.
 			for (Player pl : other) {
-				pl.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + p.getName() + " joined your queue. Queue " + room.getPlayers().length + "/" + Config.getPlayerLimit(RoomType.FFA));
-				
+				if (pl != null) { // Null check
+					pl.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + p.getName() + " joined your queue. Queue " + room.getPlayers().length + "/" + Config.getPlayerLimit(RoomType.FFA));
+				}
 			}
 		}
 		

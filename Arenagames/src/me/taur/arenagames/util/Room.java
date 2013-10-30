@@ -223,12 +223,11 @@ public class Room {
 		
 		if (getPlayers() != null) {
 			for (Player p : this.getPlayers()) {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Wait timer is stopped due to a lack of players.");
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "The game will start " + Config.getWaitTimer(RoomType.FFA) + " after " + wait
-						+ (wait == 1 ? " person " : " people ") + (wait == 1 ? "has" : "have") + " joined.");
-				
+				if (p != null) {
+					p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Wait timer is stopped due to a lack of players.");
+					p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "The game will start " + Config.getWaitTimer(RoomType.FFA) + " after " + wait + (wait == 1 ? " person " : " people ") + (wait == 1 ? "has" : "have") + " joined.");
+				}
 			}
-			
 		}
 		
 	}

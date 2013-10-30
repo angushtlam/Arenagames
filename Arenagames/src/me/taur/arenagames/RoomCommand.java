@@ -82,8 +82,9 @@ public class RoomCommand implements CommandExecutor {
 						
 						if (room.getPlayers() != null) {
 							for (Player other : room.getPlayers()) {
-								other.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + p.getName() + " has left this queue.");
-								
+								if (other != null) { // Null check
+									other.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + p.getName() + " has left this queue.");
+								}
 							}
 						}
 						
