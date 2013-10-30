@@ -24,7 +24,11 @@ public class RoomListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void playerLoggedIn(PlayerJoinEvent evt) {
 		evt.setJoinMessage(""); // I hate this.
-		evt.getPlayer().teleport(Config.getGlobalLobby()); // Teleport people to lobby when they join
+		
+		Player p = evt.getPlayer();
+		p.getInventory().setArmorContents(null);
+		p.getInventory().clear();
+		p.teleport(Config.getGlobalLobby()); // Teleport people to lobby when they join
 		
 	}
 	
