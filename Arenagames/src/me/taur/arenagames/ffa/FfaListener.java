@@ -22,12 +22,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class FfaListener implements Listener {	
 	@EventHandler(priority = EventPriority.HIGH) // Make it run after the sign check so the menu doesn't pop up randomly
 	public void kitSelector(PlayerInteractEvent evt) {
-		if (evt.isCancelled()) { // Make sure the event went through properly.
-			return;
-			
-		}
-		
-		if (!evt.getAction().name().contains("RIGHT_CLICK_")) {
+		Action a = evt.getAction();
+		if (a.equals(Action.LEFT_CLICK_AIR) || a.equals(Action.LEFT_CLICK_BLOCK)) {
 			return;
 			
 		}
@@ -81,13 +77,8 @@ public class FfaListener implements Listener {
 		FfaUtil.ffaKitMenu.open(p);
 	}
 	
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void joinRoomSign(PlayerInteractEvent evt) {
-		if (evt.isCancelled()) { // Make sure the event went through properly.
-			return;
-			
-		}
-		
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void joinRoomSign(PlayerInteractEvent evt) {		
 		if (evt.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 			
