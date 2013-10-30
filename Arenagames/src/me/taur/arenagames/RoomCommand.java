@@ -80,6 +80,9 @@ public class RoomCommand implements CommandExecutor {
 						Room.PLAYERS.remove(p);
 						room.removePlayer(p);
 						
+						p.getInventory().setArmorContents(null);
+						p.getInventory().clear();
+						
 						if (room.getPlayers() != null) {
 							for (Player other : room.getPlayers()) {
 								if (other != null) { // Null check

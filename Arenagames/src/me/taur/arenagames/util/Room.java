@@ -201,8 +201,9 @@ public class Room {
 		String gameStartIn = minute == 0 ? "in " + minute + " " + plural : "soon";
 		
 		for (Player p : this.getPlayers()) {
-			p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Wait timer has started. Game will start " + gameStartIn + ".");
-			
+			if (p != null) {
+				p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Wait timer has started. Game will start " + gameStartIn + ".");
+			}
 		}
 		
 	}

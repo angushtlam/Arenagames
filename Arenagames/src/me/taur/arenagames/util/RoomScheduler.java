@@ -27,6 +27,13 @@ public class RoomScheduler {
 					Room room = Room.ROOMS.get(s);
 					
 					if (room.isGameInProgress()) {
+						if (room.getPlayersInRoom() < 1) { // End game w/ no players.
+							if (room.getRoomType() == RoomType.FFA) {
+								Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Free For All match " + room.getRoomId() + " has ended.");
+								((FfaRoom) room).resetRoom(true);
+							}
+						}
+						
 						int countdown = room.getCountdownTimer();
 						
 						if (countdown > -1) {
@@ -57,10 +64,13 @@ public class RoomScheduler {
 						// Message players about time remaining every minute
 						if (countdown % 60 == 0) {
 							if (countdown != 0) { // If the game isn't over
-								for (Player p : room.getPlayers()) {
-									int minute = countdown / 60;
-									p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + minute + " minute" + (minute == 1 ? "" : "s") + " remaining.");
-									
+								if (room.getPlayers() != null) {
+									for (Player p : room.getPlayers()) {
+										if (p != null) {
+											int minute = countdown / 60;
+											p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + minute + " minute" + (minute == 1 ? "" : "s") + " remaining.");
+										}
+									}
 								}
 							}
 						}
