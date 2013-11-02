@@ -91,6 +91,51 @@ public class FfaConfig {
 		
 	}
 	
+	public static ConfigurationSection getSigns(String queue) {
+		return get().getConfigurationSection("ffa.queue." + queue + ".signs");
+		
+	}
+	
+	public static Location[] getSignsStored(String queue) {
+		ConfigurationSection sign = get().getConfigurationSection("ffa.queue." + queue + ".signs");
+		if (sign != null) {
+			int size = sign.getKeys(false).size();
+			Location[] locs = new Location[size];
+			for (int i = 0; i < size; i++) {
+				if (sign.get("sign-" + i) != null) {
+					String w = sign.getString("sign-" + i + ".world");
+					double x = sign.getDouble("sign-" + i + ".x");
+					double y = sign.getDouble("sign-" + i + ".y");
+					double z = sign.getDouble("sign-" + i + ".z");
+					
+					Location loc = new Location(Bukkit.getWorld(w), x, y, z);
+					locs[i] = loc;
+					
+				}
+			}
+			
+			return locs;
+		}
+		
+		return null;
+		
+	}
+	
+	public static void setSignLocation(String queue, int signnum, Location loc) {
+		get().set("ffa.queue." + queue + ".signs.sign-" + signnum + ".world", loc.getWorld().getName());
+		get().set("ffa.queue." + queue + ".signs.sign-" + signnum + ".x", loc.getBlockX());
+		get().set("ffa.queue." + queue + ".signs.sign-" + signnum + ".y", loc.getBlockY());
+		get().set("ffa.queue." + queue + ".signs.sign-" + signnum + ".z", loc.getBlockZ());
+		save();
+		
+	}
+	
+	public static void clearSignLocations(String queue) {
+		get().set("ffa.queue." + queue + ".signs", null);
+		save();
+		
+	}
+	
 	public static ConfigurationSection getKits() {
 		return get().getConfigurationSection("ffa.items");
 		

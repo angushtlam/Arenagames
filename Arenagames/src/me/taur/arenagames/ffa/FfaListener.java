@@ -85,7 +85,7 @@ public class FfaListener implements Listener {
 		}
 		
 		Block b = evt.getClickedBlock();
-		if (b.getType() != Material.WALL_SIGN) {
+		if (!b.getType().name().contains("SIGN")) {
 			return;
 			
 		}
@@ -105,7 +105,7 @@ public class FfaListener implements Listener {
 			
 		}
 		
-		String l1 = sign.getLine(1);
+		String l1 = ChatColor.stripColor(sign.getLine(1)); // Remove the fancyness
 		Room r = Room.ROOMS.get(l1.toLowerCase());
 		
 		if (r == null) {
@@ -190,6 +190,8 @@ public class FfaListener implements Listener {
 			
 		}
 		
+		room.updateSigns(); // Update signs.
+		
 		// Reminder for players to choose their kits.
 		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "Remember to pick your kit by right clicking on the Kit Selector (Nether Star) item!");
 		PlayerInventory inv = p.getInventory();
@@ -199,5 +201,6 @@ public class FfaListener implements Listener {
 		inv.addItem(Items.getKitSelector());
 		
 		Items.updatePlayerInv(p);
+		
 	}
 }

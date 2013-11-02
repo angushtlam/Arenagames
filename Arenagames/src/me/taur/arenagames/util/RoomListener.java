@@ -55,8 +55,8 @@ public class RoomListener implements Listener {
 					Bukkit.broadcastMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + room.getRoomId() + " queue has reopened.");
 					
 					if (room.getRoomType() == RoomType.FFA) {
-						((FfaRoom) room).resetRoom(true);
-						
+						FfaRoom r = (FfaRoom) room;
+						r.resetRoom(true);
 					}
 				}
 				
@@ -66,6 +66,11 @@ public class RoomListener implements Listener {
 						other.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + p.getName() + " has left this queue.");
 					}
 				}
+			}
+			
+			if (room.getRoomType() == RoomType.FFA) {
+				FfaRoom r = (FfaRoom) room;
+				r.updateSigns();
 			}
 		}
 	}

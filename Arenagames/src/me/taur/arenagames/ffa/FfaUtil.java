@@ -31,9 +31,7 @@ public class FfaUtil {
 		}
 		
 		final int kitamt = FfaConfig.getKits().getKeys(false).size();
-		
-		// Gets how many lines the plugin needs.
-		int lines = ((kitamt / 9) + 1) * 9;
+		int lines = ((kitamt / 9) + 1) * 9; // Gets how many lines the plugin needs.
 		
 		ffaKitMenu = new IconMenu("Select A Kit", lines, new IconMenu.OptionClickEventHandler() {
             @Override
@@ -62,7 +60,6 @@ public class FfaUtil {
                 
                 FfaRoom room = (FfaRoom) r;
                 String kitname = ChatColor.stripColor(menuevt.getName()); // Clear colors because we add colors in the menu name.
-
                 int id = menuevt.getPosition();
                 
                 if (FfaConfig.isKitPremium(id)) {
@@ -91,8 +88,6 @@ public class FfaUtil {
             }
         }, Arenagames.plugin);
 		
-		
-		
 		for (int i = 0; i < kitamt; i++) {
 			if (FfaConfig.getKitName(i) != null) { // Make sure the kit exists. It'll leave spaces for the kits that are nameless.
 				String info = FfaConfig.getKitDescription(i);
@@ -108,14 +103,10 @@ public class FfaUtil {
 				ffaKitMenu.setOption(i, new ItemStack(FfaConfig.getKitMenuIcon(i), 1), name, premium, lore);
 				
 			}
-			
 		}
-		
 	}
 	
 	public static void disable() {
 		
-		
 	}
-	
 }

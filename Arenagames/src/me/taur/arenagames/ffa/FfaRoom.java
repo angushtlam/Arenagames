@@ -1,23 +1,28 @@
 package me.taur.arenagames.ffa;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import me.taur.arenagames.Config;
 import me.taur.arenagames.util.Items;
+import me.taur.arenagames.util.Players;
 import me.taur.arenagames.util.Room;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 public class FfaRoom extends Room {
 	private String mapname;
@@ -159,53 +164,43 @@ public class FfaRoom extends Room {
 		
 	}
 	
-	public void playerDied(Player p, Player killer) {
+	public void playerDied(Player p, int subtract, String msg) {
 		int died = scoreboard.get(p.getName());
-		int kill = scoreboard.get(killer.getName());
 		
-		for (Player pl : this.getPlayers()) {
-			pl.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + p.getName() + " has been executed by " + killer.getName() + "!");
-			
+		if (this.getPlayers() != null) {
+			for (Player pl : this.getPlayers()) {
+				pl.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + msg);
+				
+			}	
 		}
 		
-		if (died - 1 > 0) {
-			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost 1 point for dying.");
-			scoreboard.put(p.getName(), died - 1);
+		if (died - subtract > 0) {
+			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost " + subtract + " point for dying.");
+			scoreboard.put(p.getName(), died - subtract);
 		} else {
 			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost " + died + (died == 1 ? " point" : " points") + " for dying.");
 			scoreboard.put(p.getName(), 0);
 		}
 		
-		scoreboard.put(killer.getName(), kill + 3);
-		killer.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have gained 3 points by slaying " + p.getName() + ".");
-		
 		respawnPlayer(p);
+	}
+	
+	public void playerDied(Player p, Player killer) { // Player loses 1 point for being executed by another player.
+		int kill = scoreboard.get(killer.getName());
+		scoreboard.put(killer.getName(), kill + 3);
 		
+		playerDied(p, 1, p.getName() + " has been executed by " + killer.getName() + "!");
+		killer.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have gained 3 points by slaying " + p.getName() + ".");
+
 	}
 	
 	public void playerDied(Player p, EntityType ent) {
-		int died = scoreboard.get(p.getName());
 		String entity = ent.toString().charAt(0) + ent.toString().toLowerCase().substring(1);
-		
-		for (Player pl : this.getPlayers()) {
-			pl.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + p.getName() + " has been slain by " + entity + ".");
-			
-		}
-		
-		if (died - 2 > 0) {
-			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost 2 points for dying.");
-			scoreboard.put(p.getName(), died - 2);
-		} else {
-			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost " + died + (died == 1 ? " point" : " points") + " for dying.");
-			scoreboard.put(p.getName(), 0);
-		}
-		
-		respawnPlayer(p);
+		playerDied(p, 2, p.getName() + " has been slain by " + entity + ".");
 		
 	}
 	
 	public void playerDied(Player p, DamageCause cause) {
-		int died = scoreboard.get(p.getName());
 		String c = "";
 		
 		if (cause.equals(DamageCause.BLOCK_EXPLOSION)) {
@@ -245,7 +240,7 @@ public class FfaRoom extends Room {
 			c = "couldn't breath";
 			
 		} else if (cause.equals(DamageCause.THORNS)) {
-			c = "died by an accident";
+			c = "died by parried damage";
 			
 		} else if (cause.equals(DamageCause.WITHER)) {
 			c = "withered away";
@@ -255,42 +250,13 @@ public class FfaRoom extends Room {
 			
 		}
 		
-		for (Player pl : this.getPlayers()) {
-			pl.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + p.getName() + " " + c + ".");
-			
-		}
-		
-		if (died - 2 > 0) {
-			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost 2 points for dying.");
-			scoreboard.put(p.getName(), died - 2);
-		} else {
-			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost " + died + (died == 1 ? " point" : " points") + " for dying.");
-			scoreboard.put(p.getName(), 0);
-		}
-		
-		respawnPlayer(p);
+		playerDied(p, 2, p.getName() + " " + c + ".");
 		
 	}
-	
 
 	public void playerDied(Player p) {
-		int died = scoreboard.get(p.getName());
-		
-		for (Player pl : this.getPlayers()) {
-			pl.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + p.getName() + " has died.");
-			
-		}
-		
-		if (died - 2 > 0) {
-			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost 2 points for dying.");
-			scoreboard.put(p.getName(), died - 2);
-		} else {
-			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost " + died + (died == 1 ? " point" : " points") + " for dying.");
-			scoreboard.put(p.getName(), 0);
-		}
-		
-		respawnPlayer(p);
-		
+		playerDied(p, 2, p.getName() + " died.");
+
 	}
 	
 	public void startGame() {
@@ -298,17 +264,6 @@ public class FfaRoom extends Room {
 			p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- THE GAME HAS STARTED! ---");
 			p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "Map: " + this.getMapNameFancy() + " by " + this.getMapAuthor() + ".");
 			p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- -------------------- ---");
-			
-			p.setFireTicks(0);
-			p.getActivePotionEffects().clear();
-			p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 800));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60, 1));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60, 100));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 60, 100));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 3));
-			
-			p.getInventory().setArmorContents(null);
-			p.getInventory().clear();
 			
 			if (!kit.containsKey(p)) { // If the player didn't pick a kit, give them a random one.
 				ConfigurationSection cs = FfaConfig.getKits();
@@ -322,6 +277,8 @@ public class FfaRoom extends Room {
 				
 			}
 			
+			Players.respawnEffects(p);
+			
 			int playerkit = kit.get(p); 
 			giveKit(p, playerkit);
 			
@@ -331,6 +288,67 @@ public class FfaRoom extends Room {
 		}
 		
 		setCountdownTimer(Config.getCountdown(RoomType.FFA));
+		
+	}
+	
+	public void updateSigns() {
+		Location[] locs = FfaConfig.getSignsStored(this.getRoomId());
+		Set<Location> signloc = new HashSet<Location>(); // Make a hashmap for convienence.
+		
+		if (locs != null) { // Make the Array a Set for now cuz it's convenient.
+			for (Location loc : locs) {
+				signloc.add(loc);
+			}
+		}
+		
+		boolean fix = false;
+		
+		if (signloc != null) {
+			for (Location l : signloc) {
+				if (l != null) {
+					Block b = l.getBlock();
+					if (!b.getType().name().contains("SIGN")) {
+						b.breakNaturally();
+						fix = true;
+						signloc.remove(l);
+						continue;
+						
+					}
+					
+					BlockState state = b.getState();
+					if (!(state instanceof Sign)) {
+						b.breakNaturally();
+						fix = true;
+						signloc.remove(l);
+						continue;
+						
+					}
+					
+					Sign sign = (Sign) b.getState();
+					sign.setLine(0, ChatColor.DARK_RED + "" + ChatColor.BOLD + "[FFA]");
+					sign.setLine(1, (this.isPremium() ? ChatColor.WHITE + "" : "") + this.getRoomId());
+					sign.setLine(2, ChatColor.ITALIC + "" + this.getPlayersInRoom() + "/" + Config.getPlayerLimit(RoomType.FFA));
+					sign.setLine(3, (this.isGameInProgress() ? ChatColor.GOLD + "In Progress" : ChatColor.GREEN + "Queue Open"));
+					
+					sign.update();
+				}
+			}
+		}
+		
+		if (fix) {
+			FfaConfig.clearSignLocations(this.getRoomId());
+			
+			int i = 0;
+				if (signloc != null) {
+				for (Location l : signloc) { // Set the new locations in case
+					if (l != null) {
+						FfaConfig.setSignLocation(this.getRoomId(), i, l);
+						i++;
+						
+					}
+				}
+			}
+		}	
 		
 	}
 	

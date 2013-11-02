@@ -15,9 +15,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 public class RoomScheduler {
-	
 	public static void start() {
-		
 		Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
 			public void run() {
 				start(); // Loops the scheduler.

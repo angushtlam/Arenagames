@@ -4,6 +4,7 @@ import me.taur.arenagames.ffa.FfaUtil;
 import me.taur.arenagames.ffa.FfaListener;
 import me.taur.arenagames.util.RoomListener;
 import me.taur.arenagames.util.RoomScheduler;
+import me.taur.arenagames.util.SignListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -23,6 +24,7 @@ public class Arenagames extends JavaPlugin {
 		regCmd("queue", new RoomCommand());
 		loadGamemodes();
 		
+		regEvent(new SignListener());
 		RoomScheduler.start();
 		
 	}

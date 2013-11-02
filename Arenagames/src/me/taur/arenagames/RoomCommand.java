@@ -110,6 +110,8 @@ public class RoomCommand implements CommandExecutor {
 								room.setGameInWaiting(false);
 								
 							}
+							
+							((FfaRoom) room).updateSigns(); // Update signs.
 						}
 						
 						return true;
