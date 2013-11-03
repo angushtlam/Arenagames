@@ -10,12 +10,10 @@ import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Objective;
 
 public class Room {
 	public static HashMap<String, Room> ROOMS = new HashMap<String, Room>();
 	public static HashMap<Player, String> PLAYERS = new HashMap<Player, String>();
-	public static HashMap<String, Objective> SCOREBOARDS = new HashMap<String, Objective>();
 	
 	private String roomId;
 	private RoomType roomType;
