@@ -21,6 +21,8 @@ public class RoomPlayerActiveListener implements Listener {
 		Player p = evt.getPlayer();
 		p.getInventory().setArmorContents(null);
 		p.getInventory().clear();
+		p.setLevel(0);
+		p.setExp((float) 0.0);
 		p.teleport(Config.getGlobalLobby()); // Teleport people to lobby when they join
 		
 	}
@@ -49,6 +51,7 @@ public class RoomPlayerActiveListener implements Listener {
 					
 					if (room.getRoomType() == RoomType.FFA) {
 						FfaRoom r = (FfaRoom) room;
+						r.getScoreboard().remove(p);
 						r.resetRoom(true);
 					}
 				}

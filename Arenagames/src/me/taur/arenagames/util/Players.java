@@ -6,7 +6,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Players {
 	public static void respawnEffects(Player p) {
-		p.setFoodLevel(20);
+		p.setFoodLevel(19);
 		
 		p.setFireTicks(0);
 		p.getActivePotionEffects().clear();
