@@ -1,10 +1,12 @@
 package me.taur.arenagames;
 
+import me.taur.arenagames.ffa.FfaKitSelectorListener;
 import me.taur.arenagames.ffa.FfaUtil;
-import me.taur.arenagames.ffa.FfaListener;
-import me.taur.arenagames.util.RoomListener;
-import me.taur.arenagames.util.RoomScheduler;
-import me.taur.arenagames.util.SignListener;
+import me.taur.arenagames.ffa.FfaSignListener;
+import me.taur.arenagames.room.RoomPlayerActiveListener;
+import me.taur.arenagames.room.RoomPlayerDiedListener;
+import me.taur.arenagames.room.RoomScheduler;
+import me.taur.arenagames.room.SignListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -24,7 +26,10 @@ public class Arenagames extends JavaPlugin {
 		regCmd("queue", new RoomCommand());
 		loadGamemodes();
 		
+		regEvent(new RoomPlayerActiveListener());
+		regEvent(new RoomPlayerDiedListener());
 		regEvent(new SignListener());
+		
 		RoomScheduler.start();
 		
 	}
@@ -43,9 +48,7 @@ public class Arenagames extends JavaPlugin {
 				regFfa();
 				
 			}
-			
 		}
-		
 	}
 	
 	public static void regEvent(Listener file) {
@@ -59,9 +62,8 @@ public class Arenagames extends JavaPlugin {
 	}
 
 	private static void regFfa() {
-		regEvent(new FfaListener());
-		regEvent(new RoomListener());
+		regEvent(new FfaSignListener());
+		regEvent(new FfaKitSelectorListener());
 		
 	}
-	
 }

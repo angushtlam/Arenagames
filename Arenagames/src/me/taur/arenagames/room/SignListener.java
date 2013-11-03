@@ -1,7 +1,8 @@
-package me.taur.arenagames.util;
+package me.taur.arenagames.room;
 
 import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.ffa.FfaRoom;
+import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

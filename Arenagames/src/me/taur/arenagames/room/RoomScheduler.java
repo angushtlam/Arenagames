@@ -1,4 +1,4 @@
-package me.taur.arenagames.util;
+package me.taur.arenagames.room;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -8,6 +8,8 @@ import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.ffa.FfaRoom;
+import me.taur.arenagames.util.Items;
+import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,6 +36,11 @@ public class RoomScheduler {
 						
 						int countdown = room.getCountdownTimer();
 						
+						for (Player p : room.getPlayers()) { // Make the levels the timer.
+							p.setLevel(countdown);
+							
+						}
+						
 						if (countdown > -1) {
 							room.setCountdownTimer(countdown - 1);
 							
@@ -43,12 +50,13 @@ public class RoomScheduler {
 									vroom.gameOverMessage(vroom.getWinningPlayer());
 									
 									for (Player p : vroom.getPlayers()) {
-										p.teleport(FfaConfig.getLobby());
-										p.getInventory().setArmorContents(null);
-										p.getInventory().clear();
-										Items.updatePlayerInv(p);
-										Room.PLAYERS.remove(p);
-										
+										if (p != null) {
+											p.teleport(FfaConfig.getLobby());
+											p.getInventory().setArmorContents(null);
+											p.getInventory().clear();
+											Items.updatePlayerInv(p);
+											Room.PLAYERS.remove(p);
+										}
 									}
 									
 									vroom.resetRoom(true);
@@ -72,10 +80,16 @@ public class RoomScheduler {
 								}
 							}
 						}
+						
 					}
 					
 					if (room.isGameInWaiting()) {
 						int waitcount = room.getWaitTimer();
+						
+						for (Player p : room.getPlayers()) { // Make the levels the timer.
+							p.setLevel(waitcount);
+							
+						}
 						
 						if (waitcount > -1) {
 							room.setWaitTimer(waitcount - 1);
@@ -96,8 +110,9 @@ public class RoomScheduler {
 										boolean breakloop = false;
 										while (!breakloop) {
 											if (tries == maps.size()) {
-												room.setGameInWaiting(false);
-												room.setGameInProgress(false);
+												r.setGameInWaiting(false);
+												r.setGameInProgress(false);
+												
 												
 												for (Player p : r.getPlayers()) {
 													p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Currently all of the Free For All arenas are in progress.");
@@ -108,14 +123,15 @@ public class RoomScheduler {
 												// Restart the wait timer.
 												int needed = room.getPlayersInRoom();
 												if (needed > Config.getMinPlayersInWait(RoomType.FFA)) {
-													if (!room.isGameInWaiting()) {
-														room.waitStartMessage(RoomType.FFA);
-														room.setGameInWaiting(true);
-														room.setWaitTimer(Config.getWaitTimer(RoomType.FFA));
+													if (!r.isGameInWaiting()) {
+														r.waitStartMessage(RoomType.FFA);
+														r.setGameInWaiting(true);
+														r.setWaitTimer(Config.getWaitTimer(RoomType.FFA));
+														r.updateSigns();
 													
 													}
 												} else {
-													room.waitCancelledMessage(RoomType.FFA);
+													r.waitCancelledMessage(RoomType.FFA);
 													
 												}
 												
@@ -163,9 +179,12 @@ public class RoomScheduler {
 													
 													if (!match) { // Block of code to run when the game is really starting.
 														r.setMapName((String) maps.toArray()[map]);
-														r.startGame();
+														
 														room.setGameInWaiting(false);
 														room.setGameInProgress(true);
+														
+														r.startGame();
+														
 														breakloop = true;
 														tryfornew = false;
 														
@@ -196,14 +215,18 @@ public class RoomScheduler {
 						if (waitcount < 31 && waitcount % 10 == 0) {
 							if (waitcount != 0) { // If the game isn't over
 								for (Player p : room.getPlayers()) {
-									p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + waitcount + " second" + (waitcount == 1 ? "" : "s") + " until game starts.");
-									
+									if (p != null) {
+										p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + waitcount + " second" + (waitcount == 1 ? "" : "s") + " until game starts.");
+									}
 								}
 							}
+							
 						}
 					}
 				}
+				
 			}
 		}, 20L);
+		
 	}
 }

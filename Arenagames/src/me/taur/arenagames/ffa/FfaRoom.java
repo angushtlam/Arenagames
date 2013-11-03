@@ -6,9 +6,9 @@ import java.util.Random;
 import java.util.Set;
 
 import me.taur.arenagames.Config;
+import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.Items;
 import me.taur.arenagames.util.Players;
-import me.taur.arenagames.util.Room;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
@@ -34,11 +34,10 @@ public class FfaRoom extends Room {
 		this.kit = new HashMap<Player, Integer>();
 		this.setRoomId(roomId);
 		this.setRoomType(RoomType.FFA);
-		
 	}
 
 	public String getMapName() {
-		return mapname;
+		return this.mapname;
 	}
 
 	public void setMapName(String mapname) {
@@ -46,7 +45,7 @@ public class FfaRoom extends Room {
 	}
 
 	public HashMap<String, Integer> getScoreboard() {
-		return scoreboard;
+		return this.scoreboard;
 	}
 
 	public void setScoreboard(HashMap<String, Integer> scoreboard) {
@@ -54,12 +53,11 @@ public class FfaRoom extends Room {
 	}
 	
 	public void setPlayerScore(Player p, int amt) {
-		scoreboard.put(p.getName(), amt);
-		
+		this.scoreboard.put(p.getName(), amt);
 	}
 	
 	public HashMap<Player, Integer> getKit() {
-		return kit;
+		return this.kit;
 	}
 
 	public void setKit(HashMap<Player, Integer> kit) {
@@ -67,13 +65,15 @@ public class FfaRoom extends Room {
 	}
 	
 	public void giveKit(Player p, int kitnum) {
-		String kitname = FfaConfig.getKitName(kit.get(p));
+		String kitname = FfaConfig.getKitName(this.kit.get(p));
 		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been given a " + kitname + " kit.");
 		
-		int playerkit = kit.get(p); // Get what kit the player has.
+		PlayerInventory inv = p.getInventory();
+		inv.setItem(8, Items.getKitSelector()); // Give the player a kit selector first
+		
+		int playerkit = this.kit.get(p); // Get what kit the player has.
+		
 		for (String item : FfaConfig.getKitItems(playerkit)) {
-			PlayerInventory inv = p.getInventory();
-			
 			ItemStack i = Items.convertToItemStack(item); 
 
 			// Automatically set the player's armor if the item is an armor, and they don't have the armor on.
@@ -111,10 +111,10 @@ public class FfaRoom extends Room {
 	}
 	
 	public void resetKit(Player p) {
-		int kitnum = kit.get(p); // Get what kit the player has.
+		int kitnum = this.kit.get(p); // Get what kit the player has.
 		p.getInventory().setArmorContents(null);
 		p.getInventory().clear();
-		giveKit(p, kitnum);
+		this.giveKit(p, kitnum);
 		
 		Items.updatePlayerInv(p);
 		
@@ -135,22 +135,20 @@ public class FfaRoom extends Room {
 		boolean firstLoop = true;
 		int score = 0;
 		
-		for (String name : scoreboard.keySet()) {
-			int amt = scoreboard.get(name);
+		for (String name : this.scoreboard.keySet()) {
+			int amt = this.scoreboard.get(name);
 			
 			if (firstLoop) {
 				firstLoop = false;
-				
 				player = name;
 				score = amt;
-				
 			}
 			
 			if (score < amt) {
 				player = name;
 				score = amt;
-				
 			}
+			
 		}
 		
 		return player;
@@ -158,45 +156,46 @@ public class FfaRoom extends Room {
 	}
 	
 	public void respawnPlayer(Player p) {
-		resetKit(p);
+		this.resetKit(p);
 		p.teleport(FfaConfig.getPossibleSpawnLocation(this));
 		p.setHealth(p.getMaxHealth());
 		
 	}
 	
 	public void playerDied(Player p, int subtract, String msg) {
-		int died = scoreboard.get(p.getName());
+		int died = this.scoreboard.get(p.getName());
 		
 		if (this.getPlayers() != null) {
 			for (Player pl : this.getPlayers()) {
-				pl.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + msg);
-				
+				if (pl != null) {
+					pl.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + msg);
+				}
 			}	
 		}
 		
 		if (died - subtract > 0) {
 			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost " + subtract + " point for dying.");
-			scoreboard.put(p.getName(), died - subtract);
+			this.scoreboard.put(p.getName(), died - subtract);
 		} else {
 			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost " + died + (died == 1 ? " point" : " points") + " for dying.");
-			scoreboard.put(p.getName(), 0);
+			this.scoreboard.put(p.getName(), 0);
 		}
 		
-		respawnPlayer(p);
+		this.respawnPlayer(p);
 	}
 	
 	public void playerDied(Player p, Player killer) { // Player loses 1 point for being executed by another player.
-		int kill = scoreboard.get(killer.getName());
-		scoreboard.put(killer.getName(), kill + 3);
+		int kill = this.scoreboard.get(killer.getName());
+		this.scoreboard.put(killer.getName(), kill + 3);
 		
-		playerDied(p, 1, p.getName() + " has been executed by " + killer.getName() + "!");
+		this.playerDied(p, 1, p.getName() + " has been executed by " + killer.getName() + "!");
 		killer.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have gained 3 points by slaying " + p.getName() + ".");
 
 	}
 	
 	public void playerDied(Player p, EntityType ent) {
 		String entity = ent.toString().charAt(0) + ent.toString().toLowerCase().substring(1);
-		playerDied(p, 2, p.getName() + " has been slain by " + entity + ".");
+		this.playerDied(p, 2, p.getName() + " has been slain by " + entity + ".");
 		
 	}
 	
@@ -250,44 +249,46 @@ public class FfaRoom extends Room {
 			
 		}
 		
-		playerDied(p, 2, p.getName() + " " + c + ".");
+		this.playerDied(p, 2, p.getName() + " " + c + ".");
 		
 	}
 
 	public void playerDied(Player p) {
-		playerDied(p, 2, p.getName() + " died.");
+		this.playerDied(p, 2, p.getName() + " died.");
 
 	}
 	
 	public void startGame() {
 		for (Player p : this.getPlayers()) {
-			p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- THE GAME HAS STARTED! ---");
-			p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "Map: " + this.getMapNameFancy() + " by " + this.getMapAuthor() + ".");
-			p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- -------------------- ---");
-			
-			if (!kit.containsKey(p)) { // If the player didn't pick a kit, give them a random one.
-				ConfigurationSection cs = FfaConfig.getKits();
-				int kits = cs.getKeys(false).size();
+			if (p != null) {
+				p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- THE GAME HAS STARTED! ---");
+				p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "Map: " + this.getMapNameFancy() + " by " + this.getMapAuthor() + ".");
+				p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- -------------------- ---");
 				
-				Random rand = new Random();
-				int r = rand.nextInt(kits);
+				if (!this.kit.containsKey(p)) { // If the player didn't pick a kit, give them a random one.
+					ConfigurationSection cs = FfaConfig.getKits();
+					int kits = cs.getKeys(false).size();
+					
+					Random rand = new Random();
+					int r = rand.nextInt(kits);
+					
+					this.kit.put(p, r);
+					p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You forgot to set your kit while in queue. Here's a random one.");
+					
+				}
 				
-				kit.put(p, r);
-				p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You forgot to set your kit while in queue. Here's a random one.");
+				Players.respawnEffects(p);
 				
+				int playerkit = this.kit.get(p); 
+				this.giveKit(p, playerkit);
+				
+				p.teleport(FfaConfig.getPossibleSpawnLocation(this));
+				this.scoreboard.put(p.getName(), 0);
 			}
-			
-			Players.respawnEffects(p);
-			
-			int playerkit = kit.get(p); 
-			giveKit(p, playerkit);
-			
-			p.teleport(FfaConfig.getPossibleSpawnLocation(this));
-			scoreboard.put(p.getName(), 0);
-			
 		}
 		
-		setCountdownTimer(Config.getCountdown(RoomType.FFA));
+		this.updateSigns();
+		this.setCountdownTimer(Config.getCountdown(RoomType.FFA));
 		
 	}
 	
@@ -328,8 +329,17 @@ public class FfaRoom extends Room {
 					sign.setLine(0, ChatColor.DARK_RED + "" + ChatColor.BOLD + "[FFA]");
 					sign.setLine(1, (this.isPremium() ? ChatColor.WHITE + "" : "") + this.getRoomId());
 					sign.setLine(2, ChatColor.ITALIC + "" + this.getPlayersInRoom() + "/" + Config.getPlayerLimit(RoomType.FFA));
-					sign.setLine(3, (this.isGameInProgress() ? ChatColor.GOLD + "In Progress" : ChatColor.GREEN + "Queue Open"));
 					
+					String setl3 = ChatColor.GREEN + "Queue Open";
+					if (this.isGameInProgress()) {
+						setl3 = ChatColor.YELLOW + "In Progress";
+						
+					} else if (this.isGameInWaiting()) {
+						setl3 = ChatColor.AQUA + "Starting Soon";
+						
+					}
+					
+					sign.setLine(3, setl3);
 					sign.update();
 				}
 			}
@@ -354,17 +364,17 @@ public class FfaRoom extends Room {
 	
 	public void resetRoom(boolean areYouSure) {
 		if (areYouSure) {
-			scoreboard = null;
-			scoreboard = new HashMap<String, Integer>();
+			this.scoreboard = null;
+			this.scoreboard = new HashMap<String, Integer>();
 			
-			kit = null;
-			kit = new HashMap<Player, Integer>();
+			this.kit = null;
+			this.kit = new HashMap<Player, Integer>();
 			
-			setMapName(null);
-			resetRoomBasics(areYouSure);
+			this.setMapName(null);
+			this.resetRoomBasics(areYouSure);
+			this.updateSigns();
 			
 		}
-		
 	}
 	
 }

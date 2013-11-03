@@ -1,7 +1,7 @@
 package me.taur.arenagames;
 
 import me.taur.arenagames.ffa.FfaRoom;
-import me.taur.arenagames.util.Room;
+import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
@@ -71,12 +71,14 @@ public class RoomCommand implements CommandExecutor {
 						Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
 						
 						if (room.isGameInProgress()) {
-							p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "The game is currently in progress.");
-							return true;
+							p.teleport(Config.getGlobalLobby());
+							// p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "The game is currently in progress.");
+							// return true;
 							
 						}
 						
 						p.sendMessage(ChatColor.GREEN + "You have left " + ChatColor.ITALIC + Room.PLAYERS.get(p) + ".");
+
 						Room.PLAYERS.remove(p);
 						room.removePlayer(p);
 						
@@ -93,25 +95,28 @@ public class RoomCommand implements CommandExecutor {
 						
 						// Only applies if the room is an FFA room.
 						if (room.getRoomType() == RoomType.FFA) {
-							// Check if there are enough people in the room.
-							int needed = room.getPlayersInRoom();
-							if (needed > Config.getMinPlayersInWait(RoomType.FFA) - 1) {
-								if (!room.isGameInWaiting()) {
-									room.waitStartMessage(RoomType.FFA);
-									room.setGameInWaiting(true);
-									room.setWaitTimer(Config.getWaitTimer(RoomType.FFA));
-								
+							if (!room.isGameInProgress()) {
+								// Check if there are enough people in the room.
+								int needed = room.getPlayersInRoom();
+								if (needed > Config.getMinPlayersInWait(RoomType.FFA) - 1) {
+									if (!room.isGameInWaiting()) {
+										room.waitStartMessage(RoomType.FFA);
+										room.setGameInWaiting(true);
+										room.setWaitTimer(Config.getWaitTimer(RoomType.FFA));
+									
+									} else {
+										room.waitStartMessage(p, RoomType.FFA);
+										
+									}
 								} else {
-									room.waitStartMessage(p, RoomType.FFA);
+									room.waitCancelledMessage(RoomType.FFA);
+									room.setGameInWaiting(false);
 									
 								}
-							} else {
-								room.waitCancelledMessage(RoomType.FFA);
-								room.setGameInWaiting(false);
-								
 							}
 							
-							((FfaRoom) room).updateSigns(); // Update signs.
+							FfaRoom r = (FfaRoom) room;
+							r.updateSigns(); // Update signs.
 						}
 						
 						return true;
@@ -164,12 +169,12 @@ public class RoomCommand implements CommandExecutor {
 					
 					String players = "";
 					for (Player pl : room.getPlayers()) {
-						players = players + " " + pl.getName();
-						
+						if (pl != null) {
+							players = players + " " + pl.getName();
+						}
 					}
 					
 					p.sendMessage(ChatColor.YELLOW + "Players:" + ChatColor.ITALIC + players);
-					
 					return true;
 					
 				}

@@ -4,21 +4,34 @@ import java.util.HashMap;
 
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
+import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.IconMenu;
-import me.taur.arenagames.util.Room;
 import me.taur.arenagames.util.RoomType;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 public class FfaUtil {
 	public static IconMenu ffaKitMenu = null;
 	
 	public static void enable() {
+		ScoreboardManager manager = Bukkit.getScoreboardManager();
+		
 		for (int i = 0; i < Config.getNormalRooms(RoomType.FFA); i++) {
 			String roomId = "ffa-n" + i;
 			Room.ROOMS.put(roomId, new FfaRoom(roomId));
+			
+			Scoreboard board = manager.getNewScoreboard();
+			Objective objective = board.registerNewObjective(roomId, "dummy");
+			objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+			objective.setDisplayName("Queue " + roomId);
+			Room.SCOREBOARDS.put(roomId, objective);
 			
 		}
 		
@@ -27,6 +40,12 @@ public class FfaUtil {
 			Room.ROOMS.put(roomId, new FfaRoom(roomId));
 			Room room = Room.ROOMS.get(roomId);
 			room.setPremium(true);
+			
+			Scoreboard board = manager.getNewScoreboard();
+			Objective objective = board.registerNewObjective(roomId, "dummy");
+			objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+			objective.setDisplayName("Queue " + roomId);
+			Room.SCOREBOARDS.put(roomId, objective);
 			
 		}
 		

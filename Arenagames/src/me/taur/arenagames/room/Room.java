@@ -1,24 +1,28 @@
-package me.taur.arenagames.util;
+package me.taur.arenagames.room;
 
 import java.util.HashMap;
 
 import me.taur.arenagames.Config;
 import me.taur.arenagames.ffa.FfaConfig;
+import me.taur.arenagames.util.RoomType;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Objective;
 
 public class Room {
 	public static HashMap<String, Room> ROOMS = new HashMap<String, Room>();
 	public static HashMap<Player, String> PLAYERS = new HashMap<Player, String>();
+	public static HashMap<String, Objective> SCOREBOARDS = new HashMap<String, Objective>();
 	
 	private String roomId;
 	private RoomType roomType;
 	private boolean gameInProgress, gameInWaiting, premium;
 	private int waiting, countdown;
 	private Player[] players;
-	
+
 	public Room() {
 		
 	}
@@ -115,31 +119,19 @@ public class Room {
 		this.players = players;
 	}
 	
-	public void removePlayer(Player p) {		
-		for (int i = 0; i < players.length; i++) {
-			if (players[i] == p) {
-				// New array
-				Player[] set = new Player[players.length - 1];
-				
-				boolean past = false;
-				for (int j = 0; j < set.length; j++) {
-					if (players[j] == p) {
-						past = true;
-						continue;
-					}
-					
-					if (past) {
-						set[j] = players[j + 1];
-					} else {
-						set[j] = players[j];
-					}
-				}
-				
-				players = set;
-				break;
+	public void removePlayer(Player p) {
+		Player[] roompl = this.getPlayers();
+		
+		int index = -1;
+		
+		for (int i = 0; (i < roompl.length) && (index == -1); i++) {
+			if (roompl[i] == p) {
+				index = i;
 			}
 		}
 		
+		this.setPlayers((Player[]) ArrayUtils.remove(roompl, index));
+
 	}
 	
 	public void removeAllPlayers() {
@@ -170,17 +162,17 @@ public class Room {
 				p.teleport(FfaConfig.getLobby());
 				
 			}
-			
 		}
 		
 	}
 	
 	public void gameOverMessage(String winner) {
 		for (Player p : this.getPlayers()) {
-			p.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " --- GAME OVER! ---");
-			p.sendMessage(ChatColor.YELLOW + winner + ChatColor.ITALIC + " is the winner of this round!");
-			p.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " ------------------");
-			
+			if (p != null) {
+				p.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " --- GAME OVER! ---");
+				p.sendMessage(ChatColor.YELLOW + winner + ChatColor.ITALIC + " is the winner of this round!");
+				p.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " -----------------");
+			}
 		}
 		
 		for (Player p : Bukkit.getOnlinePlayers()) {
@@ -188,7 +180,6 @@ public class Room {
 				p.sendMessage(ChatColor.AQUA + winner + ChatColor.ITALIC + " won the match in " + this.getRoomId() + ".");
 				
 			}
-			
 		}
 		
 	}
@@ -239,10 +230,8 @@ public class Room {
 			resetWaitTimer();
 			
 			gameInProgress = false;
-			
 			// Set countdown timer on start, not here.
 		}
-		
 	}
 	
 }

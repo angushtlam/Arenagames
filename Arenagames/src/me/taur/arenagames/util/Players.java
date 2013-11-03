@@ -6,6 +6,8 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Players {
 	public static void respawnEffects(Player p) {
+		p.setFoodLevel(20);
+		
 		p.setFireTicks(0);
 		p.getActivePotionEffects().clear();
 		p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 800));

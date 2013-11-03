@@ -1,10 +1,10 @@
-package me.taur.arenagames.util;
+package me.taur.arenagames.room;
 
 import me.taur.arenagames.Config;
 import me.taur.arenagames.ffa.FfaRoom;
+import me.taur.arenagames.util.Players;
+import me.taur.arenagames.util.RoomType;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
@@ -15,66 +15,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
-public class RoomListener implements Listener {
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void playerLoggedIn(PlayerJoinEvent evt) {
-		evt.setJoinMessage(""); // I hate this.
-		
-		Player p = evt.getPlayer();
-		p.getInventory().setArmorContents(null);
-		p.getInventory().clear();
-		p.teleport(Config.getGlobalLobby()); // Teleport people to lobby when they join
-		
-	}
-	
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void playerLoggedOff(PlayerQuitEvent evt) {
-		evt.setQuitMessage(""); // I hate this.
-		
-		Player p = evt.getPlayer();
-		
-		if (Room.PLAYERS.containsKey(p)) {
-			Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
-
-			room.removePlayer(p);
-			Room.PLAYERS.remove(p);
-
-			if (room.isGameInProgress()) {
-				if (room.getPlayers()[0] != null) {
-					for (Player other : room.getPlayers()) {
-						other.sendMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + p.getName() + " has left this game.");
-					}
-				}
-				
-				if (room.getPlayersInRoom() == 0) {
-					Bukkit.broadcastMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + room.getRoomId() + " queue has reopened.");
-					
-					if (room.getRoomType() == RoomType.FFA) {
-						FfaRoom r = (FfaRoom) room;
-						r.resetRoom(true);
-					}
-				}
-				
-			} else { // Left the queue
-				if (room.getPlayers() != null) {
-					for (Player other : room.getPlayers()) {
-						other.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + p.getName() + " has left this queue.");
-					}
-				}
-			}
-			
-			if (room.getRoomType() == RoomType.FFA) {
-				FfaRoom r = (FfaRoom) room;
-				r.updateSigns();
-			}
-		}
-	}
-	
+public class RoomPlayerDiedListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void playerDiedInArena(EntityDamageEvent evt) {
 		if (!(evt.getEntity() instanceof Player)) { // Players are only affected by this listener.
@@ -88,18 +30,16 @@ public class RoomListener implements Listener {
 			
 		}
 		
+		if (!Room.PLAYERS.containsKey(p)) { // Only apply when the player who died is killed by playing in an arena.
+			return;
+			
+		}
+		
 		// Make sure the event is cancelled and the player won't really die.
 		evt.setCancelled(true);
 		
 		// Set effects
-		p.setFireTicks(0);
-		p.getActivePotionEffects().clear();
-		p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 800));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60, 1));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60, 100));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 60, 100));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 2));
-		
+		Players.respawnEffects(p);
 		
 		if (Room.PLAYERS.containsKey(p)) { // If player is in a room
 			Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
@@ -117,7 +57,14 @@ public class RoomListener implements Listener {
 						    	Player d = (Player) damager;
 						    	
 						    	if (room.getRoomType() == RoomType.FFA) {
-						    		((FfaRoom) room).playerDied(p, d); // Tell the room that the player has been slain by another player.
+						    		if (Room.PLAYERS.containsKey(d)) { // If the player who killed the player is playing
+						    			((FfaRoom) room).playerDied(p, d); // Tell the room that the player has been slain by another player.
+							    		
+							    	} else {
+							    		((FfaRoom) room).playerDied(p); // The player died by themselves.
+							    		
+							    	}
+						    		
 						    		
 						    	}
 						        
