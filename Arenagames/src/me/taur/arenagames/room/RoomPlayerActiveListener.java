@@ -88,6 +88,8 @@ public class RoomPlayerActiveListener implements Listener {
 			if (room.getRoomType() == RoomType.FFA) {
 				FfaRoom r = (FfaRoom) room;
 				r.updateSigns();
+				r.getScoreboard().remove(p.getName()); // Remove the player from the scoreboard.
+				
 			}
 		}
 	}

@@ -85,6 +85,9 @@ public class RoomCommand implements CommandExecutor {
 						p.getInventory().setArmorContents(null);
 						p.getInventory().clear();
 						
+						p.setLevel(0);
+						p.setExp((float) 0.0);
+						
 						if (room.getPlayers() != null) {
 							for (Player other : room.getPlayers()) {
 								if (other != null) { // Null check
@@ -103,6 +106,12 @@ public class RoomCommand implements CommandExecutor {
 										room.waitStartMessage(RoomType.FFA);
 										room.setGameInWaiting(true);
 										room.setWaitTimer(Config.getWaitTimer(RoomType.FFA));
+										
+										for (Player pl : room.getPlayers()) {
+											pl.setLevel(0);
+											pl.setExp((float) 0.0);
+											
+										}
 									
 									} else {
 										room.waitStartMessage(p, RoomType.FFA);
@@ -117,6 +126,8 @@ public class RoomCommand implements CommandExecutor {
 							
 							FfaRoom r = (FfaRoom) room;
 							r.updateSigns(); // Update signs.
+							
+							r.getScoreboard().remove(p.getName()); // Remove the player from the scoreboard.
 						}
 						
 						return true;

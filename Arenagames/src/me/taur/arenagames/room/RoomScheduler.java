@@ -27,10 +27,47 @@ public class RoomScheduler {
 					Room room = Room.ROOMS.get(s);
 					
 					if (room.isGameInProgress()) {
+						if (room.getPlayersInRoom() == 1) { // If there is only 1 player left.
+							if (room.getRoomType() == RoomType.FFA) {
+								FfaRoom vroom = (FfaRoom) room;
+								vroom.gameOverMessage(vroom.getWinningPlayer());
+								
+								for (Player p : vroom.getPlayers()) {
+									if (p != null) {
+										p.teleport(FfaConfig.getLobby());
+										p.setLevel(0);
+										p.getInventory().setArmorContents(null);
+										p.getInventory().clear();
+										Items.updatePlayerInv(p);
+										Room.PLAYERS.remove(p);
+									}
+								}
+								
+								vroom.resetRoom(true);
+								
+							}
+						}
+						
+						
 						if (room.getPlayersInRoom() < 1) { // End game w/ no players.
 							if (room.getRoomType() == RoomType.FFA) {
+								FfaRoom vroom = (FfaRoom) room;
+								
+								for (Player p : vroom.getPlayers()) {
+									if (p != null) {
+										p.teleport(FfaConfig.getLobby());
+										p.setLevel(0);
+										p.getInventory().setArmorContents(null);
+										p.getInventory().clear();
+										Items.updatePlayerInv(p);
+										Room.PLAYERS.remove(p);
+									}
+								}
+								
+								vroom.resetRoom(true);
+								
 								Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Free For All match " + room.getRoomId() + " has ended.");
-								((FfaRoom) room).resetRoom(true);
+							
 							}
 						}
 						
