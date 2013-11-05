@@ -19,18 +19,15 @@ public class FfaKitSelectorListener implements Listener {
 		Action a = evt.getAction();
 		if (a.equals(Action.LEFT_CLICK_AIR) || a.equals(Action.LEFT_CLICK_BLOCK)) {
 			return;
-			
 		}
 		
 		ItemStack i = evt.getPlayer().getItemInHand();
 		if (i.getType() == Material.AIR) {
 			return;
-			
 		}
 		
 		if (!i.hasItemMeta()) {
 			return;
-			
 		}
 		
 		String im = i.getItemMeta().getDisplayName();
@@ -38,19 +35,16 @@ public class FfaKitSelectorListener implements Listener {
 		
 		if (im == null || kitsel == null) {
 			return;
-			
 		}
 		
 		if (!im.equals(kitsel)) { // Make sure the item they're holding is the kit item.
 			return;
-			
 		}
 		
 		Player p = evt.getPlayer();
 		if (!Room.PLAYERS.containsKey(p)) { // If the player is not in a game and has the kit selector.
 			p.getInventory().removeItem(i); // Remove it
 			return;
-			
 		}
 		
 		Room r = Room.ROOMS.get(Room.PLAYERS.get(p));
@@ -58,15 +52,12 @@ public class FfaKitSelectorListener implements Listener {
 		if (r == null) { // If the room doesn't exist
 			p.getInventory().removeItem(i); // Remove it
 			return;
-			
 		}
 		
-		if (r.getRoomType() != RoomType.FFA) { // If the player isn't in a FFA room.
-			p.getInventory().removeItem(i); // Remove it
+		if (r.getRoomType() == RoomType.FFA) { // If the player is in a FFA room.
+			FfaUtil.ffaKitMenu.open(p);
 			return;
-			
 		}
 		
-		FfaUtil.ffaKitMenu.open(p);
 	}
 }

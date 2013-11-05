@@ -71,7 +71,7 @@ public class FfaUtil {
         		}
                 
                 if (FfaConfig.getKitName(id).equals(kitname)) {
-                	p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have selected the " + kitname + " kit for your next round of this queue.");
+                	p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have selected the " + kitname + " kit for this queue round.");
         			
         			HashMap<Player, Integer> kit = room.getKit();
         			kit.put(p, id);
