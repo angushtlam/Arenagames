@@ -9,13 +9,13 @@ import me.taur.arenagames.Config;
 import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.ffa.FfaRoom;
 import me.taur.arenagames.util.Items;
+import me.taur.arenagames.util.Players;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 
 public class RoomScheduler {
 	public static void start() {
@@ -38,13 +38,8 @@ public class RoomScheduler {
 										if (p != null) {
 											p.teleport(FfaConfig.getLobby());
 											p.setLevel(0);
-											p.getInventory().setArmorContents(null);
-											p.getInventory().clear();
 											
-											for (PotionEffect effect : p.getActivePotionEffects()) {
-											    p.removePotionEffect(effect.getType());
-											}
-											
+											Players.respawnEffects(p);
 											Items.updatePlayerInv(p);
 											Room.PLAYERS.remove(p);
 										}
@@ -66,8 +61,8 @@ public class RoomScheduler {
 										if (p != null) {
 											p.teleport(FfaConfig.getLobby());
 											p.setLevel(0);
-											p.getInventory().setArmorContents(null);
-											p.getInventory().clear();
+
+											Players.respawnEffects(p);
 											Items.updatePlayerInv(p);
 											Room.PLAYERS.remove(p);
 										}
