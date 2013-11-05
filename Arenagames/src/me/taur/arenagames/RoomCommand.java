@@ -1,6 +1,7 @@
 package me.taur.arenagames;
 
 import me.taur.arenagames.ffa.FfaRoom;
+import me.taur.arenagames.lfl.LflRoom;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.RoomType;
 
@@ -158,7 +159,7 @@ public class RoomCommand implements CommandExecutor {
 								}
 							}
 							
-							FfaRoom r = (FfaRoom) room;
+							LflRoom r = (LflRoom) room;
 							r.updateSigns(); // Update signs.
 							
 							r.getScoreboard().remove(p.getName()); // Remove the player from the scoreboard.

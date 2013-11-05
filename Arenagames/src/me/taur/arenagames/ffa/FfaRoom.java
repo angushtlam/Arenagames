@@ -306,60 +306,81 @@ public class FfaRoom extends Room {
 		
 		if (signloc != null) {
 			for (Location l : signloc) {
-				if (l != null) {
-					Block b = l.getBlock();
-					if (!b.getType().name().contains("SIGN")) {
-						b.breakNaturally();
-						fix = true;
-						signloc.remove(l);
-						continue;
+				if (l == null) {
+					fix = true;
+					continue;
+					
+				}
+				
+				Block b = l.getBlock();
+				if (!b.getType().name().contains("SIGN")) {
+					b.breakNaturally();
+					fix = true;
+					continue;
+					
+				}
+				
+				BlockState state = b.getState();
+				if (!(state instanceof Sign)) {
+					b.breakNaturally();
+					fix = true;
+					continue;
+					
+				}
+				
+				Sign sign = (Sign) b.getState();
+				sign.setLine(0, ChatColor.DARK_RED + "" + ChatColor.BOLD + "[FFA]");
+				sign.setLine(1, (this.isPremium() ? ChatColor.WHITE + "" : "") + this.getRoomId());
+				sign.setLine(2, ChatColor.ITALIC + "" + this.getPlayersInRoom() + "/" + Config.getPlayerLimit(RoomType.FFA));
+				
+				String setl3 = ChatColor.GREEN + "Queue Open";
+				if (this.isGameInProgress()) {
+					setl3 = ChatColor.YELLOW + "In Progress";
+					
+				} else if (this.isGameInWaiting()) {
+					setl3 = ChatColor.AQUA + "Starting Soon";
+					
+				}
+				
+				sign.setLine(3, setl3);
+				sign.update();
+			}
+			
+			if (fix) {
+				Set<Location> signlocs = new HashSet<Location>();
+				
+				for (Location l : locs) { // Copy the list first
+					signlocs.add(l);
+					
+				}
+				
+				FfaConfig.clearSignLocations(this.getRoomId());
+				
+				int i = 0;
+				if (locs != null) {
+					for (Location l : signlocs) {
+						if (l == null) {
+							continue;
+						}
 						
+						Block b = l.getBlock();
+						if (!b.getType().name().contains("SIGN")) {
+							continue;
+						}
+						
+						BlockState state = b.getState();
+						if (!(state instanceof Sign)) {
+							continue;
+							
+						}
+							
+						FfaConfig.setSignLocation(this.getRoomId(), i, l);
+						i++;
+							
 					}
-					
-					BlockState state = b.getState();
-					if (!(state instanceof Sign)) {
-						b.breakNaturally();
-						fix = true;
-						signloc.remove(l);
-						continue;
-						
-					}
-					
-					Sign sign = (Sign) b.getState();
-					sign.setLine(0, ChatColor.DARK_RED + "" + ChatColor.BOLD + "[FFA]");
-					sign.setLine(1, (this.isPremium() ? ChatColor.WHITE + "" : "") + this.getRoomId());
-					sign.setLine(2, ChatColor.ITALIC + "" + this.getPlayersInRoom() + "/" + Config.getPlayerLimit(RoomType.FFA));
-					
-					String setl3 = ChatColor.GREEN + "Queue Open";
-					if (this.isGameInProgress()) {
-						setl3 = ChatColor.YELLOW + "In Progress";
-						
-					} else if (this.isGameInWaiting()) {
-						setl3 = ChatColor.AQUA + "Starting Soon";
-						
-					}
-					
-					sign.setLine(3, setl3);
-					sign.update();
 				}
 			}
 		}
-		
-		if (fix) {
-			FfaConfig.clearSignLocations(this.getRoomId());
-			
-			int i = 0;
-				if (signloc != null) {
-				for (Location l : signloc) { // Set the new locations in case
-					if (l != null) {
-						FfaConfig.setSignLocation(this.getRoomId(), i, l);
-						i++;
-						
-					}
-				}
-			}
-		}	
-		
 	}
 	
 	public void resetRoom(boolean areYouSure) {

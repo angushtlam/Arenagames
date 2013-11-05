@@ -1,6 +1,7 @@
 package me.taur.arenagames;
 
 import me.taur.arenagames.ffa.FfaConfig;
+import me.taur.arenagames.lfl.LflConfig;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
@@ -15,7 +16,7 @@ public class Config {
 		FileConfiguration config = Arenagames.plugin.getConfig();
 		
 		// Change every time a new gamemode is added.
-		int latestVer = 1;
+		int latestVer = 2;
 		
 		if (config.getInt("do-not-change.current-version") != latestVer) {
 			config.addDefault("do-not-change.current-version", latestVer);
@@ -43,6 +44,7 @@ public class Config {
 		}
 		
 		FfaConfig.defaultConf();
+		LflConfig.defaultConf();
 	    
 	}
 	

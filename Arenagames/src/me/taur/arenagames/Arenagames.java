@@ -12,7 +12,8 @@ import me.taur.arenagames.lfl.LflSignListener;
 import me.taur.arenagames.lfl.LflUtil;
 import me.taur.arenagames.room.PlayerLoginListener;
 import me.taur.arenagames.room.RoomScheduler;
-import me.taur.arenagames.room.SignListener;
+import me.taur.arenagames.room.SignCreateListener;
+import me.taur.arenagames.room.SignDestroyListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -33,7 +34,8 @@ public class Arenagames extends JavaPlugin {
 		loadGamemodes();
 		
 		regEvent(new PlayerLoginListener());
-		regEvent(new SignListener());
+		regEvent(new SignCreateListener());
+		regEvent(new SignDestroyListener());
 		
 		RoomScheduler.start();
 		
