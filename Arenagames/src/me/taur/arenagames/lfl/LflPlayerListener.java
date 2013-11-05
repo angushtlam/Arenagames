@@ -1,4 +1,4 @@
-package me.taur.arenagames.ffa;
+package me.taur.arenagames.lfl;
 
 import me.taur.arenagames.Config;
 import me.taur.arenagames.room.Room;
@@ -13,7 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class FfaPlayerListener implements Listener {
+public class LflPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void playerLoggedOff(PlayerQuitEvent evt) {
 		Player p = evt.getPlayer();
@@ -21,11 +21,11 @@ public class FfaPlayerListener implements Listener {
 		if (Room.PLAYERS.containsKey(p)) {
 			Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
 
-			if (room.getRoomType() == RoomType.FFA) {
+			if (room.getRoomType() == RoomType.LFL) {
 				room.removePlayer(p); // Only remove the gamemode's own players
 				Room.PLAYERS.remove(p);
 				
-				FfaRoom r = (FfaRoom) room;
+				LflRoom r = (LflRoom) room;
 				if (room.isGameInProgress()) {
 					if (room.getPlayers()[0] != null) {
 						for (Player other : room.getPlayers()) {
@@ -35,7 +35,7 @@ public class FfaPlayerListener implements Listener {
 
 					if (room.getPlayersInRoom() == 0) {
 						Bukkit.broadcastMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + room.getRoomId() + " queue has reopened.");
-						
+
 						r.getScoreboard().remove(p);
 						r.resetRoom(true);
 					}
@@ -52,19 +52,19 @@ public class FfaPlayerListener implements Listener {
 
 					// Check if there are enough people in the room.
 					int needed = room.getPlayersInRoom();
-					if (needed > Config.getMinPlayersInWait(RoomType.FFA) - 1) {
+					if (needed > Config.getMinPlayersInWait(RoomType.LFL) - 1) {
 						if (!room.isGameInWaiting()) {
-							room.waitStartMessage(RoomType.FFA);
+							room.waitStartMessage(RoomType.LFL);
 							room.setGameInWaiting(true);
-							room.setWaitTimer(Config.getWaitTimer(RoomType.FFA));
+							room.setWaitTimer(Config.getWaitTimer(RoomType.LFL));
 
 						} else {
-							room.waitStartMessage(p, RoomType.FFA);
+							room.waitStartMessage(p, RoomType.LFL);
 
 						}
 						
 					} else {
-						room.waitCancelledMessage(RoomType.FFA);
+						room.waitCancelledMessage(RoomType.LFL);
 						room.setGameInWaiting(false);
 
 					}
@@ -88,7 +88,7 @@ public class FfaPlayerListener implements Listener {
 		
 		Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
 		if (room != null) {
-			if (room.getRoomType() == RoomType.FFA) {
+			if (room.getRoomType() == RoomType.LFL) {
 				evt.setCancelled(true);
 				
 			}

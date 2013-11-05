@@ -1,4 +1,4 @@
-package me.taur.arenagames.ffa;
+package me.taur.arenagames.lfl;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -15,7 +15,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-public class FfaActive {
+public class LflActive {
 	public static void run() {
 		// Get each room in stored Rooms.
 		for (String s : Room.ROOMS.keySet()) {
@@ -23,14 +23,14 @@ public class FfaActive {
 			
 			if (room.isGameInProgress()) {
 				if (room.getPlayersInRoom() == 1) { // If there is only 1 player left.
-					if (room.getRoomType() == RoomType.FFA) {
-						FfaRoom r = (FfaRoom) room;
+					if (room.getRoomType() == RoomType.LFL) {
+						LflRoom r = (LflRoom) room;
 						r.gameOverMessage(r.getWinningPlayer());
 						
 						if (r.getPlayers() != null) {
 							for (Player p : r.getPlayers()) {
 								if (p != null) {
-									p.teleport(FfaConfig.getLobby());
+									p.teleport(LflConfig.getLobby());
 									p.setLevel(0);
 									
 									Players.respawnEffects(p);
@@ -47,13 +47,13 @@ public class FfaActive {
 				
 				
 				if (room.getPlayersInRoom() < 1) { // End game w/ no players.
-					if (room.getRoomType() == RoomType.FFA) {
-						FfaRoom r = (FfaRoom) room;
+					if (room.getRoomType() == RoomType.LFL) {
+						LflRoom r = (LflRoom) room;
 						
 						if (r.getPlayers() != null) {
 							for (Player p : r.getPlayers()) {
 								if (p != null) {
-									p.teleport(FfaConfig.getLobby());
+									p.teleport(LflConfig.getLobby());
 									p.setLevel(0);
 
 									Players.respawnEffects(p);
@@ -64,7 +64,7 @@ public class FfaActive {
 						}
 						
 						r.resetRoom(true);
-						Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Free For All match " + room.getRoomId() + " has ended.");
+						Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Lifeline match " + room.getRoomId() + " has ended.");
 					
 					}
 				}
@@ -82,13 +82,13 @@ public class FfaActive {
 					room.setCountdownTimer(countdown - 1);
 					
 					if (countdown == 0) {
-						if (room.getRoomType() == RoomType.FFA) {
-							FfaRoom r = (FfaRoom) room;
+						if (room.getRoomType() == RoomType.LFL) {
+							LflRoom r = (LflRoom) room;
 							r.gameOverMessage(r.getWinningPlayer());
 							
 							for (Player p : r.getPlayers()) {
 								if (p != null) {
-									p.teleport(FfaConfig.getLobby());
+									p.teleport(LflConfig.getLobby());
 									p.getInventory().setArmorContents(null);
 									p.getInventory().clear();
 									Items.updatePlayerInv(p);
@@ -133,10 +133,10 @@ public class FfaActive {
 					
 					if (waitcount == 0) { // Game start
 						// What happens when the room is Free-For-All
-						if (room.getRoomType() == RoomType.FFA) {
-							FfaRoom r = (FfaRoom) room;
+						if (room.getRoomType() == RoomType.LFL) {
+							LflRoom r = (LflRoom) room;
 							
-							ConfigurationSection cs = FfaConfig.get().getConfigurationSection("ffa.maps");
+							ConfigurationSection cs = LflConfig.get().getConfigurationSection("lfl.maps");
 							if (cs != null) {
 								Set<String> maps = cs.getKeys(false);
 								
@@ -152,23 +152,23 @@ public class FfaActive {
 										
 										
 										for (Player p : r.getPlayers()) {
-											p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Currently all of the Free For All arenas are in progress.");
+											p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Currently all of the Lifeline arenas are in progress.");
 											p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Please wait until an arena frees up.");
 											
 										}
 										
 										// Restart the wait timer.
 										int needed = room.getPlayersInRoom();
-										if (needed > Config.getMinPlayersInWait(RoomType.FFA)) {
+										if (needed > Config.getMinPlayersInWait(RoomType.LFL)) {
 											if (!r.isGameInWaiting()) {
-												r.waitStartMessage(RoomType.FFA);
+												r.waitStartMessage(RoomType.LFL);
 												r.setGameInWaiting(true);
-												r.setWaitTimer(Config.getWaitTimer(RoomType.FFA));
+												r.setWaitTimer(Config.getWaitTimer(RoomType.LFL));
 												r.updateSigns();
 											
 											}
 										} else {
-											r.waitCancelledMessage(RoomType.FFA);
+											r.waitCancelledMessage(RoomType.LFL);
 											
 										}
 										
@@ -188,14 +188,14 @@ public class FfaActive {
 											String mapname = ((String) maps.toArray()[map]);
 											
 											if (premium) { // If the queue is premium
-												if (!FfaConfig.canPremiumPlayMap(mapname)) { // If the premium room cannot play the map
+												if (!LflConfig.canPremiumPlayMap(mapname)) { // If the premium room cannot play the map
 													alreadyused.add(map);
 													tries++;
 													continue;
 													
 												}
 											} else {
-												if (!FfaConfig.canNormalPlayMap(mapname)) { // If the normal room cannot play the map
+												if (!LflConfig.canNormalPlayMap(mapname)) { // If the normal room cannot play the map
 													alreadyused.add(map);
 													tries++;
 													continue;
@@ -205,8 +205,8 @@ public class FfaActive {
 											
 											boolean match = false; // Make sure arenas are not used by more than 1 queue
 											for (Room tryroom : Room.ROOMS.values()) {
-												if (tryroom.getRoomType() == RoomType.FFA) {
-													FfaRoom troom = (FfaRoom) tryroom;
+												if (tryroom.getRoomType() == RoomType.LFL) {
+													LflRoom troom = (LflRoom) tryroom;
 													if (troom.getMapName() == maps.toArray()[map]) {
 														match = true;
 														
@@ -236,7 +236,7 @@ public class FfaActive {
 								
 							} else {
 								Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "An error has occured in " + room.getRoomId() + ": Maps cannot be loaded.");
-								Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Free For All match " + room.getRoomId() + " has ended.");
+								Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Lifeline match " + room.getRoomId() + " has ended.");
 								
 								r.resetRoom(true);
 								

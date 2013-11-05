@@ -1,11 +1,16 @@
 package me.taur.arenagames;
 
+import me.taur.arenagames.ffa.FfaDeathListener;
 import me.taur.arenagames.ffa.FfaKitSelectorListener;
 import me.taur.arenagames.ffa.FfaPlayerListener;
 import me.taur.arenagames.ffa.FfaUtil;
 import me.taur.arenagames.ffa.FfaSignListener;
-import me.taur.arenagames.room.RoomPlayerActiveListener;
-import me.taur.arenagames.room.RoomPlayerDiedListener;
+import me.taur.arenagames.lfl.LflDeathListener;
+import me.taur.arenagames.lfl.LflKitSelectorListener;
+import me.taur.arenagames.lfl.LflPlayerListener;
+import me.taur.arenagames.lfl.LflSignListener;
+import me.taur.arenagames.lfl.LflUtil;
+import me.taur.arenagames.room.PlayerLoginListener;
 import me.taur.arenagames.room.RoomScheduler;
 import me.taur.arenagames.room.SignListener;
 
@@ -27,8 +32,7 @@ public class Arenagames extends JavaPlugin {
 		regCmd("queue", new RoomCommand());
 		loadGamemodes();
 		
-		regEvent(new RoomPlayerActiveListener());
-		regEvent(new RoomPlayerDiedListener());
+		regEvent(new PlayerLoginListener());
 		regEvent(new SignListener());
 		
 		RoomScheduler.start();
@@ -49,6 +53,12 @@ public class Arenagames extends JavaPlugin {
 				regFfa();
 				
 			}
+			
+			if (gm[i].contains("lfl")) {
+				LflUtil.enable();
+				regLfl();
+				
+			}
 		}
 	}
 	
@@ -63,9 +73,18 @@ public class Arenagames extends JavaPlugin {
 	}
 
 	private static void regFfa() {
-		regEvent(new FfaSignListener());
-		regEvent(new FfaPlayerListener());
+		regEvent(new FfaDeathListener());
 		regEvent(new FfaKitSelectorListener());
+		regEvent(new FfaPlayerListener());
+		regEvent(new FfaSignListener());
+		
+	}
+	
+	private static void regLfl() {
+		regEvent(new LflDeathListener());
+		regEvent(new LflKitSelectorListener());
+		regEvent(new LflPlayerListener());
+		regEvent(new LflSignListener());
 		
 	}
 }

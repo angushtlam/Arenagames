@@ -3,6 +3,7 @@ package me.taur.arenagames.ffa;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -18,39 +19,40 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FfaConfig {
-
-	private static FileConfiguration ffaConfig = null;
-	private static File ffaFile = null;
+	private static FileConfiguration config = null;
+	private static File file = null;
+	
+	private static String filename = "ffa.yml";
 
 	public static void reload() {
-		if (ffaFile == null) {
-			ffaFile = new File(Arenagames.plugin.getDataFolder(), "ffa.yml");
+		if (file == null) {
+			file = new File(Arenagames.plugin.getDataFolder(), filename);
 		}
-		ffaConfig = YamlConfiguration.loadConfiguration(ffaFile);
+		config = YamlConfiguration.loadConfiguration(file);
 
-		InputStream defConfigStream = Arenagames.plugin.getResource("ffa.yml");
+		InputStream defConfigStream = Arenagames.plugin.getResource(filename);
 		if (defConfigStream != null) {
 			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-			ffaConfig.setDefaults(defConfig);
+			config.setDefaults(defConfig);
 		}
 	}
 
 	public static FileConfiguration get() {
-		if (ffaConfig == null) {
+		if (config == null) {
 			reload();
 		}
-		return ffaConfig;
+		return config;
 	}
 
 	public static void save() {
-		if ((ffaConfig == null) || (ffaFile == null)) {
+		if ((config == null) || (file == null)) {
 			return;
 		}
 		try {
-			ffaConfig.save(ffaFile);
+			config.save(file);
 		}
 		catch (IOException ex) {
-			Logger.getLogger(JavaPlugin.class.getName()).log(java.util.logging.Level.SEVERE, "Could not save config to " + ffaFile, ex);
+			Logger.getLogger(JavaPlugin.class.getName()).log(java.util.logging.Level.SEVERE, "Could not save config to " + file, ex);
 		}
 	}
 	
@@ -184,4 +186,60 @@ public class FfaConfig {
 		
 	}
 	
+	public static void defaultConf() {
+		if (get().getBoolean("generate-default-config")) {
+
+			get().addDefault("ffa.maps.edit.info.map-name", "Llamarena");
+			get().addDefault("ffa.maps.edit.info.author", "Taur and the Animals");
+			
+			get().addDefault("ffa.maps.edit.info.premium-mode-pool", false);
+			get().addDefault("ffa.maps.edit.info.normal-mode-pool", true);
+			
+			get().addDefault("ffa.maps.edit.spawns.loc-0.spawn.world", "world");
+			get().addDefault("ffa.maps.edit.spawns.loc-0.spawn.x", -50.0);
+			get().addDefault("ffa.maps.edit.spawns.loc-0.spawn.y", 70.0);
+			get().addDefault("ffa.maps.edit.spawns.loc-0.spawn.z", -50.0);
+			
+			get().addDefault("ffa.maps.edit.spawns.loc-1.spawn.world", "world");
+			get().addDefault("ffa.maps.edit.spawns.loc-1.spawn.x", -50.0);
+			get().addDefault("ffa.maps.edit.spawns.loc-1.spawn.y", 70.0);
+			get().addDefault("ffa.maps.edit.spawns.loc-1.spawn.z", 50.0);
+			
+			get().addDefault("ffa.maps.edit.spawns.loc-2.spawn.world", "world");
+			get().addDefault("ffa.maps.edit.spawns.loc-2.spawn.x", 50.0);
+			get().addDefault("ffa.maps.edit.spawns.loc-2.spawn.y", 70.0);
+			get().addDefault("ffa.maps.edit.spawns.loc-2.spawn.z", 50.0);
+			
+			get().addDefault("ffa.maps.edit.spawns.loc-3.spawn.world", "world");
+			get().addDefault("ffa.maps.edit.spawns.loc-3.spawn.x", 50.0);
+			get().addDefault("ffa.maps.edit.spawns.loc-3.spawn.y", 70.0);
+			get().addDefault("ffa.maps.edit.spawns.loc-3.spawn.z", -50.0);
+			
+			get().addDefault("ffa.items.kit-0.kit-name", "Fighter");
+			get().addDefault("ffa.items.kit-0.kit-description", "Fight enemies toe to toe!");
+			get().addDefault("ffa.items.kit-0.kit-menu-icon", "IRON_SWORD");
+			get().addDefault("ffa.items.kit-0.premium-only", false);
+			List<String> fighterItems = Arrays.asList("IRON_SWORD|KNOCKBACK:1,DAMAGE_ALL:1#1", "STONE_SWORD|FIRE_ASPECT:1#1", "IRON_CHESTPLATE:-1|DURABILITY:10#1", "COOKIE#32", "GOLDEN_APPLE:1#1");
+			get().addDefault("ffa.items.kit-0.items", fighterItems);
+			
+			get().addDefault("ffa.items.kit-1.kit-name", "Archer");
+			get().addDefault("ffa.items.kit-1.kit-description", "Kill enemies from afar!");
+			get().addDefault("ffa.items.kit-1.kit-menu-icon", "BOW");
+			get().addDefault("ffa.items.kit-1.premium-only", true);
+			List<String> archerItems = Arrays.asList("BOW|ARROW_INFINITE:1#1", "BOW:40|ARROW_KNOCKBACK:5#1", "CHAINMAIL_CHESTPLATE|DURABILITY:10#1", "COOKIE#32", "GOLDEN_APPLE:1#1");
+			get().addDefault("ffa.items.kit-1.items", archerItems);
+			
+			get().addDefault("ffa.lobby.world", "world");
+			get().addDefault("ffa.lobby.x", 5.0);
+			get().addDefault("ffa.lobby.y", 70.0);
+			get().addDefault("ffa.lobby.z", 0.0);
+			
+		}
+		
+		get().options().copyDefaults(true);
+		
+		get().set("generate-default-config", false);
+		save();
+		
+	}
 }

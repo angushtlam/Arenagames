@@ -130,6 +130,40 @@ public class RoomCommand implements CommandExecutor {
 							r.getScoreboard().remove(p.getName()); // Remove the player from the scoreboard.
 						}
 						
+						// Only applies if the room is an LFL room.
+						if (room.getRoomType() == RoomType.LFL) {
+							if (!room.isGameInProgress()) {
+								// Check if there are enough people in the room.
+								int needed = room.getPlayersInRoom();
+								if (needed > Config.getMinPlayersInWait(RoomType.LFL) - 1) {
+									if (!room.isGameInWaiting()) {
+										room.waitStartMessage(RoomType.LFL);
+										room.setGameInWaiting(true);
+										room.setWaitTimer(Config.getWaitTimer(RoomType.LFL));
+										
+										for (Player pl : room.getPlayers()) {
+											pl.setLevel(0);
+											pl.setExp((float) 0.0);
+											
+										}
+									
+									} else {
+										room.waitStartMessage(p, RoomType.LFL);
+										
+									}
+								} else {
+									room.waitCancelledMessage(RoomType.LFL);
+									room.setGameInWaiting(false);
+									
+								}
+							}
+							
+							FfaRoom r = (FfaRoom) room;
+							r.updateSigns(); // Update signs.
+							
+							r.getScoreboard().remove(p.getName()); // Remove the player from the scoreboard.
+						}
+						
 						return true;
 						
 					}
