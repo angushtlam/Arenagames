@@ -98,6 +98,7 @@ public class SignListener implements Listener {
 					Location saveloc = new Location(world, x, y, z);
 					
 					FfaConfig.setSignLocation(r.getRoomId(), size, saveloc);
+					
 				} else {
 					World world = signloc.getWorld();
 					double x = signloc.getBlockX();

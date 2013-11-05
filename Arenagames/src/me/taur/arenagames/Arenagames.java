@@ -1,6 +1,7 @@
 package me.taur.arenagames;
 
 import me.taur.arenagames.ffa.FfaKitSelectorListener;
+import me.taur.arenagames.ffa.FfaPlayerListener;
 import me.taur.arenagames.ffa.FfaUtil;
 import me.taur.arenagames.ffa.FfaSignListener;
 import me.taur.arenagames.room.RoomPlayerActiveListener;
@@ -63,6 +64,7 @@ public class Arenagames extends JavaPlugin {
 
 	private static void regFfa() {
 		regEvent(new FfaSignListener());
+		regEvent(new FfaPlayerListener());
 		regEvent(new FfaKitSelectorListener());
 		
 	}

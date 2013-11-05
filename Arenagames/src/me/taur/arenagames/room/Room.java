@@ -176,7 +176,6 @@ public class Room {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if (!isPlayerInRoom(p)) {
 				p.sendMessage(ChatColor.AQUA + winner + ChatColor.ITALIC + " won the match in " + this.getRoomId() + ".");
-				
 			}
 		}
 		

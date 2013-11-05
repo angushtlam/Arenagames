@@ -12,6 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.potion.PotionEffect;
 
 public class RoomPlayerActiveListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -21,6 +22,11 @@ public class RoomPlayerActiveListener implements Listener {
 		Player p = evt.getPlayer();
 		p.getInventory().setArmorContents(null);
 		p.getInventory().clear();
+		
+		for (PotionEffect effect : p.getActivePotionEffects()) {
+		    p.removePotionEffect(effect.getType());
+		}
+		
 		p.setLevel(0);
 		p.setExp((float) 0.0);
 		p.teleport(Config.getGlobalLobby()); // Teleport people to lobby when they join

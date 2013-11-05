@@ -9,7 +9,11 @@ public class Players {
 		p.setFoodLevel(19);
 		
 		p.setFireTicks(0);
-		p.getActivePotionEffects().clear();
+		
+		for (PotionEffect effect : p.getActivePotionEffects()) {
+		    p.removePotionEffect(effect.getType());
+		}
+		
 		p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 800));
 		p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60, 1));
 		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60, 100));

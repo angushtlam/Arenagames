@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 
 public class RoomScheduler {
 	public static void start() {
@@ -32,14 +33,21 @@ public class RoomScheduler {
 								FfaRoom vroom = (FfaRoom) room;
 								vroom.gameOverMessage(vroom.getWinningPlayer());
 								
-								for (Player p : vroom.getPlayers()) {
-									if (p != null) {
-										p.teleport(FfaConfig.getLobby());
-										p.setLevel(0);
-										p.getInventory().setArmorContents(null);
-										p.getInventory().clear();
-										Items.updatePlayerInv(p);
-										Room.PLAYERS.remove(p);
+								if (vroom.getPlayers() != null) {
+									for (Player p : vroom.getPlayers()) {
+										if (p != null) {
+											p.teleport(FfaConfig.getLobby());
+											p.setLevel(0);
+											p.getInventory().setArmorContents(null);
+											p.getInventory().clear();
+											
+											for (PotionEffect effect : p.getActivePotionEffects()) {
+											    p.removePotionEffect(effect.getType());
+											}
+											
+											Items.updatePlayerInv(p);
+											Room.PLAYERS.remove(p);
+										}
 									}
 								}
 								
@@ -53,14 +61,16 @@ public class RoomScheduler {
 							if (room.getRoomType() == RoomType.FFA) {
 								FfaRoom vroom = (FfaRoom) room;
 								
-								for (Player p : vroom.getPlayers()) {
-									if (p != null) {
-										p.teleport(FfaConfig.getLobby());
-										p.setLevel(0);
-										p.getInventory().setArmorContents(null);
-										p.getInventory().clear();
-										Items.updatePlayerInv(p);
-										Room.PLAYERS.remove(p);
+								if (vroom.getPlayers() != null) {
+									for (Player p : vroom.getPlayers()) {
+										if (p != null) {
+											p.teleport(FfaConfig.getLobby());
+											p.setLevel(0);
+											p.getInventory().setArmorContents(null);
+											p.getInventory().clear();
+											Items.updatePlayerInv(p);
+											Room.PLAYERS.remove(p);
+										}
 									}
 								}
 								
@@ -74,8 +84,9 @@ public class RoomScheduler {
 						int countdown = room.getCountdownTimer();
 						
 						for (Player p : room.getPlayers()) { // Make the levels the timer.
-							p.setLevel(countdown);
-							
+							if (p != null) {
+								p.setLevel(countdown);
+							}
 						}
 						
 						if (countdown > -1) {
