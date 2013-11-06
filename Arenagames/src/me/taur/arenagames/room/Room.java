@@ -198,7 +198,7 @@ public class Room {
 	
 	public void waitStartMessage(Player p, RoomType type) {
 		int waitcount = Config.getWaitTimer(type);
-		int minute = waitcount % 60;
+		int minute = waitcount / 60;
 		
 		String plural = minute == 1 ? "minute" : "minutes";
 		String gameStartIn = minute == 0 ? "in " + minute + " " + plural : "soon";

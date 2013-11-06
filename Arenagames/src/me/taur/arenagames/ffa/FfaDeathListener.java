@@ -38,16 +38,16 @@ public class FfaDeathListener implements Listener {
 			
 		}
 		
-		// Make sure the event is cancelled and the player won't really die.
-		evt.setCancelled(true);
-		
-		// Set effects
-		Players.respawnEffects(p);
-		
 		Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
 
 		if (room != null) {
 			if (room.getRoomType() == RoomType.FFA) {
+				// Make sure the event is cancelled and the player won't really die.
+				evt.setCancelled(true);
+				
+				// Set effects
+				Players.respawnEffects(p);
+				
 				FfaRoom r = (FfaRoom) room;
 
 				if (room.isGameInProgress()) { // Check if the game is in progress.

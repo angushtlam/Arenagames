@@ -29,12 +29,14 @@ import org.bukkit.potion.PotionEffectType;
 public class LflRoom extends Room {
 	private String mapname;
 	private HashMap<String, Integer> scoreboard;
-	private HashMap<String, Integer> timer;
+	private HashMap<Player, Integer> playertimer;
 	private HashMap<Player, Integer> kit;
 	
 	public LflRoom(String roomId) {
 		this.scoreboard = new HashMap<String, Integer>();
 		this.kit = new HashMap<Player, Integer>();
+		this.playertimer = new HashMap<Player, Integer>();
+		
 		this.setRoomId(roomId);
 		this.setRoomType(RoomType.LFL);
 	}
@@ -55,12 +57,12 @@ public class LflRoom extends Room {
 		this.scoreboard = scoreboard;
 	}
 	
-	public HashMap<String, Integer> getTimer() {
-		return this.timer;
+	public HashMap<Player, Integer> getTimer() {
+		return this.playertimer;
 	}
 
-	public void setTimer(HashMap<String, Integer> scoreboard) {
-		this.timer = scoreboard;
+	public void setTimer(HashMap<Player, Integer> timer) {
+		this.playertimer = timer;
 	}
 	
 	public void setPlayerScore(Player p, int amt) {
@@ -75,7 +77,7 @@ public class LflRoom extends Room {
 		this.kit = kit;
 	}
 	
-	public void giveKit(Player p, int kitnum) {
+	public void giveKit(Player p) {
 		String kitname = LflConfig.getKitName(this.kit.get(p));
 		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been given a " + kitname + " kit.");
 		
@@ -200,26 +202,37 @@ public class LflRoom extends Room {
 	}
 	
 	public void crankPlayer(Player p) {
-		int kill = this.scoreboard.get(p.getName());
-		this.scoreboard.put(p.getName(), kill + 1);
-		
-		this.timer.put(p.getName(), 30); // Reset the player's timer.
-		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get another kill within 30 seconds or you'll die!");
-		
-		addRefill(p);
-
-		int potionstr = kill / 3; // increases every 3 kills
-		if (potionstr > 0) {
-			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 31 * 20, potionstr));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 31 * 20, potionstr));
+		if (this.scoreboard.get(p.getName()) != null) {
+			int kill = this.scoreboard.get(p.getName());
+			this.scoreboard.put(p.getName(), kill + 1);
 			
+			this.playertimer.put(p, 30); // Reset the player's timer.
+			p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get another kill within 30 seconds or you'll die!");
+			
+			addRefill(p);
+	
+			int potionstr = kill / 3; // increases every 3 kills
+			if (potionstr > 0) {
+				p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 31 * 20, potionstr));
+				p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 31 * 20, potionstr));
+				
+			}
+			
+		} else {
+			this.scoreboard.put(p.getName(), 1);
+			
+			this.playertimer.put(p, 30); // Reset the player's timer.
+			p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get another kill within 30 seconds or you'll die!");
+			
+			addRefill(p);
+	
+			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 31 * 20, 1));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 31 * 20, 1));
+
 		}
 	}
 	
 	public void killPlayer(Player p) {
-		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have exploded for timing out.");
-		p.getWorld().createExplosion(p.getLocation(), 0.0F, false);
-		
 		Room.PLAYERS.remove(p);
 		this.removePlayer(p);
 		
@@ -242,14 +255,16 @@ public class LflRoom extends Room {
 		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You died with " + kills + (kills == 1 ? " kill" : " kills") + ".");
 		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have been removed from this arena.");
 		this.scoreboard.remove(p.getName());
+		this.playertimer.remove(p);
 		this.killPlayer(p);
 	}
 	
 	public void playerDied(Player p, Player killer) { // Player loses 1 point for being executed by another player.
-		int kill = this.scoreboard.get(killer.getName());
+		int kill = this.scoreboard.get(killer.getName()) + 1;
 		
 		this.playerDied(p, p.getName() + " has been executed by " + killer.getName() + "!");
-		killer.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You are on a  " + (kill + 1) + " kill kill-streak.");
+		killer.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You are on a " + kill + " kill kill-streak.");
+		
 		this.crankPlayer(p);
 		
 	}
@@ -340,14 +355,12 @@ public class LflRoom extends Room {
 				}
 				
 				Players.respawnEffects(p);
-				
-				int playerkit = this.kit.get(p); 
-				this.giveKit(p, playerkit);
+				this.giveKit(p);
 				
 				p.teleport(LflConfig.getPossibleSpawnLocation(this));
 				
 				this.scoreboard.put(p.getName(), 0);
-				this.timer.put(p.getName(), 30);
+				this.playertimer.put(p, 30);
 			}
 		}
 		
@@ -451,6 +464,9 @@ public class LflRoom extends Room {
 		if (areYouSure) {
 			this.scoreboard = null;
 			this.scoreboard = new HashMap<String, Integer>();
+			
+			this.playertimer = null;
+			this.playertimer = new HashMap<Player, Integer>();
 			
 			this.kit = null;
 			this.kit = new HashMap<Player, Integer>();

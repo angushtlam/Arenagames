@@ -1,9 +1,7 @@
 package me.taur.arenagames.lfl;
 
 import me.taur.arenagames.Config;
-import me.taur.arenagames.ffa.FfaRoom;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.Players;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.entity.Arrow;
@@ -38,17 +36,13 @@ public class LflDeathListener implements Listener {
 			
 		}
 		
-		// Make sure the event is cancelled and the player won't really die.
-		evt.setCancelled(true);
-		
-		// Set effects
-		Players.respawnEffects(p);
-		
 		Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
-
 		if (room != null) {
 			if (room.getRoomType() == RoomType.LFL) {
-				FfaRoom r = (FfaRoom) room;
+				// Make sure the event is cancelled and the player won't really die.
+				evt.setCancelled(true);
+				
+				LflRoom r = (LflRoom) room;
 
 				if (room.isGameInProgress()) { // Check if the game is in progress.
 					DamageCause c = evt.getCause();
