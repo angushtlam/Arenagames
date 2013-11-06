@@ -175,9 +175,13 @@ public class LflRoom extends Room {
 		
 		if (died - subtract > 0) {
 			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost " + subtract + " point for dying.");
+			
+			int newscore = died - subtract;
+			p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You now have " + newscore + (newscore == 1 ? " point" : " points") + ".");
 			this.scoreboard.put(p.getName(), died - subtract);
 		} else {
 			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost " + died + (died == 1 ? " point" : " points") + " for dying.");
+			p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You now have 0 points.");
 			this.scoreboard.put(p.getName(), 0);
 		}
 		
@@ -190,6 +194,7 @@ public class LflRoom extends Room {
 		
 		this.playerDied(p, 1, p.getName() + " has been executed by " + killer.getName() + "!");
 		killer.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have gained 3 points by slaying " + p.getName() + ".");
+		killer.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You now have " + (kill + 3) + " points.");
 
 	}
 	
