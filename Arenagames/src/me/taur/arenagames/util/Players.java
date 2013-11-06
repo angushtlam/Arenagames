@@ -15,11 +15,11 @@ public class Players {
 		    p.removePotionEffect(effect.getType());
 		}
 		
-		p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 800));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60, 1));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60, 100));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 60, 100));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 3));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 60, 800));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 80, 1));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 100));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 100, 100));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 80, 3));
 		
 		p.getInventory().setArmorContents(null);
 		p.getInventory().clear();

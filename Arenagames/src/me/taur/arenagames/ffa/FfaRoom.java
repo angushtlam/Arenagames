@@ -156,7 +156,6 @@ public class FfaRoom extends Room {
 	public void respawnPlayer(Player p) {
 		this.resetKit(p);
 		p.teleport(FfaConfig.getPossibleSpawnLocation(this));
-		p.setHealth(p.getMaxHealth());
 		
 	}
 	

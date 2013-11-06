@@ -23,10 +23,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class LflRoom extends Room {
 	private String mapname;
 	private HashMap<String, Integer> scoreboard;
+	private HashMap<String, Integer> timer;
 	private HashMap<Player, Integer> kit;
 	
 	public LflRoom(String roomId) {
@@ -50,6 +53,14 @@ public class LflRoom extends Room {
 
 	public void setScoreboard(HashMap<String, Integer> scoreboard) {
 		this.scoreboard = scoreboard;
+	}
+	
+	public HashMap<String, Integer> getTimer() {
+		return this.timer;
+	}
+
+	public void setTimer(HashMap<String, Integer> scoreboard) {
+		this.timer = scoreboard;
 	}
 	
 	public void setPlayerScore(Player p, int amt) {
@@ -110,11 +121,44 @@ public class LflRoom extends Room {
 		
 	}
 	
-	public void resetKit(Player p) {
-		int kitnum = this.kit.get(p); // Get what kit the player has.
-		p.getInventory().setArmorContents(null);
-		p.getInventory().clear();
-		this.giveKit(p, kitnum);
+	public void addRefill(Player p) {
+		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been given refills for the kill.");
+		
+		PlayerInventory inv = p.getInventory();
+		int playerkit = this.kit.get(p); // Get what kit the player has.
+		
+		for (String item : LflConfig.getKitRefill(playerkit)) {
+			ItemStack i = Items.convertToItemStack(item); 
+
+			// Automatically set the player's armor if the item is an armor, and they don't have the armor on.
+			if (inv.getHelmet() == null && i.getType().name().contains("HELMET")) {
+				inv.setHelmet(i);
+				continue;
+			}
+			
+			if (inv.getHelmet() == null && (i.getType().name().equals(Material.PUMPKIN) || i.getType().name().equals(Material.JACK_O_LANTERN))) {
+				inv.setHelmet(i);
+				continue;
+			}
+			
+			if (inv.getChestplate() == null && i.getType().name().contains("CHESTPLATE")) {
+				inv.setChestplate(i);
+				continue;
+			}
+			
+			if (inv.getLeggings() == null && i.getType().name().contains("LEGGINGS")) {
+				inv.setLeggings(i);
+				continue;
+			}
+			
+			if (inv.getBoots() == null && i.getType().name().contains("BOOTS")) {
+				inv.setBoots(i);
+				continue;
+			}
+			
+			inv.addItem(i);
+			
+		}
 		
 		Items.updatePlayerInv(p);
 		
@@ -155,52 +199,64 @@ public class LflRoom extends Room {
 
 	}
 	
-	public void respawnPlayer(Player p) {
-		this.resetKit(p);
-		p.teleport(LflConfig.getPossibleSpawnLocation(this));
-		p.setHealth(p.getMaxHealth());
+	public void crankPlayer(Player p) {
+		int kill = this.scoreboard.get(p.getName());
+		this.scoreboard.put(p.getName(), kill + 1);
+		
+		this.timer.put(p.getName(), 30); // Reset the player's timer.
+		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get another kill within 30 seconds or you'll die!");
+		
+		addRefill(p);
+
+		int potionstr = kill / 3; // increases every 3 kills
+		if (potionstr > 0) {
+			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 31 * 20, potionstr));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 31 * 20, potionstr));
+			
+		}
+	}
+	
+	public void killPlayer(Player p) {
+		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have exploded for timing out.");
+		p.getWorld().createExplosion(p.getLocation(), 0.0F, false);
+		
+		Room.PLAYERS.remove(p);
+		this.removePlayer(p);
+		
+		p.teleport(LflConfig.getLobby());
+		Players.respawnEffects(p);
 		
 	}
 	
-	public void playerDied(Player p, int subtract, String msg) {
-		int died = this.scoreboard.get(p.getName());
+	public void playerDied(Player p, String msg) {
+		int kills = this.scoreboard.get(p.getName());
 		
 		if (this.getPlayers() != null) {
 			for (Player pl : this.getPlayers()) {
 				if (pl != null) {
 					pl.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + msg);
 				}
-			}	
+			}
 		}
 		
-		if (died - subtract > 0) {
-			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost " + subtract + " point for dying.");
-			
-			int newscore = died - subtract;
-			p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You now have " + newscore + (newscore == 1 ? " point" : " points") + ".");
-			this.scoreboard.put(p.getName(), died - subtract);
-		} else {
-			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost " + died + (died == 1 ? " point" : " points") + " for dying.");
-			p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You now have 0 points.");
-			this.scoreboard.put(p.getName(), 0);
-		}
-		
-		this.respawnPlayer(p);
+		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You died with " + kills + (kills == 1 ? " kill" : " kills") + ".");
+		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have been removed from this arena.");
+		this.scoreboard.remove(p.getName());
+		this.killPlayer(p);
 	}
 	
 	public void playerDied(Player p, Player killer) { // Player loses 1 point for being executed by another player.
 		int kill = this.scoreboard.get(killer.getName());
-		this.scoreboard.put(killer.getName(), kill + 3);
 		
-		this.playerDied(p, 1, p.getName() + " has been executed by " + killer.getName() + "!");
-		killer.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have gained 3 points by slaying " + p.getName() + ".");
-		killer.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You now have " + (kill + 3) + " points.");
-
+		this.playerDied(p, p.getName() + " has been executed by " + killer.getName() + "!");
+		killer.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You are on a  " + (kill + 1) + " kill kill-streak.");
+		this.crankPlayer(p);
+		
 	}
 	
 	public void playerDied(Player p, EntityType ent) {
 		String entity = ent.toString().charAt(0) + ent.toString().toLowerCase().substring(1);
-		this.playerDied(p, 2, p.getName() + " has been slain by " + entity + ".");
+		this.playerDied(p, p.getName() + " has been slain by " + entity + ".");
 		
 	}
 	
@@ -254,12 +310,12 @@ public class LflRoom extends Room {
 			
 		}
 		
-		this.playerDied(p, 2, p.getName() + " " + c + ".");
+		this.playerDied(p, p.getName() + " " + c + ".");
 		
 	}
 
 	public void playerDied(Player p) {
-		this.playerDied(p, 2, p.getName() + " died.");
+		this.playerDied(p, p.getName() + " died.");
 
 	}
 	
@@ -269,6 +325,7 @@ public class LflRoom extends Room {
 				p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- THE GAME HAS STARTED! ---");
 				p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "Map: " + this.getMapNameFancy() + " by " + this.getMapAuthor() + ".");
 				p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- -------------------- ---");
+				p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get a kill within 30 seconds or you'll die!");
 				
 				if (!this.kit.containsKey(p)) { // If the player didn't pick a kit, give them a random one.
 					ConfigurationSection cs = LflConfig.getKits();
@@ -288,7 +345,9 @@ public class LflRoom extends Room {
 				this.giveKit(p, playerkit);
 				
 				p.teleport(LflConfig.getPossibleSpawnLocation(this));
+				
 				this.scoreboard.put(p.getName(), 0);
+				this.timer.put(p.getName(), 30);
 			}
 		}
 		
@@ -402,5 +461,4 @@ public class LflRoom extends Room {
 			
 		}
 	}
-	
 }

@@ -70,16 +70,40 @@ public class LflActive {
 				}
 				
 				int countdown = room.getCountdownTimer();
-				if (room.getPlayers() != null) {
-					for (Player p : room.getPlayers()) { // Make the levels the timer.
-						if (p != null) {
-							p.setLevel(countdown);
+				if (room.getRoomType() == RoomType.LFL) {
+					LflRoom r = (LflRoom) room;
+					
+					if (room.getPlayers() != null) {
+						for (Player p : room.getPlayers()) { // Make the levels the timer.
+							if (p != null) {
+								p.setLevel(r.getTimer().get(p.getName()));
+								
+							}
 						}
 					}
 				}
 				
+				
+				
 				if (countdown > -1) {
 					room.setCountdownTimer(countdown - 1);
+					
+					if (room.getRoomType() == RoomType.LFL) {
+						LflRoom r = (LflRoom) room;
+						
+						if (room.getPlayers() != null) {
+							for (Player p : room.getPlayers()) {
+								int timer = r.getTimer().get(p.getName()) - 1;
+								if (timer < 1) {
+									r.killPlayer(p); // Player died from not getting kills.
+									
+								} else {
+									r.getTimer().put(p.getName(), timer); // Subtract 1 from the player's timer too.
+								
+								}
+							}
+						}
+					}
 					
 					if (countdown == 0) {
 						if (room.getRoomType() == RoomType.LFL) {

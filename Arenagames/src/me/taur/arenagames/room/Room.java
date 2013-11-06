@@ -209,12 +209,13 @@ public class Room {
 	
 	public void waitCancelledMessage(RoomType type) {
 		int wait = Config.getMinPlayersInWait(type);
+		int sec = Config.getWaitTimer(type);
 		
 		if (getPlayers() != null) {
 			for (Player p : this.getPlayers()) {
 				if (p != null) {
 					p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Wait timer is stopped due to a lack of players.");
-					p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "The game will start " + Config.getWaitTimer(RoomType.FFA) + " after " + wait + (wait == 1 ? " person " : " people ") + (wait == 1 ? "has" : "have") + " joined.");
+					p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "The game will start " + sec + (wait == 1 ? " second " : " seconds ") + "after " + wait + (wait == 1 ? " person " : " people ") + (wait == 1 ? "has" : "have") + " joined.");
 				}
 			}
 		}

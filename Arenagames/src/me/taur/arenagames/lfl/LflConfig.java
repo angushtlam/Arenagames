@@ -153,6 +153,11 @@ public class LflConfig {
 		
 	}
 	
+	public static List<String> getKitRefill(int kit) {
+		return get().getStringList("lfl.items.kit-" + kit + ".refill");
+		
+	}
+	
 	public static String getKitName(int kit) {
 		return get().getString("lfl.items.kit-" + kit + ".kit-name");
 		
@@ -225,15 +230,19 @@ public class LflConfig {
 			get().addDefault("lfl.items.kit-0.kit-description", "Fight enemies toe to toe!");
 			get().addDefault("lfl.items.kit-0.kit-menu-icon", "IRON_SWORD");
 			get().addDefault("lfl.items.kit-0.premium-only", false);
-			List<String> fighterItems = Arrays.asList("IRON_SWORD|KNOCKBACK:1,DAMAGE_ALL:1#1", "STONE_SWORD|FIRE_ASPECT:1#1", "IRON_CHESTPLATE:-1|DURABILITY:10#1", "COOKIE#32", "GOLDEN_APPLE:1#1");
+			List<String> fighterItems = Arrays.asList("IRON_SWORD|KNOCKBACK:1,DAMAGE_ALL:1#1", "STONE_SWORD|FIRE_ASPECT:1#1", "IRON_CHESTPLATE:-1|DURABILITY:10#1", "COOKIE#16", "GOLDEN_APPLE:1#1");
 			get().addDefault("lfl.items.kit-0.items", fighterItems);
+			List<String> fighterRefill = Arrays.asList("COOKIE#16", "GOLDEN_APPLE:1#1");
+			get().addDefault("lfl.items.kit-0.refill", fighterRefill);
 			
 			get().addDefault("lfl.items.kit-1.kit-name", "Archer");
 			get().addDefault("lfl.items.kit-1.kit-description", "Kill enemies from afar!");
 			get().addDefault("lfl.items.kit-1.kit-menu-icon", "BOW");
 			get().addDefault("lfl.items.kit-1.premium-only", true);
-			List<String> archerItems = Arrays.asList("BOW|ARROW_INFINITE:1#1", "BOW:40|ARROW_KNOCKBACK:5#1", "CHAINMAIL_CHESTPLATE|DURABILITY:10#1", "COOKIE#32", "GOLDEN_APPLE:1#1");
+			List<String> archerItems = Arrays.asList("BOW|ARROW_INFINITE:1#1", "BOW:40|ARROW_KNOCKBACK:5#1", "ARROW#40", "CHAINMAIL_CHESTPLATE|DURABILITY:10#1", "COOKIE#16", "GOLDEN_APPLE:1#1");
 			get().addDefault("lfl.items.kit-1.items", archerItems);
+			List<String> archerRefill = Arrays.asList("COOKIE#16", "ARROW#40", "GOLDEN_APPLE:1#1");
+			get().addDefault("lfl.items.kit-1.refill", archerRefill);
 			
 			get().addDefault("lfl.lobby.world", "world");
 			get().addDefault("lfl.lobby.x", 5.0);
