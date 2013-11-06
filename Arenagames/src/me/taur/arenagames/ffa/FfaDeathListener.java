@@ -68,38 +68,6 @@ public class FfaDeathListener implements Listener {
 
 								}
 
-							} else if (damager instanceof Arrow) {
-								Arrow a = (Arrow) damager;
-								if (a.getShooter() instanceof Player) {
-									Player d = (Player) a.getShooter();
-
-									if (Room.PLAYERS.containsKey(d)) { // If the player who killed the player is playing
-										r.playerDied(p, d); // Tell the room that the player has been slain by another player.
-									} else {
-										r.playerDied(p); // The player died by themselves.
-									}
-
-								} else {
-									r.playerDied(p, a.getShooter().getType()); // Tell the room that the player has been slain by an monster.
-
-								}
-								
-							} else if (damager instanceof ThrownPotion) {
-								ThrownPotion pot = (ThrownPotion) damager;
-								if (pot.getShooter() instanceof Player) {
-									Player d = (Player) pot.getShooter();
-
-									if (Room.PLAYERS.containsKey(d)) { // If the player who killed the player is playing
-										r.playerDied(p, d); // Tell the room that the player has been slain by another player.
-									} else {
-										r.playerDied(p); // The player died by themselves.
-									}
-
-								} else {
-									r.playerDied(p, c); // Tell the room that the player has been slain by an monster.
-
-								}
-
 							} else if (damager instanceof Monster) {
 								Monster d = (Monster) damager;
 								r.playerDied(p, d.getType()); // Tell the room that the player has been slain by an monster.
@@ -109,9 +77,65 @@ public class FfaDeathListener implements Listener {
 							r.playerDied(p); // Tell the room that the player has been slain mysteriously.
 							
 						}
+						
+					} else if (c.equals(DamageCause.PROJECTILE)) {
+						if (evt instanceof EntityDamageByEntityEvent) {
+							EntityDamageByEntityEvent edbeEvent = (EntityDamageByEntityEvent) evt;
+							Entity damager = edbeEvent.getDamager();
+							
+							if (damager instanceof Arrow) {
+								Arrow a = (Arrow) damager;
+								if (a.getShooter() instanceof Player) {
+									Player d = (Player) a.getShooter();
 
+									if (Room.PLAYERS.containsKey(d)) { // If the player who killed the player is playing
+										if (p.getName() == d.getName()) {
+											r.playerDied(p); // The player died by themselves.
+										} else {
+											r.playerDied(p, d); // Tell the room that the player has been slain by another player.
+										}
+										
+									} else {
+										r.playerDied(p); // The player died by themselves.
+									}
+
+								} else {
+									r.playerDied(p, a.getShooter().getType()); // Tell the room that the player has been slain by an monster.
+
+								}
+							}
+						}
+						
+					} else if (c.equals(DamageCause.MAGIC)) {
+						if (evt instanceof EntityDamageByEntityEvent) {
+							EntityDamageByEntityEvent edbeEvent = (EntityDamageByEntityEvent) evt;
+							Entity damager = edbeEvent.getDamager();
+							
+							if (damager instanceof ThrownPotion) {
+								ThrownPotion pot = (ThrownPotion) damager;
+								if (pot.getShooter() instanceof Player) {
+									Player d = (Player) pot.getShooter();
+
+									if (Room.PLAYERS.containsKey(d)) { // If the player who killed the player is playing
+										if (p.getName() == d.getName()) {
+											r.playerDied(p); // The player died by themselves.
+										} else {
+											r.playerDied(p, d); // Tell the room that the player has been slain by another player.
+										}
+										
+									} else {
+										r.playerDied(p); // The player died by themselves.
+									}
+
+								} else {
+									r.playerDied(p, c); // Tell the room that the player has been slain by an monster.
+								}
+							}
+						}
+						
 					} else if (c.equals(DamageCause.ENTITY_EXPLOSION)) {
 						r.playerDied(p, EntityType.CREEPER); // Tell the room that the player has been slain by a Creeper.
+						
 
 					} else {
 						r.playerDied(p, c); // Tell the room that the player has been slain by something else.
