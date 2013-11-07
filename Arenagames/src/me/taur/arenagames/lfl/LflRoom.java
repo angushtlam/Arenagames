@@ -5,12 +5,14 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.Items;
 import me.taur.arenagames.util.Players;
 import me.taur.arenagames.util.RoomType;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -82,7 +84,7 @@ public class LflRoom extends Room {
 		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been given a " + kitname + " kit.");
 		
 		PlayerInventory inv = p.getInventory();
-		inv.setItem(8, Items.getKitSelector()); // Give the player a kit selector first
+		// inv.setItem(8, Items.getKitSelector()); // Give the player a kit selector first
 		
 		int playerkit = this.kit.get(p); // Get what kit the player has.
 		
@@ -202,42 +204,56 @@ public class LflRoom extends Room {
 	}
 	
 	public void crankPlayer(Player p) {
+		int reset = LflConfig.getCrankedTimer();
+		int kill = 0;
+		
 		if (this.scoreboard.get(p.getName()) != null) {
-			int kill = this.scoreboard.get(p.getName());
-			this.scoreboard.put(p.getName(), kill + 1);
-			
-			this.playertimer.put(p, 30); // Reset the player's timer.
-			p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get another kill within 30 seconds or you'll die!");
-			
-			addRefill(p);
-	
-			int potionstr = kill / 3; // increases every 3 kills
-			if (potionstr > 0) {
-				p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 31 * 20, potionstr));
-				p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 31 * 20, potionstr));
-				
-			}
-			
-		} else {
-			this.scoreboard.put(p.getName(), 1);
-			
-			this.playertimer.put(p, 30); // Reset the player's timer.
-			p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get another kill within 30 seconds or you'll die!");
-			
-			addRefill(p);
-	
-			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 31 * 20, 1));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 31 * 20, 1));
-
+			kill = this.scoreboard.get(p.getName());
 		}
+		
+		this.scoreboard.put(p.getName(), kill + 1);
+		
+		this.playertimer.put(p, reset); // Reset the player's timer.
+		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get another kill within " + reset + " seconds or you'll die!");
+		
+		int potionstr = kill / 3; // increases every 3 kills
+		if (potionstr > 0) {
+			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 31 * 20, potionstr));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 31 * 20, potionstr));
+			
+		}
+		
+		addRefill(p);
+		
 	}
 	
 	public void killPlayer(Player p) {
+		this.scoreboard.remove(p.getName());
+		this.playertimer.remove(p);
+		
 		Room.PLAYERS.remove(p);
 		this.removePlayer(p);
 		
-		p.teleport(LflConfig.getLobby());
-		Players.respawnEffects(p);
+		p.setLevel(0);
+		
+		p.getInventory().setArmorContents(null);
+		p.getInventory().clear();
+		
+		p.setHealth(p.getMaxHealth());
+		p.setFoodLevel(19);
+		
+		p.setFireTicks(0);
+		
+		for (PotionEffect effect : p.getActivePotionEffects()) {
+		    p.removePotionEffect(effect.getType());
+		}
+		
+		final Player pl = p; // Have to put a delay to prevent ConcurrentModificationExeception
+		Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
+		    public void run() {
+		    	pl.teleport(LflConfig.getLobby());
+		    }
+		}, 1L);
 		
 	}
 	
@@ -254,18 +270,15 @@ public class LflRoom extends Room {
 		
 		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You died with " + kills + (kills == 1 ? " kill" : " kills") + ".");
 		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have been removed from this arena.");
-		this.scoreboard.remove(p.getName());
-		this.playertimer.remove(p);
+		
 		this.killPlayer(p);
 	}
 	
 	public void playerDied(Player p, Player killer) { // Player loses 1 point for being executed by another player.
 		int kill = this.scoreboard.get(killer.getName()) + 1;
-		
-		this.playerDied(p, p.getName() + " has been executed by " + killer.getName() + "!");
 		killer.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You are on a " + kill + " kill kill-streak.");
-		
-		this.crankPlayer(p);
+		this.crankPlayer(killer);
+		this.playerDied(p, p.getName() + " has been executed by " + killer.getName() + "!");
 		
 	}
 	
@@ -340,7 +353,7 @@ public class LflRoom extends Room {
 				p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- THE GAME HAS STARTED! ---");
 				p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "Map: " + this.getMapNameFancy() + " by " + this.getMapAuthor() + ".");
 				p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- -------------------- ---");
-				p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get a kill within 30 seconds or you'll die!");
+				p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get a kill within " + LflConfig.getCrankedTimer() + " seconds or you'll die!");
 				
 				if (!this.kit.containsKey(p)) { // If the player didn't pick a kit, give them a random one.
 					ConfigurationSection cs = LflConfig.getKits();
@@ -360,7 +373,7 @@ public class LflRoom extends Room {
 				p.teleport(LflConfig.getPossibleSpawnLocation(this));
 				
 				this.scoreboard.put(p.getName(), 0);
-				this.playertimer.put(p, 30);
+				this.playertimer.put(p, LflConfig.getCrankedTimer());
 			}
 		}
 		

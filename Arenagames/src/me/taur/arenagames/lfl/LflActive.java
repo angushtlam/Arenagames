@@ -12,6 +12,7 @@ import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -84,6 +85,10 @@ public class LflActive {
 							for (Player p : room.getPlayers()) {
 								if (p != null) {
 									int timer = room.getTimer().get(p) - 1;
+									if (countdown < 5 || timer < 5) { // If there is only less than 5 seconds left for the player
+										p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1F, 0F);
+									}
+									
 									if (timer < 1) {
 										p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have exploded for timing out.");
 										p.getWorld().createExplosion(p.getLocation(), 0.0F, false);
@@ -145,6 +150,14 @@ public class LflActive {
 					if (waitcount > -1) {
 						room.setWaitTimer(waitcount - 1);
 
+						if (waitcount < 5) { // If there is only less than 5 seconds left:
+							for (Player p : room.getPlayers()) {
+								if (p != null) {
+									p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1F, 0F);
+								}
+							}
+						}
+						
 						if (waitcount == 0) { // Game start
 							ConfigurationSection cs = LflConfig.get().getConfigurationSection("lfl.maps");
 							if (cs != null) {
@@ -265,7 +278,6 @@ public class LflActive {
 								}
 							}
 						}
-
 					}
 				}
 			}

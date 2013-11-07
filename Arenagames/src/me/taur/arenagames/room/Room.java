@@ -9,6 +9,7 @@ import me.taur.arenagames.util.RoomType;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class Room {
@@ -182,18 +183,11 @@ public class Room {
 	}
 	
 	public void waitStartMessage(RoomType type) {
-		int waitcount = Config.getWaitTimer(type);
-		int minute = waitcount % 60;
-		
-		String plural = minute == 1 ? "minute" : "minutes";
-		String gameStartIn = minute == 0 ? "in " + minute + " " + plural : "soon";
-		
 		for (Player p : this.getPlayers()) {
 			if (p != null) {
-				p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Wait timer has started. Game will start " + gameStartIn + ".");
+				waitStartMessage(p, type);
 			}
 		}
-		
 	}
 	
 	public void waitStartMessage(Player p, RoomType type) {
@@ -204,6 +198,7 @@ public class Room {
 		String gameStartIn = minute == 0 ? "in " + minute + " " + plural : "soon";
 		
 		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Wait timer has started. Game will start " + gameStartIn + ".");
+		p.playSound(p.getLocation(), Sound.SUCCESSFUL_HIT, 1F, 0F);
 		
 	}
 	
@@ -216,6 +211,7 @@ public class Room {
 				if (p != null) {
 					p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Wait timer is stopped due to a lack of players.");
 					p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "The game will start " + sec + (wait == 1 ? " second " : " seconds ") + "after " + wait + (wait == 1 ? " person " : " people ") + (wait == 1 ? "has" : "have") + " joined.");
+					p.playSound(p.getLocation(), Sound.NOTE_BASS, 1F, 0F);
 				}
 			}
 		}

@@ -12,6 +12,7 @@ import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -76,6 +77,14 @@ public class FfaActive {
 					if (countdown > -1) {
 						room.setCountdownTimer(countdown - 1);
 
+						if (countdown < 5) { // If there is only less than 5 seconds left:
+							for (Player p : room.getPlayers()) {
+								if (p != null) {
+									p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1F, 0F);
+								}
+							}
+						}
+						
 						if (countdown == 0) {
 							room.gameOverMessage(room.getWinningPlayer());
 
@@ -107,7 +116,6 @@ public class FfaActive {
 							}
 						}
 					}
-
 				}
 
 				if (room.isGameInWaiting()) {
@@ -121,6 +129,14 @@ public class FfaActive {
 					if (waitcount > -1) {
 						room.setWaitTimer(waitcount - 1);
 
+						if (waitcount < 5) { // If there is only less than 5 seconds left:
+							for (Player p : room.getPlayers()) {
+								if (p != null) {
+									p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1F, 0F);
+								}
+							}
+						}
+						
 						if (waitcount == 0) { // Game start
 							ConfigurationSection cs = FfaConfig.get().getConfigurationSection("ffa.maps");
 							if (cs != null) {
