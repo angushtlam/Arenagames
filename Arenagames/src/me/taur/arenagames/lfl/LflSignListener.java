@@ -3,9 +3,11 @@ package me.taur.arenagames.lfl;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.Items;
+import me.taur.arenagames.util.ParticleEffect;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -120,6 +122,12 @@ public class LflSignListener implements Listener {
 			}
 			
 			room.updateSigns(); // Update signs.
+			
+			Location[] blocs = LflConfig.getSignsStored(room.getRoomId());
+			for (Location bloc : blocs) {
+				ParticleEffect.HAPPY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 3);
+				
+			}
 			
 			// Reminder for players to choose their kits.
 			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "Remember to pick your kit by right clicking on the Kit Selector (Nether Star) item!");

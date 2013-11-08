@@ -5,12 +5,13 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.Items;
-import me.taur.arenagames.util.Players;
 import me.taur.arenagames.util.RoomType;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,14 +27,15 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class FfaRoom extends Room {
 	private String mapname;
-	private HashMap<String, Integer> scoreboard;
+	private HashMap<String, Integer> pointboard;
 	private HashMap<Player, Integer> kit;
 	
 	public FfaRoom(String roomId) {
-		this.scoreboard = new HashMap<String, Integer>();
+		this.pointboard = new HashMap<String, Integer>();
 		this.kit = new HashMap<Player, Integer>();
 		this.setRoomId(roomId);
 		this.setRoomType(RoomType.FFA);
+		this.createScoreboard();
 	}
 
 	public String getMapName() {
@@ -45,15 +47,81 @@ public class FfaRoom extends Room {
 	}
 
 	public HashMap<String, Integer> getScoreboard() {
-		return this.scoreboard;
+		return this.pointboard;
 	}
 
-	public void setScoreboard(HashMap<String, Integer> scoreboard) {
-		this.scoreboard = scoreboard;
+	public void setPointboard(HashMap<String, Integer> scoreboard) {
+		this.pointboard = scoreboard;
 	}
 	
-	public void setPlayerScore(Player p, int amt) {
-		this.scoreboard.put(p.getName(), amt);
+	public void setPointboard(Player p, int amt) {
+		this.pointboard.put(p.getName(), amt);
+	}
+	
+	public void updateScoreboard() {
+		if (Room.SCOREBOARDS.get(this.getRoomId()) != null) {
+			int players = this.getPlayersInRoom();
+			
+			if (this.isGameInProgress()) {
+				
+				String winner = this.getWinningPlayer();
+				int timer = this.getCountdownTimer();
+				
+				String[] lines = {ChatColor.YELLOW + "Timer: " + timer,
+								  ChatColor.DARK_GRAY + "    ---",
+								  ChatColor.GREEN + "Winning: ",
+								  ChatColor.GREEN + winner,
+								  ChatColor.DARK_GRAY + "    ---",
+								  ChatColor.YELLOW + "Pl.: " + players + "/" + Config.getPlayerLimit(this.getRoomType())};
+				
+				int used = lines.length;
+				
+				clearScoreboard();
+				for (int i = 0; i < lines.length; i++) {
+					this.setScoreboardField(lines[i], used);
+					used--;
+					
+				}
+				
+			} else {
+				if (this.isGameInWaiting()) {
+					int timer = this.getWaitTimer();
+					
+					String[] lines = {ChatColor.YELLOW + "Timer: " + timer,
+									  ChatColor.DARK_GRAY + "    ---",
+									  ChatColor.AQUA + "Starts Soon",
+									  ChatColor.DARK_GRAY + "    ---",
+									  ChatColor.DARK_GRAY + "    ---",
+									  ChatColor.YELLOW + "Pl.: " + players + "/" + Config.getPlayerLimit(this.getRoomType())};
+					
+					int used = lines.length;
+					
+					clearScoreboard();
+					for (int i = 0; i < lines.length; i++) {
+						this.setScoreboardField(lines[i], used);
+						used--;
+						
+					}
+					
+				} else {
+					String[] lines = {ChatColor.GOLD + "Timer: " + "~",
+									  ChatColor.DARK_GRAY + "    ---",
+									  ChatColor.GOLD + "" + ChatColor.ITALIC + "Needs more",
+									  ChatColor.GOLD + "" + ChatColor.ITALIC + "players!",
+									  ChatColor.DARK_GRAY + "    ---",
+									  ChatColor.YELLOW + "Pl.: " + players + "/" + Config.getPlayerLimit(this.getRoomType())};
+					
+					int used = lines.length;
+					
+					clearScoreboard();
+					for (int i = 0; i < lines.length; i++) {
+						this.setScoreboardField(lines[i], used);
+						used--;
+						
+					}
+				}
+			}
+		}
 	}
 	
 	public HashMap<Player, Integer> getKit() {
@@ -133,8 +201,8 @@ public class FfaRoom extends Room {
 		boolean firstLoop = true;
 		int score = 0;
 		
-		for (String name : this.scoreboard.keySet()) {
-			int amt = this.scoreboard.get(name);
+		for (String name : this.pointboard.keySet()) {
+			int amt = this.pointboard.get(name);
 			
 			if (firstLoop) {
 				firstLoop = false;
@@ -153,14 +221,8 @@ public class FfaRoom extends Room {
 
 	}
 	
-	public void respawnPlayer(Player p) {
-		this.resetKit(p);
-		p.teleport(FfaConfig.getPossibleSpawnLocation(this));
-		
-	}
-	
 	public void playerDied(Player p, int subtract, String msg) {
-		int died = this.scoreboard.get(p.getName());
+		int died = this.pointboard.get(p.getName());
 		
 		if (this.getPlayers() != null) {
 			for (Player pl : this.getPlayers()) {
@@ -175,19 +237,29 @@ public class FfaRoom extends Room {
 			
 			int newscore = died - subtract;
 			p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You now have " + newscore + (newscore == 1 ? " point" : " points") + ".");
-			this.scoreboard.put(p.getName(), died - subtract);
+			this.pointboard.put(p.getName(), died - subtract);
 		} else {
 			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost " + died + (died == 1 ? " point" : " points") + " for dying.");
 			p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You now have 0 points.");
-			this.scoreboard.put(p.getName(), 0);
+			this.pointboard.put(p.getName(), 0);
 		}
 		
-		this.respawnPlayer(p);
+		
+		FfaSpawnManager.respawn(p, FfaConfig.getPossibleSpawnLocation(this));
+		
+		final Player pl = p; // Reset the kit the same time the player's invulnerability ends.
+		Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
+		    public void run() {
+		    	if (pl != null) {
+		    		resetKit(pl);
+		    	}
+		    }
+		}, 60L);
 	}
 	
 	public void playerDied(Player p, Player killer) { // Player loses 1 point for being executed by another player.
-		int kill = this.scoreboard.get(killer.getName());
-		this.scoreboard.put(killer.getName(), kill + 3);
+		int kill = this.pointboard.get(killer.getName());
+		this.pointboard.put(killer.getName(), kill + 3);
 		
 		this.playerDied(p, 1, p.getName() + " has been executed by " + killer.getName() + "!");
 		killer.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have gained 3 points by slaying " + p.getName() + ".");
@@ -279,13 +351,11 @@ public class FfaRoom extends Room {
 					
 				}
 				
-				Players.respawnEffects(p);
-				
 				int playerkit = this.kit.get(p); 
 				this.giveKit(p, playerkit);
 				
-				p.teleport(FfaConfig.getPossibleSpawnLocation(this));
-				this.scoreboard.put(p.getName(), 0);
+				FfaSpawnManager.spawn(p, FfaConfig.getPossibleSpawnLocation(this));
+				this.pointboard.put(p.getName(), 0);
 			}
 		}
 		
@@ -387,8 +457,8 @@ public class FfaRoom extends Room {
 	
 	public void resetRoom(boolean areYouSure) {
 		if (areYouSure) {
-			this.scoreboard = null;
-			this.scoreboard = new HashMap<String, Integer>();
+			this.pointboard = null;
+			this.pointboard = new HashMap<String, Integer>();
 			
 			this.kit = null;
 			this.kit = new HashMap<Player, Integer>();
@@ -396,6 +466,7 @@ public class FfaRoom extends Room {
 			this.setMapName(null);
 			this.resetRoomBasics(areYouSure);
 			this.updateSigns();
+			this.updateScoreboard(); // Update scoreboard
 			
 		}
 	}

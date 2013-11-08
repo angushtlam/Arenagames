@@ -1,11 +1,15 @@
 package me.taur.arenagames;
 
+import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.ffa.FfaRoom;
+import me.taur.arenagames.lfl.LflConfig;
 import me.taur.arenagames.lfl.LflRoom;
 import me.taur.arenagames.room.Room;
+import me.taur.arenagames.util.ParticleEffect;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -127,6 +131,13 @@ public class RoomCommand implements CommandExecutor {
 							
 							FfaRoom r = (FfaRoom) room;
 							r.updateSigns(); // Update signs.
+							r.updateScoreboard(); // Update scoreboard
+							
+							Location[] blocs = FfaConfig.getSignsStored(room.getRoomId());
+							for (Location bloc : blocs) {
+								ParticleEffect.ANGRY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 1);
+								
+							}
 							
 							r.getScoreboard().remove(p.getName()); // Remove the player from the scoreboard.
 						}
@@ -162,7 +173,13 @@ public class RoomCommand implements CommandExecutor {
 							LflRoom r = (LflRoom) room;
 							r.updateSigns(); // Update signs.
 							
-							r.getScoreboard().remove(p.getName()); // Remove the player from the scoreboard.
+							Location[] blocs = LflConfig.getSignsStored(room.getRoomId());
+							for (Location bloc : blocs) {
+								ParticleEffect.ANGRY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 1);
+								
+							}
+							
+							room.removePlayerScoreboard(p);
 						}
 						
 						return true;

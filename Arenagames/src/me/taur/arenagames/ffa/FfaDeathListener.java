@@ -1,9 +1,7 @@
 package me.taur.arenagames.ffa;
 
 import me.taur.arenagames.Config;
-import me.taur.arenagames.ffa.FfaRoom;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.Players;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.entity.Arrow;
@@ -45,11 +43,7 @@ public class FfaDeathListener implements Listener {
 				// Make sure the event is cancelled and the player won't really die.
 				evt.setCancelled(true);
 				
-				// Set effects
-				Players.respawnEffects(p);
-				
 				FfaRoom r = (FfaRoom) room;
-
 				if (room.isGameInProgress()) { // Check if the game is in progress.
 					DamageCause c = evt.getCause();
 

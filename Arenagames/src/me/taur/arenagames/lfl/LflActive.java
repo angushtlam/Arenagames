@@ -5,9 +5,9 @@ import java.util.Random;
 import java.util.Set;
 
 import me.taur.arenagames.Config;
+import me.taur.arenagames.ffa.FfaSpawnManager;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.Items;
-import me.taur.arenagames.util.Players;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
@@ -35,8 +35,12 @@ public class LflActive {
 									p.teleport(LflConfig.getLobby());
 									p.setLevel(0);
 
-									Players.respawnEffects(p);
+									FfaSpawnManager.purgeEffects(p);
+									
+									p.getInventory().setArmorContents(null);
+									p.getInventory().clear();
 									Items.updatePlayerInv(p);
+									
 									Room.PLAYERS.remove(p);
 								}
 							}
@@ -54,8 +58,12 @@ public class LflActive {
 									p.teleport(LflConfig.getLobby());
 									p.setLevel(0);
 
-									Players.respawnEffects(p);
+									FfaSpawnManager.purgeEffects(p);
+									
+									p.getInventory().setArmorContents(null);
+									p.getInventory().clear();
 									Items.updatePlayerInv(p);
+									
 									Room.PLAYERS.remove(p);
 								}
 							}
@@ -92,7 +100,6 @@ public class LflActive {
 									if (timer < 1) {
 										p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have exploded for timing out.");
 										p.getWorld().createExplosion(p.getLocation(), 0.0F, false);
-										p.setLevel(0);
 										
 										room.killPlayer(p); // Player died from not getting kills.
 	
@@ -110,9 +117,11 @@ public class LflActive {
 							for (Player p : r.getPlayers()) {
 								if (p != null) {
 									p.teleport(LflConfig.getLobby());
+									
 									p.getInventory().setArmorContents(null);
 									p.getInventory().clear();
 									Items.updatePlayerInv(p);
+									
 									Room.PLAYERS.remove(p);
 								}
 							}

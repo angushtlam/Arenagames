@@ -71,7 +71,8 @@ public class FfaPlayerListener implements Listener {
 				}
 				
 				r.updateSigns();
-				r.getScoreboard().remove(p.getName()); // Remove the player from the scoreboard.
+				r.updateScoreboard(); // Update scoreboard
+				room.removePlayerScoreboard(p);
 
 			}
 		}

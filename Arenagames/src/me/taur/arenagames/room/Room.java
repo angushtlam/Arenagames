@@ -9,12 +9,18 @@ import me.taur.arenagames.util.RoomType;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
 
 public class Room {
 	public static HashMap<String, Room> ROOMS = new HashMap<String, Room>();
 	public static HashMap<Player, String> PLAYERS = new HashMap<Player, String>();
+	public static HashMap<String, Scoreboard> SCOREBOARDS = new HashMap<String, Scoreboard>();
 	
 	private String roomId;
 	private RoomType roomType;
@@ -138,6 +144,71 @@ public class Room {
 		
 	}
 	
+	public void createScoreboard() {
+		if (this.roomId != null) {
+			Scoreboard board = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+			Objective o = board.registerNewObjective(this.roomId, "dummy");
+			o.setDisplayName(ChatColor.AQUA + "Queue " + this.roomId);
+			o.setDisplaySlot(DisplaySlot.SIDEBAR);
+			
+			SCOREBOARDS.put(roomId, board);
+			
+		}
+	}
+	
+	public void addPlayerScoreboard(Player p) {
+		if (SCOREBOARDS.get(roomId) != null) {
+			p.setScoreboard(SCOREBOARDS.get(roomId));
+		
+		}
+	}
+	
+	public void removePlayerScoreboard(Player p) {
+		Scoreboard board = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
+		p.setScoreboard(board);
+		
+	}
+	
+	public void setScoreboardField(OfflinePlayer op, int value) {		
+		if (Room.SCOREBOARDS.get(roomId) != null) {
+			Score score = Room.SCOREBOARDS.get(roomId).getObjective(DisplaySlot.SIDEBAR).getScore(op);
+			score.setScore(value);
+			
+		}
+	}
+	
+	public void setScoreboardField(String str, int value) {
+		if (str.length() > 15) {
+			str.substring(0, 16);
+			
+		}
+		
+		OfflinePlayer op = Bukkit.getOfflinePlayer(str);
+		setScoreboardField(op, value);
+	}
+	
+	public void clearScoreboard() {
+		this.createScoreboard();
+	}
+	
+	public int getScoreboardField(OfflinePlayer op) {
+		if (Room.SCOREBOARDS.get(roomId) != null) {
+			return Room.SCOREBOARDS.get(roomId).getObjective(DisplaySlot.SIDEBAR).getScore(op).getScore();
+			
+		}
+		
+		return 0;
+	}
+	
+	public void removeAllPlayerScoreboard() {
+		for (Player p : this.getPlayers()) {
+			if (p != null) {
+				removePlayerScoreboard(p);
+				
+			}
+		}
+	}
+	
 	public boolean isPlayerInRoom(Player p) {
 		if (getPlayers() == null) {
 			return false;
@@ -195,7 +266,7 @@ public class Room {
 		int minute = waitcount / 60;
 		
 		String plural = minute == 1 ? "minute" : "minutes";
-		String gameStartIn = minute == 0 ? "in " + minute + " " + plural : "soon";
+		String gameStartIn = minute > 0 ? "in " + minute + " " + plural : "soon";
 		
 		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Wait timer has started. Game will start " + gameStartIn + ".");
 		p.playSound(p.getLocation(), Sound.SUCCESSFUL_HIT, 1F, 0F);
@@ -227,5 +298,4 @@ public class Room {
 			// Set countdown timer on start, not here.
 		}
 	}
-	
 }

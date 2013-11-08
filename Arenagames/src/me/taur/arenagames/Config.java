@@ -99,7 +99,7 @@ public class Config {
 		double y = Arenagames.plugin.getConfig().getInt("global.lobby.y");
 		double z = Arenagames.plugin.getConfig().getInt("global.lobby.z");
 		
-		return new Location(Bukkit.getWorld(w), x + 0.5, y, z + 0.5);
+		return new Location(Bukkit.getWorld(w), x, y, z);
 		
 	}
 	

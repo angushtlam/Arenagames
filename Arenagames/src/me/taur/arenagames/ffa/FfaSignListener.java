@@ -3,9 +3,11 @@ package me.taur.arenagames.ffa;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.Items;
+import me.taur.arenagames.util.ParticleEffect;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -93,6 +95,8 @@ public class FfaSignListener implements Listener {
 			room.addPlayer(p);
 			Room.PLAYERS.put(p, roomId);
 
+			room.addPlayerScoreboard(p);
+			
 			p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You joined Free For All queue " + roomId + ". ");
 
 			if (other != null) { // Make sure it wasn't empty before the player joined.
@@ -121,7 +125,8 @@ public class FfaSignListener implements Listener {
 			}
 
 			room.updateSigns(); // Update signs.
-
+			room.updateScoreboard(); // Update scoreboard
+			
 			// Reminder for players to choose their kits.
 			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "Remember to pick your kit by right clicking on the Kit Selector (Nether Star) item!");
 			PlayerInventory inv = p.getInventory();
@@ -129,6 +134,12 @@ public class FfaSignListener implements Listener {
 			inv.setArmorContents(null);
 			inv.clear();
 			inv.setItem(8, Items.getKitSelector());
+			
+			Location[] blocs = FfaConfig.getSignsStored(room.getRoomId());
+			for (Location bloc : blocs) {
+				ParticleEffect.HAPPY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 3);
+				
+			}
 
 			Items.updatePlayerInv(p);
 		}

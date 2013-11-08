@@ -36,7 +36,7 @@ public class LflPlayerListener implements Listener {
 					if (room.getPlayersInRoom() == 0) {
 						Bukkit.broadcastMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + room.getRoomId() + " queue has reopened.");
 
-						r.getScoreboard().remove(p);
+						r.getPointboard().remove(p);
 						r.resetRoom(true);
 					}
 
@@ -71,7 +71,7 @@ public class LflPlayerListener implements Listener {
 				}
 				
 				r.updateSigns();
-				r.getScoreboard().remove(p.getName()); // Remove the player from the scoreboard.
+				room.removePlayerScoreboard(p);
 
 			}
 		}

@@ -7,7 +7,6 @@ import java.util.Set;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.Items;
-import me.taur.arenagames.util.Players;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
@@ -25,6 +24,8 @@ public class FfaActive {
 			if (r.getRoomType() == RoomType.FFA) {
 				FfaRoom room = (FfaRoom) r;
 
+				room.updateScoreboard(); // Update scoreboard
+				
 				if (room.isGameInProgress()) {
 					if (room.getPlayersInRoom() == 1) { // If there is only 1 player left.
 						room.gameOverMessage(room.getWinningPlayer());
@@ -35,8 +36,12 @@ public class FfaActive {
 									p.teleport(FfaConfig.getLobby());
 									p.setLevel(0);
 
-									Players.respawnEffects(p);
+									FfaSpawnManager.purgeEffects(p);
+									
+									p.getInventory().setArmorContents(null);
+									p.getInventory().clear();
 									Items.updatePlayerInv(p);
+									
 									Room.PLAYERS.remove(p);
 								}
 							}
@@ -54,8 +59,12 @@ public class FfaActive {
 									p.teleport(FfaConfig.getLobby());
 									p.setLevel(0);
 
-									Players.respawnEffects(p);
+									FfaSpawnManager.purgeEffects(p);
+									
+									p.getInventory().setArmorContents(null);
+									p.getInventory().clear();
 									Items.updatePlayerInv(p);
+									
 									Room.PLAYERS.remove(p);
 								}
 							}
@@ -63,6 +72,7 @@ public class FfaActive {
 
 						room.resetRoom(true);
 						Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Free For All match " + room.getRoomId() + " has ended.");
+						
 					}
 
 					int countdown = room.getCountdownTimer();
@@ -166,6 +176,7 @@ public class FfaActive {
 												room.setGameInWaiting(true);
 												room.setWaitTimer(Config.getWaitTimer(RoomType.FFA));
 												room.updateSigns();
+												room.updateScoreboard(); // Update scoreboard
 
 											}
 										} else {

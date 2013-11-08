@@ -7,9 +7,9 @@ import java.util.Set;
 
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
+import me.taur.arenagames.ffa.FfaSpawnManager;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.Items;
-import me.taur.arenagames.util.Players;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
@@ -30,12 +30,12 @@ import org.bukkit.potion.PotionEffectType;
 
 public class LflRoom extends Room {
 	private String mapname;
-	private HashMap<String, Integer> scoreboard;
+	private HashMap<String, Integer> pointboard;
 	private HashMap<Player, Integer> playertimer;
 	private HashMap<Player, Integer> kit;
 	
 	public LflRoom(String roomId) {
-		this.scoreboard = new HashMap<String, Integer>();
+		this.pointboard = new HashMap<String, Integer>();
 		this.kit = new HashMap<Player, Integer>();
 		this.playertimer = new HashMap<Player, Integer>();
 		
@@ -51,12 +51,12 @@ public class LflRoom extends Room {
 		this.mapname = mapname;
 	}
 
-	public HashMap<String, Integer> getScoreboard() {
-		return this.scoreboard;
+	public HashMap<String, Integer> getPointboard() {
+		return this.pointboard;
 	}
 
-	public void setScoreboard(HashMap<String, Integer> scoreboard) {
-		this.scoreboard = scoreboard;
+	public void setPointboard(HashMap<String, Integer> pointboard) {
+		this.pointboard = pointboard;
 	}
 	
 	public HashMap<Player, Integer> getTimer() {
@@ -68,7 +68,7 @@ public class LflRoom extends Room {
 	}
 	
 	public void setPlayerScore(Player p, int amt) {
-		this.scoreboard.put(p.getName(), amt);
+		this.pointboard.put(p.getName(), amt);
 	}
 	
 	public HashMap<Player, Integer> getKit() {
@@ -84,8 +84,6 @@ public class LflRoom extends Room {
 		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been given a " + kitname + " kit.");
 		
 		PlayerInventory inv = p.getInventory();
-		// inv.setItem(8, Items.getKitSelector()); // Give the player a kit selector first
-		
 		int playerkit = this.kit.get(p); // Get what kit the player has.
 		
 		for (String item : LflConfig.getKitItems(playerkit)) {
@@ -183,8 +181,8 @@ public class LflRoom extends Room {
 		boolean firstLoop = true;
 		int score = 0;
 		
-		for (String name : this.scoreboard.keySet()) {
-			int amt = this.scoreboard.get(name);
+		for (String name : this.pointboard.keySet()) {
+			int amt = this.pointboard.get(name);
 			
 			if (firstLoop) {
 				firstLoop = false;
@@ -207,19 +205,20 @@ public class LflRoom extends Room {
 		int reset = LflConfig.getCrankedTimer();
 		int kill = 0;
 		
-		if (this.scoreboard.get(p.getName()) != null) {
-			kill = this.scoreboard.get(p.getName());
+		if (this.pointboard.get(p.getName()) != null) {
+			kill = this.pointboard.get(p.getName());
 		}
 		
-		this.scoreboard.put(p.getName(), kill + 1);
+		this.pointboard.put(p.getName(), kill + 1);
 		
 		this.playertimer.put(p, reset); // Reset the player's timer.
 		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get another kill within " + reset + " seconds or you'll die!");
 		
-		int potionstr = kill / 3; // increases every 3 kills
+		int potionstr = (kill / 4) + 1; // Perks increases every 4 kills
 		if (potionstr > 0) {
-			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 31 * 20, potionstr));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 31 * 20, potionstr));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, LflConfig.getCrankedTimer() * 20, potionstr));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, LflConfig.getCrankedTimer() * 20, potionstr));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, LflConfig.getCrankedTimer() * 20, potionstr));
 			
 		}
 		
@@ -228,27 +227,24 @@ public class LflRoom extends Room {
 	}
 	
 	public void killPlayer(Player p) {
-		this.scoreboard.remove(p.getName());
+		this.pointboard.remove(p.getName());
 		this.playertimer.remove(p);
 		
 		Room.PLAYERS.remove(p);
 		this.removePlayer(p);
 		
 		p.setLevel(0);
-		
-		p.getInventory().setArmorContents(null);
-		p.getInventory().clear();
-		
 		p.setHealth(p.getMaxHealth());
 		p.setFoodLevel(19);
 		
-		p.setFireTicks(0);
+		FfaSpawnManager.purgeEffects(p);
 		
-		for (PotionEffect effect : p.getActivePotionEffects()) {
-		    p.removePotionEffect(effect.getType());
-		}
+		p.getInventory().setArmorContents(null);
+		p.getInventory().clear();
+		Items.updatePlayerInv(p);
 		
-		final Player pl = p; // Have to put a delay to prevent ConcurrentModificationExeception
+		// Have to put a delay to prevent ConcurrentModificationExeception
+		final Player pl = p;
 		Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
 		    public void run() {
 		    	pl.teleport(LflConfig.getLobby());
@@ -258,7 +254,7 @@ public class LflRoom extends Room {
 	}
 	
 	public void playerDied(Player p, String msg) {
-		int kills = this.scoreboard.get(p.getName());
+		int kills = this.pointboard.get(p.getName());
 		
 		if (this.getPlayers() != null) {
 			for (Player pl : this.getPlayers()) {
@@ -275,7 +271,7 @@ public class LflRoom extends Room {
 	}
 	
 	public void playerDied(Player p, Player killer) { // Player loses 1 point for being executed by another player.
-		int kill = this.scoreboard.get(killer.getName()) + 1;
+		int kill = this.pointboard.get(killer.getName()) + 1;
 		killer.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You are on a " + kill + " kill kill-streak.");
 		this.crankPlayer(killer);
 		this.playerDied(p, p.getName() + " has been executed by " + killer.getName() + "!");
@@ -367,12 +363,10 @@ public class LflRoom extends Room {
 					
 				}
 				
-				Players.respawnEffects(p);
+				LflSpawnManager.spawn(p, LflConfig.getPossibleSpawnLocation(this));
 				this.giveKit(p);
 				
-				p.teleport(LflConfig.getPossibleSpawnLocation(this));
-				
-				this.scoreboard.put(p.getName(), 0);
+				this.pointboard.put(p.getName(), 0);
 				this.playertimer.put(p, LflConfig.getCrankedTimer());
 			}
 		}
@@ -475,8 +469,8 @@ public class LflRoom extends Room {
 	
 	public void resetRoom(boolean areYouSure) {
 		if (areYouSure) {
-			this.scoreboard = null;
-			this.scoreboard = new HashMap<String, Integer>();
+			this.pointboard = null;
+			this.pointboard = new HashMap<String, Integer>();
 			
 			this.playertimer = null;
 			this.playertimer = new HashMap<Player, Integer>();
