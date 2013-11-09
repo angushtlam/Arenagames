@@ -94,6 +94,10 @@ public class LflSignListener implements Listener {
 			room.addPlayer(p);
 			Room.PLAYERS.put(p, roomId);
 			
+			room.updateSigns(); // Update signs.
+			room.updateScoreboard();
+			room.setPlayerScoreboard(p); // Add scoreboards to players
+			
 			p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You joined Lifeline queue " + roomId + ". ");
 			
 			if (other != null) { // Make sure it wasn't empty before the player joined.
@@ -120,8 +124,6 @@ public class LflSignListener implements Listener {
 				room.setGameInWaiting(false);
 				
 			}
-			
-			room.updateSigns(); // Update signs.
 			
 			Location[] blocs = LflConfig.getSignsStored(room.getRoomId());
 			for (Location bloc : blocs) {

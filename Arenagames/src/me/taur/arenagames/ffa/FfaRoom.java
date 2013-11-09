@@ -33,6 +33,7 @@ public class FfaRoom extends Room {
 	public FfaRoom(String roomId) {
 		this.pointboard = new HashMap<String, Integer>();
 		this.kit = new HashMap<Player, Integer>();
+		
 		this.setRoomId(roomId);
 		this.setRoomType(RoomType.FFA);
 		this.createScoreboard();
@@ -46,7 +47,7 @@ public class FfaRoom extends Room {
 		this.mapname = mapname;
 	}
 
-	public HashMap<String, Integer> getScoreboard() {
+	public HashMap<String, Integer> getPointboard() {
 		return this.pointboard;
 	}
 
@@ -60,68 +61,94 @@ public class FfaRoom extends Room {
 	
 	public void updateScoreboard() {
 		if (Room.SCOREBOARDS.get(this.getRoomId()) != null) {
-			int players = this.getPlayersInRoom();
+			
+			this.setScoreboardTitle(this.scoreboardTimer());
 			
 			if (this.isGameInProgress()) {
-				
 				String winner = this.getWinningPlayer();
-				int timer = this.getCountdownTimer();
 				
-				String[] lines = {ChatColor.YELLOW + "Timer: " + timer,
-								  ChatColor.DARK_GRAY + "    ---",
-								  ChatColor.GREEN + "Winning: ",
-								  ChatColor.GREEN + winner,
-								  ChatColor.DARK_GRAY + "    ---",
-								  ChatColor.YELLOW + "Pl.: " + players + "/" + Config.getPlayerLimit(this.getRoomType())};
-				
-				int used = lines.length;
-				
-				clearScoreboard();
-				for (int i = 0; i < lines.length; i++) {
-					this.setScoreboardField(lines[i], used);
-					used--;
-					
-				}
+				this.setScoreboardField("Highest Score", this.getPointboard().get(winner).intValue());
 				
 			} else {
-				if (this.isGameInWaiting()) {
-					int timer = this.getWaitTimer();
-					
-					String[] lines = {ChatColor.YELLOW + "Timer: " + timer,
-									  ChatColor.DARK_GRAY + "    ---",
-									  ChatColor.AQUA + "Starts Soon",
-									  ChatColor.DARK_GRAY + "    ---",
-									  ChatColor.DARK_GRAY + "    ---",
-									  ChatColor.YELLOW + "Pl.: " + players + "/" + Config.getPlayerLimit(this.getRoomType())};
-					
-					int used = lines.length;
-					
-					clearScoreboard();
-					for (int i = 0; i < lines.length; i++) {
-						this.setScoreboardField(lines[i], used);
-						used--;
-						
-					}
-					
-				} else {
-					String[] lines = {ChatColor.GOLD + "Timer: " + "~",
-									  ChatColor.DARK_GRAY + "    ---",
-									  ChatColor.GOLD + "" + ChatColor.ITALIC + "Needs more",
-									  ChatColor.GOLD + "" + ChatColor.ITALIC + "players!",
-									  ChatColor.DARK_GRAY + "    ---",
-									  ChatColor.YELLOW + "Pl.: " + players + "/" + Config.getPlayerLimit(this.getRoomType())};
-					
-					int used = lines.length;
-					
-					clearScoreboard();
-					for (int i = 0; i < lines.length; i++) {
-						this.setScoreboardField(lines[i], used);
-						used--;
-						
-					}
-				}
+				this.setScoreboardField("Highest Score", 0);
+				
+				
 			}
+			
+			this.setScoreboardField("Players", this.getPlayersInRoom());
+			
 		}
+	}
+	
+	public String scoreboardTimer() {
+		String str = "";
+		
+		if (this.isGameInProgress()) {
+			str = ChatColor.GOLD + "" + ChatColor.BOLD + "Game: " + ChatColor.YELLOW;
+			int timer = this.getCountdownTimer();
+			
+			int minute = timer / 60;
+			int seconds = timer % 60;
+				
+			if (minute == 0) {
+				str = str + "0";
+					
+			} else {
+				str = str + minute;
+					
+			}
+			
+			if (seconds % 2 != 0) {
+				str = str + ChatColor.GRAY + ":" + ChatColor.YELLOW;
+			} else {
+				str = str + ChatColor.DARK_GRAY + ":" + ChatColor.YELLOW;
+			}
+				
+			if (seconds < 10) {
+				str = str + "0" + seconds;
+				
+			} else {
+				str = str + seconds;
+				
+			}
+			
+		} else if (this.isGameInWaiting()) {
+			str = ChatColor.AQUA + "" + ChatColor.BOLD + "Wait: " + ChatColor.YELLOW;
+			
+			int timer = this.getWaitTimer();
+			
+			int minute = timer / 60;
+			int seconds = timer % 60;
+				
+			if (minute == 0) {
+				str = str + "0";
+					
+			} else {
+				str = str + minute;
+					
+			}
+			
+			if (seconds % 2 != 0) {
+				str = str + ChatColor.GRAY + ":" + ChatColor.YELLOW;
+			} else {
+				str = str + ChatColor.DARK_GRAY + ":" + ChatColor.YELLOW;
+			}
+				
+			if (seconds < 10) {
+				str = str + "0" + seconds;
+				
+			} else {
+				str = str + seconds;
+				
+			}
+			
+		} else {
+			str = ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Waiting";
+			
+		}
+		
+		return str;
+		
 	}
 	
 	public HashMap<Player, Integer> getKit() {
@@ -150,7 +177,13 @@ public class FfaRoom extends Room {
 				continue;
 			}
 			
-			if (inv.getHelmet() == null && (i.getType().name().equals(Material.PUMPKIN) || i.getType().name().equals(Material.JACK_O_LANTERN))) {
+
+			if (inv.getHelmet() == null && i.getType().name().equals(Material.PUMPKIN)) {
+				inv.setHelmet(i);
+				continue;
+			}
+			
+			if (inv.getHelmet() == null && i.getType().name().equals(Material.JACK_O_LANTERN)) {
 				inv.setHelmet(i);
 				continue;
 			}
@@ -179,10 +212,12 @@ public class FfaRoom extends Room {
 	}
 	
 	public void resetKit(Player p) {
-		int kitnum = this.kit.get(p); // Get what kit the player has.
-		p.getInventory().setArmorContents(null);
-		p.getInventory().clear();
-		this.giveKit(p, kitnum);
+		if (this.isPlayerInRoom(p)) {
+			int kitnum = this.kit.get(p); // Get what kit the player has.
+			p.getInventory().setArmorContents(null);
+			p.getInventory().clear();
+			this.giveKit(p, kitnum);
+		}
 		
 	}
 
@@ -237,13 +272,16 @@ public class FfaRoom extends Room {
 			
 			int newscore = died - subtract;
 			p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You now have " + newscore + (newscore == 1 ? " point" : " points") + ".");
+			p.setLevel(died - subtract);
 			this.pointboard.put(p.getName(), died - subtract);
+			
 		} else {
 			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost " + died + (died == 1 ? " point" : " points") + " for dying.");
 			p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You now have 0 points.");
+			p.setLevel(0);
 			this.pointboard.put(p.getName(), 0);
+			
 		}
-		
 		
 		FfaSpawnManager.respawn(p, FfaConfig.getPossibleSpawnLocation(this));
 		
@@ -259,6 +297,7 @@ public class FfaRoom extends Room {
 	
 	public void playerDied(Player p, Player killer) { // Player loses 1 point for being executed by another player.
 		int kill = this.pointboard.get(killer.getName());
+		killer.setLevel(kill + 3);
 		this.pointboard.put(killer.getName(), kill + 3);
 		
 		this.playerDied(p, 1, p.getName() + " has been executed by " + killer.getName() + "!");
@@ -462,6 +501,13 @@ public class FfaRoom extends Room {
 			
 			this.kit = null;
 			this.kit = new HashMap<Player, Integer>();
+			
+			this.removeAllPlayerScoreboard();
+			
+			for (Player p : this.getPlayers()) {
+				p.setLevel(0);
+				
+			}
 			
 			this.setMapName(null);
 			this.resetRoomBasics(areYouSure);

@@ -132,14 +132,13 @@ public class RoomCommand implements CommandExecutor {
 							FfaRoom r = (FfaRoom) room;
 							r.updateSigns(); // Update signs.
 							r.updateScoreboard(); // Update scoreboard
+							r.removePlayerScoreboard(p);
 							
 							Location[] blocs = FfaConfig.getSignsStored(room.getRoomId());
 							for (Location bloc : blocs) {
 								ParticleEffect.ANGRY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 1);
 								
 							}
-							
-							r.getScoreboard().remove(p.getName()); // Remove the player from the scoreboard.
 						}
 						
 						// Only applies if the room is an LFL room.
@@ -179,7 +178,7 @@ public class RoomCommand implements CommandExecutor {
 								
 							}
 							
-							room.removePlayerScoreboard(p);
+							r.removePlayerScoreboard(p);
 						}
 						
 						return true;

@@ -24,6 +24,8 @@ public class LflActive {
 
 			if (r.getRoomType() == RoomType.LFL) {
 				LflRoom room = (LflRoom) r;
+				
+				room.updateScoreboard();
 
 				if (room.isGameInProgress()) {
 					if (room.getPlayersInRoom() == 1) { // If there is only 1 player left.

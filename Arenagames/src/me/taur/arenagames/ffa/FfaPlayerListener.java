@@ -36,7 +36,6 @@ public class FfaPlayerListener implements Listener {
 					if (room.getPlayersInRoom() == 0) {
 						Bukkit.broadcastMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + room.getRoomId() + " queue has reopened.");
 						
-						r.getScoreboard().remove(p);
 						r.resetRoom(true);
 					}
 
@@ -72,7 +71,9 @@ public class FfaPlayerListener implements Listener {
 				
 				r.updateSigns();
 				r.updateScoreboard(); // Update scoreboard
-				room.removePlayerScoreboard(p);
+				r.getPointboard().remove(p);
+				
+				r.removePlayerScoreboard(p);
 
 			}
 		}

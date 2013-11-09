@@ -156,11 +156,18 @@ public class Room {
 		}
 	}
 	
-	public void addPlayerScoreboard(Player p) {
-		if (SCOREBOARDS.get(roomId) != null) {
-			p.setScoreboard(SCOREBOARDS.get(roomId));
-		
+	public void setScoreboardTitle(String str) {
+		if (SCOREBOARDS.get(roomId) != null) { // Make sure the board is not null
+			SCOREBOARDS.get(roomId).getObjective(DisplaySlot.SIDEBAR).setDisplayName(str);
 		}
+		
+	}
+	
+	public void setPlayerScoreboard(Player p) {
+		if (SCOREBOARDS.get(roomId) != null) { // Make sure the board is not null
+			p.setScoreboard(SCOREBOARDS.get(roomId));
+		}
+		
 	}
 	
 	public void removePlayerScoreboard(Player p) {
@@ -187,10 +194,6 @@ public class Room {
 		setScoreboardField(op, value);
 	}
 	
-	public void clearScoreboard() {
-		this.createScoreboard();
-	}
-	
 	public int getScoreboardField(OfflinePlayer op) {
 		if (Room.SCOREBOARDS.get(roomId) != null) {
 			return Room.SCOREBOARDS.get(roomId).getObjective(DisplaySlot.SIDEBAR).getScore(op).getScore();
@@ -201,12 +204,15 @@ public class Room {
 	}
 	
 	public void removeAllPlayerScoreboard() {
-		for (Player p : this.getPlayers()) {
-			if (p != null) {
-				removePlayerScoreboard(p);
-				
+		if (this.getPlayers() != null) {
+			for (Player p : this.getPlayers()) {
+				if (p != null) {
+					removePlayerScoreboard(p);
+					
+				}
 			}
 		}
+		
 	}
 	
 	public boolean isPlayerInRoom(Player p) {

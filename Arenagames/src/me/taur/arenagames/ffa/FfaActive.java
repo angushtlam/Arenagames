@@ -23,8 +23,8 @@ public class FfaActive {
 
 			if (r.getRoomType() == RoomType.FFA) {
 				FfaRoom room = (FfaRoom) r;
-
-				room.updateScoreboard(); // Update scoreboard
+				
+				room.updateScoreboard();
 				
 				if (room.isGameInProgress()) {
 					if (room.getPlayersInRoom() == 1) { // If there is only 1 player left.
@@ -76,13 +76,6 @@ public class FfaActive {
 					}
 
 					int countdown = room.getCountdownTimer();
-					if (room.getPlayers() != null) {
-						for (Player p : room.getPlayers()) { // Make the levels the timer.
-							if (p != null) {
-								p.setLevel(countdown);
-							}
-						}
-					}
 
 					if (countdown > -1) {
 						room.setCountdownTimer(countdown - 1);
@@ -91,6 +84,7 @@ public class FfaActive {
 							for (Player p : room.getPlayers()) {
 								if (p != null) {
 									p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1F, 0F);
+									
 								}
 							}
 						}
@@ -130,11 +124,6 @@ public class FfaActive {
 
 				if (room.isGameInWaiting()) {
 					int waitcount = room.getWaitTimer();
-
-					for (Player p : room.getPlayers()) { // Make the levels the timer.
-						p.setLevel(waitcount);
-
-					}
 
 					if (waitcount > -1) {
 						room.setWaitTimer(waitcount - 1);
@@ -268,9 +257,8 @@ public class FfaActive {
 								}
 							}
 						}
-
 					}
-				}
+				}				
 			}
 		}
 	}

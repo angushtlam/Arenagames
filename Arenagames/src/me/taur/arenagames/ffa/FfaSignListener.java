@@ -34,7 +34,6 @@ public class FfaSignListener implements Listener {
 
 		Sign sign = (Sign) b.getState();
 		if (sign.getLine(0).contains("[FFA]")) {
-
 			Player p = evt.getPlayer();
 
 			if (!p.hasPermission("arenagames.join")) {
@@ -94,8 +93,10 @@ public class FfaSignListener implements Listener {
 			Player[] other = room.getPlayers(); // Get players that are in the room before the player is added.
 			room.addPlayer(p);
 			Room.PLAYERS.put(p, roomId);
-
-			room.addPlayerScoreboard(p);
+			
+			room.updateSigns(); // Update signs.
+			room.updateScoreboard();
+			room.setPlayerScoreboard(p); // Add scoreboards to players
 			
 			p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You joined Free For All queue " + roomId + ". ");
 
@@ -123,9 +124,6 @@ public class FfaSignListener implements Listener {
 				room.setGameInWaiting(false);
 
 			}
-
-			room.updateSigns(); // Update signs.
-			room.updateScoreboard(); // Update scoreboard
 			
 			// Reminder for players to choose their kits.
 			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "Remember to pick your kit by right clicking on the Kit Selector (Nether Star) item!");

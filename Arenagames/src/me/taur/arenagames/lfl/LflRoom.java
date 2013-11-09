@@ -41,6 +41,7 @@ public class LflRoom extends Room {
 		
 		this.setRoomId(roomId);
 		this.setRoomType(RoomType.LFL);
+		this.createScoreboard();
 	}
 
 	public String getMapName() {
@@ -71,6 +72,98 @@ public class LflRoom extends Room {
 		this.pointboard.put(p.getName(), amt);
 	}
 	
+	public void updateScoreboard() {
+		if (Room.SCOREBOARDS.get(this.getRoomId()) != null) {
+			
+			this.setScoreboardTitle(this.scoreboardTimer());
+			
+			if (this.isGameInProgress() && this.getWinningPlayer() != null) {
+				String winner = this.getWinningPlayer();
+				
+				this.setScoreboardField("Most Kills", this.getPointboard().get(winner).intValue());
+				
+			} else {
+				this.setScoreboardField("Most Kills", 0);
+				
+				
+			}
+			
+			this.setScoreboardField("Players", this.getPlayersInRoom());
+			
+		}
+	}
+	
+	public String scoreboardTimer() {
+		String str = "";
+		
+		if (this.isGameInProgress()) {
+			str = ChatColor.GOLD + "" + ChatColor.BOLD + "Game: " + ChatColor.YELLOW;
+			int timer = this.getCountdownTimer();
+			
+			int minute = timer / 60;
+			int seconds = timer % 60;
+				
+			if (minute == 0) {
+				str = str + "0";
+					
+			} else {
+				str = str + minute;
+					
+			}
+			
+			if (seconds % 2 != 0) {
+				str = str + ChatColor.GRAY + ":" + ChatColor.YELLOW;
+			} else {
+				str = str + ChatColor.DARK_GRAY + ":" + ChatColor.YELLOW;
+			}
+				
+			if (seconds < 10) {
+				str = str + "0" + seconds;
+				
+			} else {
+				str = str + seconds;
+				
+			}
+			
+		} else if (this.isGameInWaiting()) {
+			str = ChatColor.AQUA + "" + ChatColor.BOLD + "Wait: " + ChatColor.YELLOW;
+			
+			int timer = this.getWaitTimer();
+			
+			int minute = timer / 60;
+			int seconds = timer % 60;
+				
+			if (minute == 0) {
+				str = str + "0";
+					
+			} else {
+				str = str + minute;
+					
+			}
+			
+			if (seconds % 2 != 0) {
+				str = str + ChatColor.GRAY + ":" + ChatColor.YELLOW;
+			} else {
+				str = str + ChatColor.DARK_GRAY + ":" + ChatColor.YELLOW;
+			}
+				
+			if (seconds < 10) {
+				str = str + "0" + seconds;
+				
+			} else {
+				str = str + seconds;
+				
+			}
+			
+		} else {
+			str = ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Waiting";
+			
+		}
+		
+		return str;
+		
+	}
+	
 	public HashMap<Player, Integer> getKit() {
 		return this.kit;
 	}
@@ -95,7 +188,12 @@ public class LflRoom extends Room {
 				continue;
 			}
 			
-			if (inv.getHelmet() == null && (i.getType().name().equals(Material.PUMPKIN) || i.getType().name().equals(Material.JACK_O_LANTERN))) {
+			if (inv.getHelmet() == null && i.getType().name().equals(Material.PUMPKIN)) {
+				inv.setHelmet(i);
+				continue;
+			}
+			
+			if (inv.getHelmet() == null && i.getType().name().equals(Material.JACK_O_LANTERN)) {
 				inv.setHelmet(i);
 				continue;
 			}
@@ -218,7 +316,7 @@ public class LflRoom extends Room {
 		if (potionstr > 0) {
 			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, LflConfig.getCrankedTimer() * 20, potionstr));
 			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, LflConfig.getCrankedTimer() * 20, potionstr));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, LflConfig.getCrankedTimer() * 20, potionstr));
+			// p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, LflConfig.getCrankedTimer() * 20, potionstr));
 			
 		}
 		
@@ -232,6 +330,8 @@ public class LflRoom extends Room {
 		
 		Room.PLAYERS.remove(p);
 		this.removePlayer(p);
+		
+		this.removePlayerScoreboard(p);
 		
 		p.setLevel(0);
 		p.setHealth(p.getMaxHealth());

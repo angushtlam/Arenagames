@@ -118,7 +118,8 @@ public class Items {
                 			
                 		}
                 		
-                		i.addEnchantment(ench, level);
+                		// i.addEnchantment(ench, level);
+                		i.addUnsafeEnchantment(ench, level);
                 	}
                 }
             }
