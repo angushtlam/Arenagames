@@ -1,6 +1,7 @@
 package me.taur.arenagames.room;
 
 import me.taur.arenagames.Config;
+import me.taur.arenagames.util.InvUtil;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,8 +17,7 @@ public class PlayerLoginListener implements Listener {
 		evt.setJoinMessage(""); // I hate this.
 		
 		Player p = evt.getPlayer();
-		p.getInventory().setArmorContents(null);
-		p.getInventory().clear();
+		InvUtil.setLobbyInventory(p);
 		
 		for (PotionEffect effect : p.getActivePotionEffects()) {
 		    p.removePotionEffect(effect.getType());

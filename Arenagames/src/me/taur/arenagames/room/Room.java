@@ -70,6 +70,7 @@ public class Room {
 		}
 		
 		return players.length;
+		
 	}
 	
 	public int getWaitTimer() {
@@ -154,6 +155,7 @@ public class Room {
 			SCOREBOARDS.put(roomId, board);
 			
 		}
+		
 	}
 	
 	public void setScoreboardTitle(String str) {
@@ -182,6 +184,7 @@ public class Room {
 			score.setScore(value);
 			
 		}
+		
 	}
 	
 	public void setScoreboardField(String str, int value) {
@@ -192,6 +195,7 @@ public class Room {
 		
 		OfflinePlayer op = Bukkit.getOfflinePlayer(str);
 		setScoreboardField(op, value);
+		
 	}
 	
 	public int getScoreboardField(OfflinePlayer op) {
@@ -201,6 +205,7 @@ public class Room {
 		}
 		
 		return 0;
+		
 	}
 	
 	public void removeAllPlayerScoreboard() {
@@ -265,6 +270,7 @@ public class Room {
 				waitStartMessage(p, type);
 			}
 		}
+		
 	}
 	
 	public void waitStartMessage(Player p, RoomType type) {
@@ -303,5 +309,7 @@ public class Room {
 			gameInProgress = false;
 			// Set countdown timer on start, not here.
 		}
+		
 	}
+	
 }

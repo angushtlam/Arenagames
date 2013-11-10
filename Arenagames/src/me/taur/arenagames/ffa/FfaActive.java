@@ -5,8 +5,10 @@ import java.util.Random;
 import java.util.Set;
 
 import me.taur.arenagames.Config;
+import me.taur.arenagames.player.EloUtil;
+import me.taur.arenagames.player.PlayerData;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.Items;
+import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
@@ -27,45 +29,69 @@ public class FfaActive {
 				room.updateScoreboard();
 				
 				if (room.isGameInProgress()) {
-					if (room.getPlayersInRoom() == 1) { // If there is only 1 player left.
-						room.gameOverMessage(room.getWinningPlayer());
+					if (room.getPlayersInRoom() < 2) { // If there are not enough players in the room:
+						if (room.getWinningPlayer() != null) {
+							room.gameOverMessage(room.getWinningPlayer());
+							
+							if (Config.isEloEnabled(RoomType.FFA)) { // Only change the player's Elo if it is enabled.
+								for (Player p : room.getPlayers()) {
+									if (PlayerData.isLoaded(p)) {
+										PlayerData data = PlayerData.get(p);
+										int oldelo = data.getFfaEloRank();
+										int newelo = data.getFfaEloRank();
+										
+										if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
+											newelo = EloUtil.addElo(oldelo, room.getAvgElo());
 
-						if (room.getPlayers() != null) {
-							for (Player p : room.getPlayers()) {
-								if (p != null) {
-									p.teleport(FfaConfig.getLobby());
-									p.setLevel(0);
-
-									FfaSpawnManager.purgeEffects(p);
-									
-									p.getInventory().setArmorContents(null);
-									p.getInventory().clear();
-									Items.updatePlayerInv(p);
-									
-									Room.PLAYERS.remove(p);
+										} else {
+											newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+											
+										}
+										
+										int diff = newelo - oldelo;
+										
+										data.setFfaEloRank(newelo);
+										data.save(p);
+										p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your FFA Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
+										
+									}
 								}
 							}
+							
+							for (Player p : room.getPlayers()) {
+								if (p != null) {
+									if (PlayerData.isLoaded(p)) {
+										PlayerData data = PlayerData.get(p);
+										data.setFfaGamesPlayed(data.getFfaGamesPlayed() + 1); // Increase their play count.
+
+										int points = room.getPointboard().get(p.getName());
+										if (points > data.getFfaRecord()) { // If the player has set a new record:
+											data.setFfaRecord(points);
+											p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have set a new personal record: " + points + "!");
+											
+										}
+										
+										data.save(p);
+									}
+									
+									Room.PLAYERS.remove(p);
+									
+								}
+							}
+							
 						}
 
-						room.resetRoom(true);
-
-					}
-
-
-					if (room.getPlayersInRoom() < 1) { // End game w/ no players.				
 						if (room.getPlayers() != null) {
 							for (Player p : room.getPlayers()) {
 								if (p != null) {
 									p.teleport(FfaConfig.getLobby());
-									p.setLevel(0);
+									p.setLevel(0); // Change their levels because the countdown is not 0 yet.
 
 									FfaSpawnManager.purgeEffects(p);
-									
-									p.getInventory().setArmorContents(null);
-									p.getInventory().clear();
-									Items.updatePlayerInv(p);
+									InvUtil.setLobbyInventory(p);
 									
 									Room.PLAYERS.remove(p);
+									
 								}
 							}
 						}
@@ -89,18 +115,58 @@ public class FfaActive {
 							}
 						}
 						
-						if (countdown == 0) {
-							room.gameOverMessage(room.getWinningPlayer());
+						if (countdown == 0) { // If the game is over
+							room.gameOverMessage(room.getWinningPlayer()); // Broadcast who won.
 
+							if (Config.isEloEnabled(RoomType.FFA)) { // Only change the player's Elo if it is enabled.
+								for (Player p : room.getPlayers()) {
+									if (PlayerData.isLoaded(p)) {
+										PlayerData data = PlayerData.get(p);
+										int oldelo = data.getFfaEloRank();
+										int newelo = data.getFfaEloRank();
+										
+										if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
+											newelo = EloUtil.addElo(oldelo, room.getAvgElo());
+
+										} else {
+											newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+											
+										}
+										
+										int diff = newelo - oldelo;
+										
+										data.setFfaEloRank(newelo);
+										data.save(p);
+										p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your FFA Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
+										
+									}
+								}
+							}
+							
 							for (Player p : room.getPlayers()) {
 								if (p != null) {
 									p.teleport(FfaConfig.getLobby());
-									p.getInventory().setArmorContents(null);
-									p.getInventory().clear();
-									Items.updatePlayerInv(p);
+									InvUtil.setLobbyInventory(p);
+									
+									if (PlayerData.isLoaded(p)) {
+										PlayerData data = PlayerData.get(p);
+										data.setFfaGamesPlayed(data.getFfaGamesPlayed() + 1); // Increase their play count.
+
+										int points = room.getPointboard().get(p.getName());
+										if (points > data.getFfaRecord()) { // If the player has set a new record:
+											data.setFfaRecord(points);
+											p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have set a new personal record: " + points + "!");
+											
+										}
+										
+										data.save(p);
+									}
+									
 									Room.PLAYERS.remove(p);
+									
 								}
 							}
+							
 
 							room.resetRoom(true);
 							continue;

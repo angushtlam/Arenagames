@@ -5,9 +5,10 @@ import java.util.Random;
 import java.util.Set;
 
 import me.taur.arenagames.Config;
-import me.taur.arenagames.ffa.FfaSpawnManager;
+import me.taur.arenagames.player.EloUtil;
+import me.taur.arenagames.player.PlayerData;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.Items;
+import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
@@ -28,45 +29,69 @@ public class LflActive {
 				room.updateScoreboard();
 
 				if (room.isGameInProgress()) {
-					if (room.getPlayersInRoom() == 1) { // If there is only 1 player left.
-						room.gameOverMessage(room.getWinningPlayer());
+					if (room.getPlayersInRoom() < 2) { // If there are not enough players in the room:
+						if (room.getWinningPlayer() != null) {
+							room.gameOverMessage(room.getWinningPlayer());
+							
+							if (Config.isEloEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
+								for (Player p : room.getPlayers()) {
+									if (PlayerData.isLoaded(p)) {
+										PlayerData data = PlayerData.get(p);
+										int oldelo = data.getLflEloRank();
+										int newelo = data.getLflEloRank();
+										
+										if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
+											newelo = EloUtil.addElo(oldelo, room.getAvgElo());
 
-						if (room.getPlayers() != null) {
-							for (Player p : room.getPlayers()) {
-								if (p != null) {
-									p.teleport(LflConfig.getLobby());
-									p.setLevel(0);
-
-									FfaSpawnManager.purgeEffects(p);
-									
-									p.getInventory().setArmorContents(null);
-									p.getInventory().clear();
-									Items.updatePlayerInv(p);
-									
-									Room.PLAYERS.remove(p);
+										} else {
+											newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+											
+										}
+										
+										int diff = newelo - oldelo;
+										
+										data.setLflEloRank(newelo);
+										data.save(p);
+										p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Lifeline Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
+										
+									}
 								}
 							}
+							
+							for (Player p : room.getPlayers()) {
+								if (p != null) {
+									if (PlayerData.isLoaded(p)) {
+										PlayerData data = PlayerData.get(p);
+										data.setLflGamesPlayed(data.getLflGamesPlayed() + 1); // Increase their play count.
 
-							room.resetRoom(true);
-
+										int points = room.getPointboard().get(p.getName());
+										if (points > data.getLflRecord()) { // If the player has set a new record:
+											data.setLflRecord(points);
+											p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have set a new personal record: " + points + "!");
+											
+										}
+										
+										data.save(p);
+									}
+									
+									Room.PLAYERS.remove(p);
+									
+								}
+							}
+							
 						}
-					}
 
-
-					if (room.getPlayersInRoom() < 1) { // End game w/ no players.
 						if (room.getPlayers() != null) {
 							for (Player p : room.getPlayers()) {
 								if (p != null) {
 									p.teleport(LflConfig.getLobby());
-									p.setLevel(0);
+									p.setLevel(0); // Change their levels because the countdown is not 0 yet.
 
-									FfaSpawnManager.purgeEffects(p);
-									
-									p.getInventory().setArmorContents(null);
-									p.getInventory().clear();
-									Items.updatePlayerInv(p);
+									LflSpawnManager.purgeEffects(p);
+									InvUtil.setLobbyInventory(p);
 									
 									Room.PLAYERS.remove(p);
+									
 								}
 							}
 						}
@@ -83,6 +108,7 @@ public class LflActive {
 							if (p != null) {
 								if (room.getTimer().get(p) != null) {
 									p.setLevel(room.getTimer().get(p));
+									
 								}
 							}
 						}
@@ -91,18 +117,88 @@ public class LflActive {
 					if (countdown > -1) {
 						room.setCountdownTimer(countdown - 1);
 
+						if (room.getPlayerAlive() < 2) { // If there are less than 2 players alive.
+							if (room.getWinningPlayer() != null) {
+								room.gameOverMessage(room.getWinningPlayer());
+								
+								if (Config.isEloEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
+									for (Player p : room.getPlayers()) {
+										if (PlayerData.isLoaded(p)) {
+											PlayerData data = PlayerData.get(p);
+											int oldelo = data.getLflEloRank();
+											int newelo = data.getLflEloRank();
+											
+											if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
+												newelo = EloUtil.addElo(oldelo, room.getAvgElo());
+
+											} else {
+												newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+												
+											}
+											
+											int diff = newelo - oldelo;
+											
+											data.setLflEloRank(newelo);
+											data.save(p);
+											p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Lifeline Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
+											
+										}
+									}
+								}
+								
+								for (Player p : room.getPlayers()) {
+									if (p != null) {
+										if (PlayerData.isLoaded(p)) {
+											PlayerData data = PlayerData.get(p);
+											data.setLflGamesPlayed(data.getLflGamesPlayed() + 1); // Increase their play count.
+
+											int points = room.getPointboard().get(p.getName());
+											if (points > data.getLflRecord()) { // If the player has set a new record:
+												data.setLflRecord(points);
+												p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have set a new personal record: " + points + "!");
+												
+											}
+											
+											data.save(p);
+										}
+										
+										Room.PLAYERS.remove(p);
+										
+									}
+								}
+								
+							}
+
+							if (room.getPlayers() != null) {
+								for (Player p : room.getPlayers()) {
+									if (p != null) {
+										p.teleport(LflConfig.getLobby());
+										p.setLevel(0); // Change their levels because the countdown is not 0 yet.
+
+										LflSpawnManager.purgeEffects(p);
+										InvUtil.setLobbyInventory(p);
+										
+										Room.PLAYERS.remove(p);
+										
+									}
+								}
+							}
+
+							room.resetRoom(true);
+							Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Lifeline match " + room.getRoomId() + " has ended.");
+							
+						}
+						
 						if (room.getPlayers() != null) {
 							for (Player p : room.getPlayers()) {
 								if (p != null) {
 									int timer = room.getTimer().get(p) - 1;
-									if (countdown < 5 || timer < 5) { // If there is only less than 5 seconds left for the player
+									if (countdown < 5 || (timer < 5 && timer > -1)) { // If there is only less than 5 seconds left for the player
 										p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1F, 0F);
 									}
 									
-									if (timer < 1) {
+									if (timer == 0) {
 										p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have exploded for timing out.");
-										p.getWorld().createExplosion(p.getLocation(), 0.0F, false);
-										
 										room.killPlayer(p); // Player died from not getting kills.
 	
 									} else {
@@ -116,18 +212,55 @@ public class LflActive {
 						if (countdown == 0) {  // End the game
 							room.gameOverMessage(room.getWinningPlayer());
 
-							for (Player p : r.getPlayers()) {
-								if (p != null) {
-									p.teleport(LflConfig.getLobby());
-									
-									p.getInventory().setArmorContents(null);
-									p.getInventory().clear();
-									Items.updatePlayerInv(p);
-									
-									Room.PLAYERS.remove(p);
+							if (Config.isEloEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
+								for (Player p : room.getPlayers()) {
+									if (PlayerData.isLoaded(p)) {
+										PlayerData data = PlayerData.get(p);
+										int oldelo = data.getLflEloRank();
+										int newelo = data.getLflEloRank();
+										
+										if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
+											newelo = EloUtil.addElo(oldelo, room.getAvgElo());
+
+										} else {
+											newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+											
+										}
+										
+										int diff = newelo - oldelo;
+										
+										data.setLflEloRank(newelo);
+										data.save(p);
+										p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Lifeline Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
+										
+									}
 								}
 							}
+							
+							for (Player p : room.getPlayers()) {
+								if (p != null) {
+									p.teleport(LflConfig.getLobby());
+									InvUtil.setLobbyInventory(p);
+									
+									if (PlayerData.isLoaded(p)) {
+										PlayerData data = PlayerData.get(p);
+										data.setLflGamesPlayed(data.getLflGamesPlayed() + 1); // Increase their play count.
 
+										int points = room.getPointboard().get(p.getName());
+										if (points > data.getLflRecord()) { // If the player has set a new record:
+											data.setLflRecord(points);
+											p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have set a new personal record: " + points + "!");
+											
+										}
+										
+										data.save(p);
+									}
+									
+									Room.PLAYERS.remove(p);
+									
+								}
+							}
+							
 							room.resetRoom(true);
 
 						}
@@ -143,11 +276,13 @@ public class LflActive {
 									if (p != null) {
 										int minute = countdown / 60;
 										p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + minute + " minute" + (minute == 1 ? "" : "s") + " remaining.");
+										
 									}
 								}
 							}
 						}
 					}
+					
 				}
 
 				if (room.isGameInWaiting()) {

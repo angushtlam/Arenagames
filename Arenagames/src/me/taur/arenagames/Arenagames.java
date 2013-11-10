@@ -10,7 +10,11 @@ import me.taur.arenagames.lfl.LflKitSelectorListener;
 import me.taur.arenagames.lfl.LflPlayerListener;
 import me.taur.arenagames.lfl.LflSignListener;
 import me.taur.arenagames.lfl.LflUtil;
+import me.taur.arenagames.player.PlayerCommand;
+import me.taur.arenagames.player.PlayerDataListener;
+import me.taur.arenagames.player.PlayerProfileListener;
 import me.taur.arenagames.room.PlayerLoginListener;
+import me.taur.arenagames.room.RoomCommand;
 import me.taur.arenagames.room.RoomScheduler;
 import me.taur.arenagames.room.SignCreateListener;
 import me.taur.arenagames.room.SignDestroyListener;
@@ -31,12 +35,14 @@ public class Arenagames extends JavaPlugin {
 		Config.startCheck();
 		
 		regCmd("queue", new RoomCommand());
+		regCmd("player", new PlayerCommand());
 		loadGamemodes();
 		
 		regEvent(new PlayerLoginListener());
 		regEvent(new SignCreateListener());
 		regEvent(new SignDestroyListener());
-		
+		regEvent(new PlayerDataListener());
+		regEvent(new PlayerProfileListener());
 		RoomScheduler.start();
 		
 	}

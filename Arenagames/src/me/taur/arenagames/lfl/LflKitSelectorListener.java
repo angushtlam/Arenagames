@@ -1,7 +1,7 @@
 package me.taur.arenagames.lfl;
 
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.Items;
+import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Material;
@@ -31,7 +31,7 @@ public class LflKitSelectorListener implements Listener {
 		}
 		
 		String im = i.getItemMeta().getDisplayName();
-		String kitsel = Items.getKitSelector().getItemMeta().getDisplayName();
+		String kitsel = InvUtil.getKitSelector().getItemMeta().getDisplayName();
 		
 		if (im == null || kitsel == null) {
 			return;

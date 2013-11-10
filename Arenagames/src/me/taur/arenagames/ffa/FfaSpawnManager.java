@@ -1,7 +1,8 @@
 package me.taur.arenagames.ffa;
 
 import me.taur.arenagames.Arenagames;
-import me.taur.arenagames.util.Items;
+import me.taur.arenagames.room.Room;
+import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.ParticleEffect;
 
 import org.bukkit.Bukkit;
@@ -36,13 +37,12 @@ public class FfaSpawnManager {
 		
 		p.getInventory().setArmorContents(null);
 		p.getInventory().clear();
-		Items.updatePlayerInv(p);
+		InvUtil.updatePlayerInv(p);
 		
 	}
 	
 	public static void spawn(Player p, Location tp) {
 		p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10, 400));  // Prevent player from seeing the teleport.
-		p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 20 * 3, 1)); // Make screen blink
 		
 		p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20 * 3, 1)); // Stop spawncamping and prevent protected players from attacking.
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 3, 5));
@@ -70,8 +70,9 @@ public class FfaSpawnManager {
 		final Location loc = tp;
 		Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
 		    public void run() {
-		    	spawn(pl, loc);
-		    	
+		    	if (Room.PLAYERS.get(pl) != null) {
+		    		spawn(pl, loc);
+		    	}
 		    }
 		}, 40L);
 	}

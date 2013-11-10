@@ -7,11 +7,12 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class Items {
+public class InvUtil {
 	public static ItemStack convertToItemStack(String blob) {
-		Material material = Material.SPONGE; // For error checking
+		Material material = Material.SPONGE; // If Material is invalid, the material will show up as Sponge.
 		int dmg = 0;
 		int amt = 0;
 		String dataBlob = null;
@@ -81,14 +82,12 @@ public class Items {
             		
             	}
             }
-            
         } else {
         	dmg = 0;
         	
         }
 		
-		// Create the ItemStack with basic info.
-		ItemStack i = new ItemStack(material, amt, (short) dmg);
+		ItemStack i = new ItemStack(material, amt, (short) dmg); // Create the ItemStack with basic info.
 		
 		if (enchantmentBlob != null) {
             String[] enchantments = enchantmentBlob.split(",");
@@ -99,7 +98,9 @@ public class Items {
                     enchStr = parts[0];
                     try {
                         level = Integer.parseInt(parts[1]);
-                    } catch (NumberFormatException ignore) {}
+                    } catch (NumberFormatException ignore) {
+                    	
+                    }
                 }
 
                 Enchantment ench = null;
@@ -117,32 +118,61 @@ public class Items {
                 			level = ench.getMaxLevel();
                 			
                 		}
-                		
-                		// i.addEnchantment(ench, level);
+
                 		i.addUnsafeEnchantment(ench, level);
                 	}
                 }
+                
             }
 
         }
 		
 		return i;
+		
 	}
 	
 	public static ItemStack getKitSelector() {
 		ItemStack i = new ItemStack(Material.NETHER_STAR, 1);
 		ItemMeta im = i.getItemMeta();
-		im.setDisplayName(ChatColor.GOLD + "Kit Selector");
+		im.setDisplayName(ChatColor.GREEN + "Kit Selector");
 		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to select your kit."));
 		i.setItemMeta(im);
 		
 		return i;
 		
 	}
+
+	public static ItemStack getProfileBook() {
+		ItemStack i = new ItemStack(Material.WRITTEN_BOOK, 1);
+		ItemMeta im = i.getItemMeta();
+		im.setDisplayName(ChatColor.GOLD + "Profile Book");
+		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to check your profile."));
+		i.setItemMeta(im);
+		
+		return i;
+		
+	}
+	
+	public static void setLobbyInventory(Player p) {
+		PlayerInventory inv = p.getInventory();
+		
+		inv.setArmorContents(null);
+		inv.clear();
+		
+		inv.setItem(0, InvUtil.getProfileBook());
+		updatePlayerInv(p);
+	}
 	
 	@SuppressWarnings("deprecation")
 	public static void updatePlayerInv(Player p) {
 		p.updateInventory();
+		
+	}
+	
+	public static void clearPlayerInv(Player p) {
+		p.getInventory().setArmorContents(null);
+		p.getInventory().clear();
+		updatePlayerInv(p);
 		
 	}
 }

@@ -1,10 +1,11 @@
-package me.taur.arenagames;
+package me.taur.arenagames.room;
 
+import me.taur.arenagames.Config;
 import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.ffa.FfaRoom;
 import me.taur.arenagames.lfl.LflConfig;
 import me.taur.arenagames.lfl.LflRoom;
-import me.taur.arenagames.room.Room;
+import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.ParticleEffect;
 import me.taur.arenagames.util.RoomType;
 
@@ -87,11 +88,9 @@ public class RoomCommand implements CommandExecutor {
 						Room.PLAYERS.remove(p);
 						room.removePlayer(p);
 						
-						p.getInventory().setArmorContents(null);
-						p.getInventory().clear();
+						InvUtil.setLobbyInventory(p);
 						
 						p.setLevel(0);
-						p.setExp((float) 0.0);
 						
 						if (room.getPlayers() != null) {
 							for (Player other : room.getPlayers()) {

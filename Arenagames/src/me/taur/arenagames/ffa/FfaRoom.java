@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeSet;
 
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
+import me.taur.arenagames.player.PlayerData;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.Items;
+import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
@@ -38,26 +40,6 @@ public class FfaRoom extends Room {
 		this.setRoomType(RoomType.FFA);
 		this.createScoreboard();
 	}
-
-	public String getMapName() {
-		return this.mapname;
-	}
-
-	public void setMapName(String mapname) {
-		this.mapname = mapname;
-	}
-
-	public HashMap<String, Integer> getPointboard() {
-		return this.pointboard;
-	}
-
-	public void setPointboard(HashMap<String, Integer> scoreboard) {
-		this.pointboard = scoreboard;
-	}
-	
-	public void setPointboard(Player p, int amt) {
-		this.pointboard.put(p.getName(), amt);
-	}
 	
 	public void updateScoreboard() {
 		if (Room.SCOREBOARDS.get(this.getRoomId()) != null) {
@@ -72,9 +54,9 @@ public class FfaRoom extends Room {
 			} else {
 				this.setScoreboardField("Highest Score", 0);
 				
-				
 			}
 			
+			this.setScoreboardField("Elo Average", this.getAvgElo());
 			this.setScoreboardField("Players", this.getPlayersInRoom());
 			
 		}
@@ -151,25 +133,17 @@ public class FfaRoom extends Room {
 		
 	}
 	
-	public HashMap<Player, Integer> getKit() {
-		return this.kit;
-	}
-
-	public void setKit(HashMap<Player, Integer> kit) {
-		this.kit = kit;
-	}
-	
 	public void giveKit(Player p, int kitnum) {
 		String kitname = FfaConfig.getKitName(this.kit.get(p));
 		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been given a " + kitname + " kit.");
 		
 		PlayerInventory inv = p.getInventory();
-		inv.setItem(8, Items.getKitSelector()); // Give the player a kit selector first
+		inv.setItem(8, InvUtil.getKitSelector()); // Give the player a kit selector first
 		
 		int playerkit = this.kit.get(p); // Get what kit the player has.
 		
 		for (String item : FfaConfig.getKitItems(playerkit)) {
-			ItemStack i = Items.convertToItemStack(item); 
+			ItemStack i = InvUtil.convertToItemStack(item); 
 
 			// Automatically set the player's armor if the item is an armor, and they don't have the armor on.
 			if (inv.getHelmet() == null && i.getType().name().contains("HELMET")) {
@@ -207,7 +181,7 @@ public class FfaRoom extends Room {
 			
 		}
 		
-		Items.updatePlayerInv(p);
+		InvUtil.updatePlayerInv(p);
 		
 	}
 	
@@ -218,16 +192,6 @@ public class FfaRoom extends Room {
 			p.getInventory().clear();
 			this.giveKit(p, kitnum);
 		}
-		
-	}
-
-	public String getMapNameFancy() {
-		return FfaConfig.get().getString("ffa.maps." + this.getMapName() + ".info.map-name");
-		
-	}
-	
-	public String getMapAuthor() {
-		return FfaConfig.get().getString("ffa.maps." + this.getMapName() + ".info.author");
 		
 	}
 	
@@ -254,6 +218,43 @@ public class FfaRoom extends Room {
 		
 		return player;
 
+	}
+	
+	public int getPointMedian() {
+		TreeSet<Integer> set = new TreeSet<Integer>();
+		
+		for (int i : this.getPointboard().values()) {
+			set.add(i);
+		}
+		
+		int half = set.size() / 2;
+		return (int) set.toArray()[half];
+		
+	}
+	
+	public int getAvgElo() {
+		int total = 0;
+		
+		if (this.getPlayers() != null) {
+			for (Player p : this.getPlayers()) {
+				if (p != null) {
+					if (PlayerData.isLoaded(p)) {
+						PlayerData data = PlayerData.get(p);
+						total = total + data.getFfaEloRank();;
+					}
+				}
+			}
+		}
+		
+		int pl = this.getPlayersInRoom();
+		
+		if (pl == 0) {
+			pl = 1;
+			
+		}
+		
+		return total / pl;
+		
 	}
 	
 	public void playerDied(Player p, int subtract, String msg) {
@@ -390,6 +391,8 @@ public class FfaRoom extends Room {
 					
 				}
 				
+				InvUtil.clearPlayerInv(p);
+				
 				int playerkit = this.kit.get(p); 
 				this.giveKit(p, playerkit);
 				
@@ -515,6 +518,44 @@ public class FfaRoom extends Room {
 			this.updateScoreboard(); // Update scoreboard
 			
 		}
+	}
+	
+	public String getMapName() {
+		return this.mapname;
+	}
+
+	public void setMapName(String mapname) {
+		this.mapname = mapname;
+	}
+
+	public HashMap<String, Integer> getPointboard() {
+		return this.pointboard;
+	}
+
+	public void setPointboard(HashMap<String, Integer> scoreboard) {
+		this.pointboard = scoreboard;
+	}
+	
+	public void setPointboard(Player p, int amt) {
+		this.pointboard.put(p.getName(), amt);
+	}
+	
+	public HashMap<Player, Integer> getKit() {
+		return this.kit;
+	}
+
+	public void setKit(HashMap<Player, Integer> kit) {
+		this.kit = kit;
+	}
+	
+	public String getMapNameFancy() {
+		return FfaConfig.get().getString("ffa.maps." + this.getMapName() + ".info.map-name");
+		
+	}
+	
+	public String getMapAuthor() {
+		return FfaConfig.get().getString("ffa.maps." + this.getMapName() + ".info.author");
+		
 	}
 	
 }

@@ -9,5 +9,8 @@ database: false
 
 commands:
   queue:
-    description: Leaves the queue.
+    description: Queue related commands.
     aliases: [q]
+  player:
+    description: Player related commands.
+    aliases: [self]

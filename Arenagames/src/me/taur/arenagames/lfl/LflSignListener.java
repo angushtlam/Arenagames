@@ -1,8 +1,9 @@
 package me.taur.arenagames.lfl;
 
 import me.taur.arenagames.Config;
+import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.Items;
+import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.ParticleEffect;
 import me.taur.arenagames.util.RoomType;
 
@@ -125,21 +126,20 @@ public class LflSignListener implements Listener {
 				
 			}
 			
-			Location[] blocs = LflConfig.getSignsStored(room.getRoomId());
+			// Reminder for players to choose their kits.
+			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "Remember to pick your kit by right clicking on the Kit Selector (Nether Star) item!");
+			
+			InvUtil.setLobbyInventory(p);
+			
+			PlayerInventory inv = p.getInventory();
+			inv.setItem(8, InvUtil.getKitSelector());
+			InvUtil.updatePlayerInv(p);
+			
+			Location[] blocs = FfaConfig.getSignsStored(room.getRoomId());
 			for (Location bloc : blocs) {
 				ParticleEffect.HAPPY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 3);
 				
 			}
-			
-			// Reminder for players to choose their kits.
-			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "Remember to pick your kit by right clicking on the Kit Selector (Nether Star) item!");
-			PlayerInventory inv = p.getInventory();
-			
-			inv.setArmorContents(null);
-			inv.clear();
-			inv.setItem(8, Items.getKitSelector());
-			
-			Items.updatePlayerInv(p);
 		}
 	}
 }
