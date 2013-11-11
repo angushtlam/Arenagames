@@ -5,10 +5,9 @@ import java.util.Random;
 import java.util.Set;
 
 import me.taur.arenagames.Config;
-import me.taur.arenagames.player.EloUtil;
-import me.taur.arenagames.player.PlayerData;
+import me.taur.arenagames.event.RoomEndEvent;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.InvUtil;
+import me.taur.arenagames.util.RoomEndResult;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
@@ -30,239 +29,57 @@ public class LflActive {
 
 				if (room.isGameInProgress()) {
 					if (room.getPlayersInRoom() < 2) { // If there are not enough players in the room:
-						if (room.getWinningPlayer() != null) {
-							room.gameOverMessage(room.getWinningPlayer());
-							
-							if (Config.isEloEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
-								for (Player p : room.getPlayers()) {
-									if (PlayerData.isLoaded(p)) {
-										PlayerData data = PlayerData.get(p);
-										int oldelo = data.getLflEloRank();
-										int newelo = data.getLflEloRank();
-										
-										if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
-											newelo = EloUtil.addElo(oldelo, room.getAvgElo());
-
-										} else {
-											newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
-											
-										}
-										
-										int diff = newelo - oldelo;
-										
-										data.setLflEloRank(newelo);
-										data.save(p);
-										p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Lifeline Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
-										
-									}
-								}
-							}
-							
-							for (Player p : room.getPlayers()) {
-								if (p != null) {
-									if (PlayerData.isLoaded(p)) {
-										PlayerData data = PlayerData.get(p);
-										data.setLflGamesPlayed(data.getLflGamesPlayed() + 1); // Increase their play count.
-
-										int points = room.getPointboard().get(p.getName());
-										if (points > data.getLflRecord()) { // If the player has set a new record:
-											data.setLflRecord(points);
-											p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have set a new personal record: " + points + "!");
-											
-										}
-										
-										data.save(p);
-									}
-									
-									Room.PLAYERS.remove(p);
-									
-								}
-							}
-							
-						}
-
-						if (room.getPlayers() != null) {
-							for (Player p : room.getPlayers()) {
-								if (p != null) {
-									p.teleport(LflConfig.getLobby());
-									p.setLevel(0); // Change their levels because the countdown is not 0 yet.
-
-									LflSpawnManager.purgeEffects(p);
-									InvUtil.setLobbyInventory(p);
-									
-									Room.PLAYERS.remove(p);
-									
-								}
-							}
-						}
-
-						room.resetRoom(true);
-						Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Lifeline match " + room.getRoomId() + " has ended.");
-
+						RoomEndEvent event = new RoomEndEvent(room.getRoomId(), RoomEndResult.NOT_ENOUGH_PLAYERS);
+						Bukkit.getPluginManager().callEvent(event);
+						continue;
+						
 					}
 
 					int countdown = room.getCountdownTimer();
 
-					if (room.getPlayers() != null) {
-						for (Player p : room.getPlayers()) { // Make the levels the timer.
-							if (p != null) {
-								if (room.getTimer().get(p) != null) {
-									p.setLevel(room.getTimer().get(p));
-									
-								}
-							}
-						}
-					}
+					
 
-					if (countdown > -1) {
-						room.setCountdownTimer(countdown - 1);
-
-						if (room.getPlayerAlive() < 2) { // If there are less than 2 players alive.
-							if (room.getWinningPlayer() != null) {
-								room.gameOverMessage(room.getWinningPlayer());
-								
-								if (Config.isEloEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
-									for (Player p : room.getPlayers()) {
-										if (PlayerData.isLoaded(p)) {
-											PlayerData data = PlayerData.get(p);
-											int oldelo = data.getLflEloRank();
-											int newelo = data.getLflEloRank();
-											
-											if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
-												newelo = EloUtil.addElo(oldelo, room.getAvgElo());
-
-											} else {
-												newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
-												
-											}
-											
-											int diff = newelo - oldelo;
-											
-											data.setLflEloRank(newelo);
-											data.save(p);
-											p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Lifeline Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
-											
-										}
-									}
-								}
-								
-								for (Player p : room.getPlayers()) {
-									if (p != null) {
-										if (PlayerData.isLoaded(p)) {
-											PlayerData data = PlayerData.get(p);
-											data.setLflGamesPlayed(data.getLflGamesPlayed() + 1); // Increase their play count.
-
-											int points = room.getPointboard().get(p.getName());
-											if (points > data.getLflRecord()) { // If the player has set a new record:
-												data.setLflRecord(points);
-												p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have set a new personal record: " + points + "!");
-												
-											}
-											
-											data.save(p);
+					if (countdown > 0) {
+						if (room.getPlayers() != null) {
+							for (Player p : room.getPlayers()) { // Make the levels the player's own timer.
+								if (p != null) {
+									if (room.getTimer().containsKey(p)) {
+										int ptime = room.getTimer().get(p);
+										p.setLevel(ptime);
+										
+										int timer = ptime - 1;
+										if (countdown < 5 || (timer < 5 && timer > -1)) { // If there is only less than 5 seconds left for the player
+											p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1F, 0F);
 										}
 										
-										Room.PLAYERS.remove(p);
-										
-									}
-								}
-								
-							}
-
-							if (room.getPlayers() != null) {
-								for (Player p : room.getPlayers()) {
-									if (p != null) {
-										p.teleport(LflConfig.getLobby());
-										p.setLevel(0); // Change their levels because the countdown is not 0 yet.
-
-										LflSpawnManager.purgeEffects(p);
-										InvUtil.setLobbyInventory(p);
-										
-										Room.PLAYERS.remove(p);
+										if (timer == 0) {
+											p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have exploded for timing out.");
+											room.killPlayer(p); // Player died from not getting kills.
+		
+										} else {
+											room.getTimer().put(p, timer); // Subtract 1 from the player's timer too.
+										}
 										
 									}
 								}
 							}
-
-							room.resetRoom(true);
-							Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Lifeline match " + room.getRoomId() + " has ended.");
 							
 						}
 						
-						if (room.getPlayers() != null) {
-							for (Player p : room.getPlayers()) {
-								if (p != null) {
-									int timer = room.getTimer().get(p) - 1;
-									if (countdown < 5 || (timer < 5 && timer > -1)) { // If there is only less than 5 seconds left for the player
-										p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1F, 0F);
-									}
-									
-									if (timer == 0) {
-										p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have exploded for timing out.");
-										room.killPlayer(p); // Player died from not getting kills.
-	
-									} else {
-										room.getTimer().put(p, timer); // Subtract 1 from the player's timer too.
-	
-									}
-								}
-							}
+						room.setCountdownTimer(countdown - 1);
+
+						if (room.getPlayerAlive() < 2) { // If there are less than 2 players alive.
+							RoomEndEvent event = new RoomEndEvent(room.getRoomId(), RoomEndResult.LAST_PERSON_STANDING);
+							Bukkit.getPluginManager().callEvent(event);
+							continue;
+							
 						}
 
-						if (countdown == 0) {  // End the game
-							room.gameOverMessage(room.getWinningPlayer());
-
-							if (Config.isEloEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
-								for (Player p : room.getPlayers()) {
-									if (PlayerData.isLoaded(p)) {
-										PlayerData data = PlayerData.get(p);
-										int oldelo = data.getLflEloRank();
-										int newelo = data.getLflEloRank();
-										
-										if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
-											newelo = EloUtil.addElo(oldelo, room.getAvgElo());
-
-										} else {
-											newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
-											
-										}
-										
-										int diff = newelo - oldelo;
-										
-										data.setLflEloRank(newelo);
-										data.save(p);
-										p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Lifeline Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
-										
-									}
-								}
-							}
+						if (countdown == 0) {  // The global timer has ended.
+							RoomEndEvent event = new RoomEndEvent(room.getRoomId(), RoomEndResult.TIMER_OVER);
+							Bukkit.getPluginManager().callEvent(event);
+							continue;
 							
-							for (Player p : room.getPlayers()) {
-								if (p != null) {
-									p.teleport(LflConfig.getLobby());
-									InvUtil.setLobbyInventory(p);
-									
-									if (PlayerData.isLoaded(p)) {
-										PlayerData data = PlayerData.get(p);
-										data.setLflGamesPlayed(data.getLflGamesPlayed() + 1); // Increase their play count.
-
-										int points = room.getPointboard().get(p.getName());
-										if (points > data.getLflRecord()) { // If the player has set a new record:
-											data.setLflRecord(points);
-											p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have set a new personal record: " + points + "!");
-											
-										}
-										
-										data.save(p);
-									}
-									
-									Room.PLAYERS.remove(p);
-									
-								}
-							}
-							
-							room.resetRoom(true);
-
 						}
 
 						continue;

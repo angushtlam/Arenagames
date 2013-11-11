@@ -9,6 +9,7 @@ import me.taur.arenagames.ffa.FfaSignListener;
 import me.taur.arenagames.lfl.LflDeathListener;
 import me.taur.arenagames.lfl.LflKitSelectorListener;
 import me.taur.arenagames.lfl.LflPlayerListener;
+import me.taur.arenagames.lfl.LflRoomListener;
 import me.taur.arenagames.lfl.LflSignListener;
 import me.taur.arenagames.lfl.LflUtil;
 import me.taur.arenagames.player.PlayerCommand;
@@ -95,6 +96,7 @@ public class Arenagames extends JavaPlugin {
 		regEvent(new LflKitSelectorListener());
 		regEvent(new LflPlayerListener());
 		regEvent(new LflSignListener());
+		regEvent(new LflRoomListener());
 		
 	}
 }

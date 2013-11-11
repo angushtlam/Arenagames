@@ -135,9 +135,10 @@ public class FfaSignListener implements Listener {
 			InvUtil.updatePlayerInv(p);
 			
 			Location[] blocs = FfaConfig.getSignsStored(room.getRoomId());
-			for (Location bloc : blocs) {
-				ParticleEffect.HAPPY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 3);
-				
+			if (blocs != null) {
+				for (Location bloc : blocs) {
+					ParticleEffect.HAPPY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 3);
+				}
 			}
 		}
 	}

@@ -112,8 +112,13 @@ public class LflPlayerListener implements Listener {
 			if (room.getRoomType() == RoomType.LFL) {
 				LflRoom r = (LflRoom) room;
 				if (r != null) {
-					if (r.getTimer().get(p) < 1) {
+					if (!r.getTimer().containsKey(p)) {
 						evt.setCancelled(true);
+						
+					} else {
+						if (r.getTimer().get(p) < 1) {
+							evt.setCancelled(true);
+						}
 					}
 				}
 			}
@@ -140,8 +145,13 @@ public class LflPlayerListener implements Listener {
 			if (room.getRoomType() == RoomType.LFL) {
 				LflRoom r = (LflRoom) room;
 				if (r != null) {
-					if (r.getTimer().get(p) < 1) {
+					if (!r.getTimer().containsKey(p)) {
 						evt.setCancelled(true);
+						
+					} else {
+						if (r.getTimer().get(p) < 1) {
+							evt.setCancelled(true);
+						}
 					}
 				}
 			}
