@@ -24,10 +24,8 @@ public class RoomCommand implements CommandExecutor {
 				
 				if (!(s instanceof Player)) {
 					s.sendMessage(ChatColor.stripColor(msg));
-
 				} else {
 					s.sendMessage(msg);
-					
 				}
 				
 				return true;
@@ -78,9 +76,6 @@ public class RoomCommand implements CommandExecutor {
 						
 						if (room.isGameInProgress()) {
 							p.teleport(Config.getGlobalLobby());
-							// p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "The game is currently in progress.");
-							// return true;
-							
 						}
 						
 						p.sendMessage(ChatColor.GREEN + "You have left " + ChatColor.ITALIC + Room.PLAYERS.get(p) + ".");
@@ -89,7 +84,6 @@ public class RoomCommand implements CommandExecutor {
 						room.removePlayer(p);
 						
 						InvUtil.setLobbyInventory(p);
-						
 						p.setLevel(0);
 						
 						if (room.getPlayers() != null) {
@@ -159,8 +153,8 @@ public class RoomCommand implements CommandExecutor {
 									
 									} else {
 										room.waitStartMessage(p, RoomType.LFL);
-										
 									}
+									
 								} else {
 									room.waitCancelledMessage(RoomType.LFL);
 									room.setGameInWaiting(false);
@@ -170,14 +164,14 @@ public class RoomCommand implements CommandExecutor {
 							
 							LflRoom r = (LflRoom) room;
 							r.updateSigns(); // Update signs.
+							r.updateScoreboard(); // Update scoreboard
+							r.removePlayerScoreboard(p);
 							
 							Location[] blocs = LflConfig.getSignsStored(room.getRoomId());
 							for (Location bloc : blocs) {
 								ParticleEffect.ANGRY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 1);
 								
 							}
-							
-							r.removePlayerScoreboard(p);
 						}
 						
 						return true;

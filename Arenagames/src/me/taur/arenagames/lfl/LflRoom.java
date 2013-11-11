@@ -440,6 +440,8 @@ public class LflRoom extends Room {
 					
 				}
 				
+				InvUtil.clearPlayerInv(p);
+				
 				LflSpawnManager.spawn(p, LflConfig.getPossibleSpawnLocation(this));
 				this.giveKit(p);
 				
