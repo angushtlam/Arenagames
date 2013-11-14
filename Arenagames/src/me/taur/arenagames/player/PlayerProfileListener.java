@@ -1,8 +1,6 @@
 package me.taur.arenagames.player;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.util.InvUtil;
@@ -45,44 +43,8 @@ public class PlayerProfileListener implements Listener {
 		
 		ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
 		BookMeta b = (BookMeta) book.getItemMeta();
-		
 		b.setDisplayName(ChatColor.GOLD + "Profile Book");
-		b.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to check your profile."));
-		
-		List<String> page = new ArrayList<String>();
-		if (PlayerData.isLoaded(p)) { // Make sure the PlayerData exists.
-			PlayerData data = PlayerData.STORE.get(p);
-			
-			page.add(ChatColor.BLACK + "" + ChatColor.BOLD + "Profile\n" + ChatColor.RESET + "" +
-					 ChatColor.DARK_RED + "" + ChatColor.BOLD + " --- \n" + ChatColor.RESET +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Username: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + p.getName() + "\n\n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Premium: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + (data.isPremium() ? "Yes" : "No"));
-			
-			page.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Free-For-All\n" + ChatColor.RESET + "" +
-					 ChatColor.DARK_RED + "" + ChatColor.BOLD + " --- \n" + ChatColor.RESET +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Games Played: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + data.getFfaGamesPlayed() + "\n\n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Elo Ranking: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + data.getFfaEloRank() + "\n\n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Highest Record: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + data.getFfaRecord());
-			
-			page.add(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Lifeline\n" + ChatColor.RESET + "" +
-					 ChatColor.DARK_RED + "" + ChatColor.BOLD + " --- \n" + ChatColor.RESET +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Games Played: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + data.getLflGamesPlayed() + "\n\n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Elo Ranking: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + data.getLflEloRank() + "\n\n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Highest Record: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + data.getLflRecord());
-			
-		} else {
-			page.add(ChatColor.ITALIC + "Error loading PlayerData.");
-			
-		}
-		
+		b.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to check your profile."));		
 		b.setPages(PlayerProfile.bookInformation(p));
 		book.setItemMeta(b);
 		
@@ -101,10 +63,6 @@ public class PlayerProfileListener implements Listener {
 			
 		} else {
 			PlayerProfile.READ.remove(p); // If they are already reading, remove the player so the next time they read, it has to be reset again.
-			
 		}
-		
-		
 	}
-	
 }

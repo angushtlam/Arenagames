@@ -40,20 +40,28 @@ public class LflRoomListener implements Listener {
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
-							int oldelo = data.getLflEloRank();
-							int newelo = data.getLflEloRank();
+							int oldelo = data.getLflRanking();
+							int newelo = data.getLflRanking();
 							
 							if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
-								newelo = EloUtil.addElo(oldelo, room.getAvgElo());
+								try {
+									newelo = EloUtil.addElo(oldelo, room.getAvgElo());
+								} catch (Exception e) {
+									
+								}
 
 							} else {
-								newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+								try {
+									newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+								} catch (Exception e) {
+									
+								}
 								
 							}
 							
 							int diff = newelo - oldelo;
 							
-							data.setLflEloRank(newelo);
+							data.setLflRanking(newelo);
 							data.save(p);
 							
 							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Lifeline Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
@@ -124,20 +132,28 @@ public class LflRoomListener implements Listener {
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
-							int oldelo = data.getLflEloRank();
-							int newelo = data.getLflEloRank();
+							int oldelo = data.getLflRanking();
+							int newelo = data.getLflRanking();
 							
 							if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
-								newelo = EloUtil.addElo(oldelo, room.getAvgElo());
+								try {
+									newelo = EloUtil.addElo(oldelo, room.getAvgElo());
+								} catch (Exception e) {
+									
+								}
 
 							} else {
-								newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+								try {
+									newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+								} catch (Exception e) {
+									
+								}
 								
 							}
 							
 							int diff = newelo - oldelo;
 							
-							data.setLflEloRank(newelo);
+							data.setLflRanking(newelo);
 							data.save(p);
 							
 							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Lifeline Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
@@ -187,20 +203,28 @@ public class LflRoomListener implements Listener {
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
-							int oldelo = data.getLflEloRank();
-							int newelo = data.getLflEloRank();
+							int oldelo = data.getLflRanking();
+							int newelo = data.getLflRanking();
 							
 							if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
-								newelo = EloUtil.addElo(oldelo, room.getAvgElo());
+								try {
+									newelo = EloUtil.addElo(oldelo, room.getAvgElo());
+								} catch (Exception e) {
+									
+								}
 
 							} else {
-								newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+								try {
+									newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+								} catch (Exception e) {
+									
+								}
 								
 							}
 							
 							int diff = newelo - oldelo;
 							
-							data.setLflEloRank(newelo);
+							data.setLflRanking(newelo);
 							data.save(p);
 							
 							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Lifeline Elo: " + oldelo + " > " + newelo + " (" + diff + ").");

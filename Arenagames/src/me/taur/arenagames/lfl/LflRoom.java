@@ -275,7 +275,7 @@ public class LflRoom extends Room {
 				if (p != null) {
 					if (PlayerData.isLoaded(p)) {
 						PlayerData data = PlayerData.get(p);
-						total = total + data.getLflEloRank();;
+						total = total + data.getLflRanking();
 					}
 				}
 			}

@@ -240,7 +240,8 @@ public class FfaRoom extends Room {
 				if (p != null) {
 					if (PlayerData.isLoaded(p)) {
 						PlayerData data = PlayerData.get(p);
-						total = total + data.getFfaEloRank();;
+						total = total + data.getFfaRanking();
+						
 					}
 				}
 			}
@@ -250,7 +251,6 @@ public class FfaRoom extends Room {
 		
 		if (pl == 0) {
 			pl = 1;
-			
 		}
 		
 		return total / pl;

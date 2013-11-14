@@ -21,14 +21,14 @@ public class PlayerProfile {
 					 LINE_DIVIDER +
 					 ChatColor.BLACK + "" + ChatColor.BOLD + "Username: \n" + ChatColor.RESET + "" +
 					 ChatColor.BLACK + p.getName() + "\n\n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Premium: " + ChatColor.RESET + (data.isPremium() ? "\u2714" : "\u3128"));
+					 ChatColor.BLACK + "" + ChatColor.BOLD + "Premium: " + ChatColor.RESET + (Premium.isPremium(p) ? "\u2714" : "\u3128"));
 			
 			page.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Free-For-All\n" + ChatColor.RESET + "" +
 					 LINE_DIVIDER +
 					 ChatColor.BLACK + "" + ChatColor.BOLD + "Games Played: \n" + ChatColor.RESET + "" +
 					 ChatColor.BLACK + data.getFfaGamesPlayed() + "\n\n" + ChatColor.RESET + "" +
 					 ChatColor.BLACK + "" + ChatColor.BOLD + "Elo Ranking: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + data.getFfaEloRank() + "\n\n" + ChatColor.RESET + "" +
+					 ChatColor.BLACK + data.getFfaRanking() + "\n\n" + ChatColor.RESET + "" +
 					 ChatColor.BLACK + "" + ChatColor.BOLD + "Highest Record: \n" + ChatColor.RESET + "" +
 					 ChatColor.BLACK + data.getFfaRecord());
 			
@@ -37,7 +37,7 @@ public class PlayerProfile {
 					 ChatColor.BLACK + "" + ChatColor.BOLD + "Games Played: \n" + ChatColor.RESET + "" +
 					 ChatColor.BLACK + data.getLflGamesPlayed() + "\n\n" + ChatColor.RESET + "" +
 					 ChatColor.BLACK + "" + ChatColor.BOLD + "Elo Ranking: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + data.getLflEloRank() + "\n\n" + ChatColor.RESET + "" +
+					 ChatColor.BLACK + data.getLflRanking() + "\n\n" + ChatColor.RESET + "" +
 					 ChatColor.BLACK + "" + ChatColor.BOLD + "Highest Record: \n" + ChatColor.RESET + "" +
 					 ChatColor.BLACK + data.getLflRecord());
 			

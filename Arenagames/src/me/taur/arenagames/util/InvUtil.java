@@ -2,6 +2,8 @@ package me.taur.arenagames.util;
 
 import java.util.Arrays;
 
+import me.taur.arenagames.item.CustomItem;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -46,8 +48,8 @@ public class InvUtil {
 			
 		}
 				
-		Material mat = Material.getMaterial(blob); // Check if the material is a real material
-		if (mat != null) {
+		Material mat = Material.getMaterial(blob);
+		if (mat != null) { // Check if the material is a real material.
 			material = mat;
 				
 		}
@@ -87,7 +89,15 @@ public class InvUtil {
         	
         }
 		
-		ItemStack i = new ItemStack(material, amt, (short) dmg); // Create the ItemStack with basic info.
+		ItemStack i = null;
+		
+		if (CustomItem.STORE.containsKey(blob)) { // TODO: Check if item is a custom item.
+			i = CustomItem.STORE.get(blob);
+			i.setAmount(amt);
+			
+		} else {
+			i = new ItemStack(material, amt, (short) dmg);
+		}
 		
 		if (enchantmentBlob != null) {
             String[] enchantments = enchantmentBlob.split(",");
@@ -101,6 +111,7 @@ public class InvUtil {
                     } catch (NumberFormatException ignore) {
                     	
                     }
+                    
                 }
 
                 Enchantment ench = null;
@@ -159,7 +170,7 @@ public class InvUtil {
 		inv.setArmorContents(null);
 		inv.clear();
 		
-		inv.setItem(0, InvUtil.getProfileBook());
+		inv.setItem(8, InvUtil.getProfileBook());
 		updatePlayerInv(p);
 	}
 	

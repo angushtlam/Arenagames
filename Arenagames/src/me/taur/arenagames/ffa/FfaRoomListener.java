@@ -33,27 +33,34 @@ public class FfaRoomListener implements Listener {
 			if (result == RoomEndResult.TIMER_OVER) { // If the game ended by timer:
 				if (room.getWinningPlayer() != null) {
 					room.gameOverMessage(room.getWinningPlayer()); // Broadcast who won.
-					
 				}
 
 				if (Config.isEloEnabled(RoomType.FFA)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
-							int oldelo = data.getFfaEloRank();
-							int newelo = data.getFfaEloRank();
+							int oldelo = data.getFfaRanking();
+							int newelo = data.getFfaRanking();
 							
 							if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
-								newelo = EloUtil.addElo(oldelo, room.getAvgElo());
-
+								try {
+									newelo = EloUtil.addElo(oldelo, room.getAvgElo());
+								} catch (Exception e) {
+									
+								}
+								
 							} else {
-								newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+								try {
+									newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+								} catch (Exception e) {
+									
+								}
 								
 							}
 							
 							int diff = newelo - oldelo;
 							
-							data.setFfaEloRank(newelo);
+							data.setFfaRanking(newelo);
 							data.save(p);
 							
 							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your FFA Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
@@ -93,27 +100,34 @@ public class FfaRoomListener implements Listener {
 			} else if (result == RoomEndResult.NOT_ENOUGH_PLAYERS) {
 				if (room.getWinningPlayer() != null) {
 					room.gameOverMessage(room.getWinningPlayer()); // Broadcast who won.
-					
 				}
 
 				if (Config.isEloEnabled(RoomType.FFA)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
-							int oldelo = data.getFfaEloRank();
-							int newelo = data.getFfaEloRank();
+							int oldelo = data.getFfaRanking();
+							int newelo = data.getFfaRanking();
 
 							if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
-								newelo = EloUtil.addElo(oldelo, room.getAvgElo());
+								try {
+									newelo = EloUtil.addElo(oldelo, room.getAvgElo());
+								} catch (Exception e) {
+									
+								}
 
 							} else {
-								newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+								try {
+									newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+								} catch (Exception e) {
+									
+								}
 
 							}
 
 							int diff = newelo - oldelo;
 
-							data.setFfaEloRank(newelo);
+							data.setFfaRanking(newelo);
 							data.save(p);
 							
 							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your FFA Elo: " + oldelo + " > " + newelo + " (" + diff + ").");

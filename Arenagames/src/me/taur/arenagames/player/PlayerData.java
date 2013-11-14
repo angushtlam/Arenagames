@@ -1,31 +1,42 @@
 package me.taur.arenagames.player;
 
-import java.io.File;
 import java.util.HashMap;
 
-import me.taur.arenagames.Arenagames;
-
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class PlayerData {
-	public static boolean USE_FLATFILE = true;
 	public static HashMap<Player, PlayerData> STORE = new HashMap<Player, PlayerData>();
 	
-	private String name;
-	private boolean premium;
-	private int ffaGamesPlayed;
-	private int ffaEloRank;
-	private int ffaRecord;
-	private int lflGamesPlayed;
-	private int lflEloRank;
-	private int lflRecord;
+	private String playerName, mojangUUID;
+	
+	private long firstJoined, lastLogin, recentPremiumPayment;
+	private int premiumForMonths;
+	private double moneySpentInUSD;
+	
+	private int moderatorRank, violationLevel;
+	private int currency, currencyLifetime, cash, cashLifetime, exp;
+	
+	private int ffaGamesWon, ffaGamesPlayed, ffaRanking, ffaRecord;
+	private int ffaTotalKills, ffaTotalDeaths;
+	private int ffaCurrencyEarned;
+	
+	private int lflGamesWon, lflGamesPlayed, lflRanking, lflRecord;
+	private int lflTotalKills, lflTotalDeaths;
+	private int lflCurrencyEarned;
+	
+	private int perkFfaFireworks, perkFfaSpawnSpeed, perkFfaSpawnInvis;
+	private int perkLflFireworks, perkLflSpawnSpeed, perkLflSpawnInvis;
+	private int perkPetChicken, perkPetCow, perkPetOcelot, perkPetPig, perkPetSheep, perkPetHorse, perkPetBat,
+				perkPetMooshroom, perkPetWolf, perkPetSlime, perkPetZombie, perkPetSilverfish, perkPetMagmaCube,
+				perkPetIronGolem;
+	
+	private int perkTrailWater, perkTrailCloud, perkTrailMystic, perkTrailStar, perkTrailFlame, perkTrailBlood,
+				perkTrailHeart;
 	
 	public PlayerData(Player p) {
-		name = p.getName();
-		createFile(p);
-		loadData(p);
+		setPlayerName(p.getName());
+		PlayerDataUtil.createFile(p);
+		PlayerDataUtil.loadData(p);
 		STORE.put(p, this);
 		
 	}
@@ -33,128 +44,137 @@ public class PlayerData {
 	public static boolean isLoaded(Player p) {
 		if (STORE.get(p) != null) {
 			return true;
-			
 		}
 		
 		return false;
-		
 	}
 	
 	public static PlayerData get(Player p) {
 		return STORE.get(p);
 	}
 	
-	public void createFile(Player p) { // Also loads the file and adds new unwritten values.
-		if (USE_FLATFILE) {
-			File dir = new File(Arenagames.plugin.getDataFolder(), "players");
-			if (!dir.exists()) {
-				dir.mkdir();
-
-			}
-
-			File file = new File(Arenagames.plugin.getDataFolder(), "players/" + p.getName().toLowerCase() + ".yml");
-			if (!file.exists()) {
-				try {
-					file.createNewFile();
-					FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
-					conf.addDefault("user.name", p.getName());
-					conf.addDefault("user.premium", false);
-
-					conf.addDefault("user.ffa.games", 0);
-					conf.addDefault("user.ffa.elo", 1000);
-					conf.addDefault("user.ffa.record", 0);
-
-					conf.addDefault("user.lfl.games", 0);
-					conf.addDefault("user.lfl.elo", 1000);
-					conf.addDefault("user.lfl.record", 0);
-					conf.options().copyDefaults(true);
-					conf.save(file);
-
-				} catch (Exception e) {
-
-				}
-				
-			}
-		}
-		
-	}
-	
-	public void loadData(Player p) {
-		if (USE_FLATFILE) {
-			File dir = new File(Arenagames.plugin.getDataFolder(), "players");
-			if (!dir.exists()) {
-				createFile(p);
-
-			}
-
-			File file = new File(Arenagames.plugin.getDataFolder(), "players/" + p.getName().toLowerCase() + ".yml");
-			if (!file.exists()) {
-				createFile(p);
-
-			} else {
-				FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
-				this.setName(conf.getString("user.name"));
-				this.setPremium(conf.getBoolean("user.premium"));
-
-				this.setFfaGamesPlayed(conf.getInt("user.ffa.games"));
-				this.setFfaEloRank(conf.getInt("user.ffa.elo"));
-				this.setFfaRecord(conf.getInt("user.ffa.record"));
-
-				this.setLflGamesPlayed(conf.getInt("user.lfl.games"));
-				this.setLflEloRank(conf.getInt("user.lfl.elo"));
-				this.setLflRecord(conf.getInt("user.lfl.record"));
-
-			}
-			
-		}
-		
-	}
-	
 	public void save(Player p) {
-		if (USE_FLATFILE) {
-			File dir = new File(Arenagames.plugin.getDataFolder(), "players");
-			if (!dir.exists()) {
-				dir.mkdir();
-
-			}
-
-			File file = new File(Arenagames.plugin.getDataFolder(), "players/" + p.getName().toLowerCase() + ".yml");
-			try {
-				file.createNewFile();
-				FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
-				conf.set("user.name", p.getName());
-				conf.set("user.premium", this.isPremium());
-
-				conf.set("user.ffa.games", this.getFfaGamesPlayed());
-				conf.set("user.ffa.elo", this.getFfaEloRank());
-				conf.set("user.ffa.record", this.getFfaRecord());
-				
-				conf.set("user.lfl.games", this.getLflGamesPlayed());
-				conf.set("user.lfl.elo", this.getLflEloRank());
-				conf.set("user.lfl.record", this.getLflRecord());
-				conf.save(file);
-
-			} catch (Exception e) {
-
-			}
-		}
-		
+		PlayerDataUtil.save(p);
 	}
 
-	public String getName() {
-		return name;
+	public String getPlayerName() {
+		return playerName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public boolean isPremium() {
-		return premium;
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
 	}
 
-	public void setPremium(boolean premium) {
-		this.premium = premium;
+	public String getMojangUUID() {
+		return mojangUUID;
+	}
+
+	public void setMojangUUID(String mojangUUID) {
+		this.mojangUUID = mojangUUID;
+	}
+
+	public long getFirstJoined() {
+		return firstJoined;
+	}
+
+	public void setFirstJoined(long firstJoined) {
+		this.firstJoined = firstJoined;
+	}
+
+	public long getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(long lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+
+	public long getRecentPremiumPayment() {
+		return recentPremiumPayment;
+	}
+
+	public void setRecentPremiumPayment(long recentPremiumPayment) {
+		this.recentPremiumPayment = recentPremiumPayment;
+	}
+
+	public int getPremiumForMonths() {
+		return premiumForMonths;
+	}
+
+	public void setPremiumForMonths(int premiumForMonths) {
+		this.premiumForMonths = premiumForMonths;
+	}
+
+	public double getMoneySpentInUSD() {
+		return moneySpentInUSD;
+	}
+
+	public void setMoneySpentInUSD(double moneySpentInUSD) {
+		this.moneySpentInUSD = moneySpentInUSD;
+	}
+
+	public int getModeratorRank() {
+		return moderatorRank;
+	}
+
+	public void setModeratorRank(int moderatorRank) {
+		this.moderatorRank = moderatorRank;
+	}
+
+	public int getViolationLevel() {
+		return violationLevel;
+	}
+
+	public void setViolationLevel(int violationLevel) {
+		this.violationLevel = violationLevel;
+	}
+
+	public int getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(int currency) {
+		this.currency = currency;
+	}
+
+	public int getCurrencyLifetime() {
+		return currencyLifetime;
+	}
+
+	public void setCurrencyLifetime(int currencyLifetime) {
+		this.currencyLifetime = currencyLifetime;
+	}
+
+	public int getCash() {
+		return cash;
+	}
+
+	public void setCash(int cash) {
+		this.cash = cash;
+	}
+
+	public int getCashLifetime() {
+		return cashLifetime;
+	}
+
+	public void setCashLifetime(int cashLifetime) {
+		this.cashLifetime = cashLifetime;
+	}
+
+	public int getExp() {
+		return exp;
+	}
+
+	public void setExp(int exp) {
+		this.exp = exp;
+	}
+
+	public int getFfaGamesWon() {
+		return ffaGamesWon;
+	}
+
+	public void setFfaGamesWon(int ffaGamesWon) {
+		this.ffaGamesWon = ffaGamesWon;
 	}
 
 	public int getFfaGamesPlayed() {
@@ -165,12 +185,12 @@ public class PlayerData {
 		this.ffaGamesPlayed = ffaGamesPlayed;
 	}
 
-	public int getFfaEloRank() {
-		return ffaEloRank;
+	public int getFfaRanking() {
+		return ffaRanking;
 	}
 
-	public void setFfaEloRank(int ffaEloRank) {
-		this.ffaEloRank = ffaEloRank;
+	public void setFfaRanking(int ffaRanking) {
+		this.ffaRanking = ffaRanking;
 	}
 
 	public int getFfaRecord() {
@@ -181,6 +201,38 @@ public class PlayerData {
 		this.ffaRecord = ffaRecord;
 	}
 
+	public int getFfaTotalKills() {
+		return ffaTotalKills;
+	}
+
+	public void setFfaTotalKills(int ffaTotalKills) {
+		this.ffaTotalKills = ffaTotalKills;
+	}
+
+	public int getFfaTotalDeaths() {
+		return ffaTotalDeaths;
+	}
+
+	public void setFfaTotalDeaths(int ffaTotalDeaths) {
+		this.ffaTotalDeaths = ffaTotalDeaths;
+	}
+
+	public int getFfaCurrencyEarned() {
+		return ffaCurrencyEarned;
+	}
+
+	public void setFfaCurrencyEarned(int ffaCurrencyEarned) {
+		this.ffaCurrencyEarned = ffaCurrencyEarned;
+	}
+
+	public int getLflGamesWon() {
+		return lflGamesWon;
+	}
+
+	public void setLflGamesWon(int lflGamesWon) {
+		this.lflGamesWon = lflGamesWon;
+	}
+
 	public int getLflGamesPlayed() {
 		return lflGamesPlayed;
 	}
@@ -189,12 +241,12 @@ public class PlayerData {
 		this.lflGamesPlayed = lflGamesPlayed;
 	}
 
-	public int getLflEloRank() {
-		return lflEloRank;
+	public int getLflRanking() {
+		return lflRanking;
 	}
 
-	public void setLflEloRank(int lflEloRank) {
-		this.lflEloRank = lflEloRank;
+	public void setLflRanking(int lflRanking) {
+		this.lflRanking = lflRanking;
 	}
 
 	public int getLflRecord() {
@@ -203,5 +255,245 @@ public class PlayerData {
 
 	public void setLflRecord(int lflRecord) {
 		this.lflRecord = lflRecord;
+	}
+
+	public int getLflTotalKills() {
+		return lflTotalKills;
+	}
+
+	public void setLflTotalKills(int lflTotalKills) {
+		this.lflTotalKills = lflTotalKills;
+	}
+
+	public int getLflTotalDeaths() {
+		return lflTotalDeaths;
+	}
+
+	public void setLflTotalDeaths(int lflTotalDeaths) {
+		this.lflTotalDeaths = lflTotalDeaths;
+	}
+
+	public int getLflCurrencyEarned() {
+		return lflCurrencyEarned;
+	}
+
+	public void setLflCurrencyEarned(int lflCurrencyEarned) {
+		this.lflCurrencyEarned = lflCurrencyEarned;
+	}
+
+	public int getPerkFfaFireworks() {
+		return perkFfaFireworks;
+	}
+
+	public void setPerkFfaFireworks(int perkFfaFireworks) {
+		this.perkFfaFireworks = perkFfaFireworks;
+	}
+
+	public int getPerkFfaSpawnSpeed() {
+		return perkFfaSpawnSpeed;
+	}
+
+	public void setPerkFfaSpawnSpeed(int perkFfaSpawnSpeed) {
+		this.perkFfaSpawnSpeed = perkFfaSpawnSpeed;
+	}
+
+	public int getPerkFfaSpawnInvis() {
+		return perkFfaSpawnInvis;
+	}
+
+	public void setPerkFfaSpawnInvis(int perkFfaSpawnInvis) {
+		this.perkFfaSpawnInvis = perkFfaSpawnInvis;
+	}
+
+	public int getPerkLflFireworks() {
+		return perkLflFireworks;
+	}
+
+	public void setPerkLflFireworks(int perkLflFireworks) {
+		this.perkLflFireworks = perkLflFireworks;
+	}
+
+	public int getPerkLflSpawnSpeed() {
+		return perkLflSpawnSpeed;
+	}
+
+	public void setPerkLflSpawnSpeed(int perkLflSpawnSpeed) {
+		this.perkLflSpawnSpeed = perkLflSpawnSpeed;
+	}
+
+	public int getPerkLflSpawnInvis() {
+		return perkLflSpawnInvis;
+	}
+
+	public void setPerkLflSpawnInvis(int perkLflSpawnInvis) {
+		this.perkLflSpawnInvis = perkLflSpawnInvis;
+	}
+
+	public int getPerkPetChicken() {
+		return perkPetChicken;
+	}
+
+	public void setPerkPetChicken(int perkPetChicken) {
+		this.perkPetChicken = perkPetChicken;
+	}
+
+	public int getPerkPetCow() {
+		return perkPetCow;
+	}
+
+	public void setPerkPetCow(int perkPetCow) {
+		this.perkPetCow = perkPetCow;
+	}
+
+	public int getPerkPetOcelot() {
+		return perkPetOcelot;
+	}
+
+	public void setPerkPetOcelot(int perkPetOcelot) {
+		this.perkPetOcelot = perkPetOcelot;
+	}
+
+	public int getPerkPetPig() {
+		return perkPetPig;
+	}
+
+	public void setPerkPetPig(int perkPetPig) {
+		this.perkPetPig = perkPetPig;
+	}
+
+	public int getPerkPetSheep() {
+		return perkPetSheep;
+	}
+
+	public void setPerkPetSheep(int perkPetSheep) {
+		this.perkPetSheep = perkPetSheep;
+	}
+
+	public int getPerkPetHorse() {
+		return perkPetHorse;
+	}
+
+	public void setPerkPetHorse(int perkPetHorse) {
+		this.perkPetHorse = perkPetHorse;
+	}
+
+	public int getPerkPetBat() {
+		return perkPetBat;
+	}
+
+	public void setPerkPetBat(int perkPetBat) {
+		this.perkPetBat = perkPetBat;
+	}
+
+	public int getPerkPetMooshroom() {
+		return perkPetMooshroom;
+	}
+
+	public void setPerkPetMooshroom(int perkPetMooshroom) {
+		this.perkPetMooshroom = perkPetMooshroom;
+	}
+
+	public int getPerkPetWolf() {
+		return perkPetWolf;
+	}
+
+	public void setPerkPetWolf(int perkPetWolf) {
+		this.perkPetWolf = perkPetWolf;
+	}
+
+	public int getPerkPetSlime() {
+		return perkPetSlime;
+	}
+
+	public void setPerkPetSlime(int perkPetSlime) {
+		this.perkPetSlime = perkPetSlime;
+	}
+
+	public int getPerkPetZombie() {
+		return perkPetZombie;
+	}
+
+	public void setPerkPetZombie(int perkPetZombie) {
+		this.perkPetZombie = perkPetZombie;
+	}
+
+	public int getPerkPetSilverfish() {
+		return perkPetSilverfish;
+	}
+
+	public void setPerkPetSilverfish(int perkPetSilverfish) {
+		this.perkPetSilverfish = perkPetSilverfish;
+	}
+
+	public int getPerkPetMagmaCube() {
+		return perkPetMagmaCube;
+	}
+
+	public void setPerkPetMagmaCube(int perkPetMagmaCube) {
+		this.perkPetMagmaCube = perkPetMagmaCube;
+	}
+
+	public int getPerkPetIronGolem() {
+		return perkPetIronGolem;
+	}
+
+	public void setPerkPetIronGolem(int perkPetIronGolem) {
+		this.perkPetIronGolem = perkPetIronGolem;
+	}
+
+	public int getPerkTrailWater() {
+		return perkTrailWater;
+	}
+
+	public void setPerkTrailWater(int perkTrailWater) {
+		this.perkTrailWater = perkTrailWater;
+	}
+
+	public int getPerkTrailCloud() {
+		return perkTrailCloud;
+	}
+
+	public void setPerkTrailCloud(int perkTrailCloud) {
+		this.perkTrailCloud = perkTrailCloud;
+	}
+
+	public int getPerkTrailMystic() {
+		return perkTrailMystic;
+	}
+
+	public void setPerkTrailMystic(int perkTrailMystic) {
+		this.perkTrailMystic = perkTrailMystic;
+	}
+
+	public int getPerkTrailStar() {
+		return perkTrailStar;
+	}
+
+	public void setPerkTrailStar(int perkTrailStar) {
+		this.perkTrailStar = perkTrailStar;
+	}
+
+	public int getPerkTrailFlame() {
+		return perkTrailFlame;
+	}
+
+	public void setPerkTrailFlame(int perkTrailFlame) {
+		this.perkTrailFlame = perkTrailFlame;
+	}
+
+	public int getPerkTrailBlood() {
+		return perkTrailBlood;
+	}
+
+	public void setPerkTrailBlood(int perkTrailBlood) {
+		this.perkTrailBlood = perkTrailBlood;
+	}
+
+	public int getPerkTrailHeart() {
+		return perkTrailHeart;
+	}
+
+	public void setPerkTrailHeart(int perkTrailHeart) {
+		this.perkTrailHeart = perkTrailHeart;
 	}
 }

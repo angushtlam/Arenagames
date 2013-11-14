@@ -14,7 +14,7 @@ import org.bukkit.potion.PotionEffect;
 public class PlayerLoginListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void playerLoggedIn(PlayerJoinEvent evt) {
-		evt.setJoinMessage(""); // I hate this.
+		// evt.setJoinMessage(""); // I hate this.
 		
 		Player p = evt.getPlayer();
 		InvUtil.setLobbyInventory(p);
@@ -31,7 +31,7 @@ public class PlayerLoginListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void playerLoggedOff(PlayerQuitEvent evt) {
-		evt.setQuitMessage(""); // I hate this.
+		// evt.setQuitMessage(""); // I hate this.
 		
 	}
 }

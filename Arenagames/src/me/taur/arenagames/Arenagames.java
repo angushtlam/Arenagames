@@ -6,6 +6,7 @@ import me.taur.arenagames.ffa.FfaPlayerListener;
 import me.taur.arenagames.ffa.FfaRoomListener;
 import me.taur.arenagames.ffa.FfaUtil;
 import me.taur.arenagames.ffa.FfaSignListener;
+import me.taur.arenagames.item.CustomItemUtil;
 import me.taur.arenagames.lfl.LflDeathListener;
 import me.taur.arenagames.lfl.LflKitSelectorListener;
 import me.taur.arenagames.lfl.LflPlayerListener;
@@ -46,6 +47,8 @@ public class Arenagames extends JavaPlugin {
 		regEvent(new PlayerDataListener());
 		regEvent(new PlayerProfileListener());
 		RoomScheduler.start();
+		
+		CustomItemUtil.enable();
 		
 	}
 
