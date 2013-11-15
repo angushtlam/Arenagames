@@ -14,10 +14,8 @@ public class PlayerCommand implements CommandExecutor {
 				
 				if (!(s instanceof Player)) {
 					s.sendMessage(ChatColor.stripColor(msg));
-
 				} else {
 					s.sendMessage(msg);
-					
 				}
 				
 				return true;
@@ -35,9 +33,9 @@ public class PlayerCommand implements CommandExecutor {
 					if (PlayerData.isLoaded(p)) {
 						PlayerData data = PlayerData.STORE.get(p);
 						data.save(p);
-						
 						p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "Your player data has been saved.");
 						return true;
+						
 					}
 				
 					// Need to load the player's PlayerData.

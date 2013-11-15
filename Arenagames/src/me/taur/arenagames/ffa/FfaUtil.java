@@ -95,7 +95,6 @@ public class FfaUtil {
 				
 				if (FfaConfig.isKitPremium(i)) {
 					premium = ChatColor.GOLD + "Premium Kit";
-					
 				}
 				
 				String name = ChatColor.RESET + "" + ChatColor.BOLD + FfaConfig.getKitName(i);

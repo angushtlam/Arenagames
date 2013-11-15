@@ -37,8 +37,6 @@ public class LflActive {
 
 					int countdown = room.getCountdownTimer();
 
-					
-
 					if (countdown > 0) {
 						if (room.getPlayers() != null) {
 							for (Player p : room.getPlayers()) { // Make the levels the player's own timer.
@@ -63,7 +61,6 @@ public class LflActive {
 									}
 								}
 							}
-							
 						}
 						
 						room.setCountdownTimer(countdown - 1);
@@ -99,7 +96,6 @@ public class LflActive {
 							}
 						}
 					}
-					
 				}
 
 				if (room.isGameInWaiting()) {
@@ -107,7 +103,6 @@ public class LflActive {
 
 					for (Player p : room.getPlayers()) { // Make the levels the timer.
 						p.setLevel(waitcount);
-
 					}
 
 					if (waitcount > -1) {
@@ -154,7 +149,6 @@ public class LflActive {
 											}
 										} else {
 											r.waitCancelledMessage(RoomType.LFL);
-
 										}
 
 										breakloop = true;
@@ -218,7 +212,6 @@ public class LflActive {
 										}
 									}
 								}
-
 							} else {
 								Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "An error has occured in " + room.getRoomId() + ": Maps cannot be loaded.");
 								Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Lifeline match " + room.getRoomId() + " has ended.");
@@ -228,7 +221,6 @@ public class LflActive {
 							}
 
 							continue;
-
 						}
 					}
 

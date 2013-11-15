@@ -39,21 +39,19 @@ public class FfaRoom extends Room {
 		this.setRoomId(roomId);
 		this.setRoomType(RoomType.FFA);
 		this.createScoreboard();
+		
 	}
 	
 	public void updateScoreboard() {
 		if (Room.SCOREBOARDS.get(this.getRoomId()) != null) {
-			
 			this.setScoreboardTitle(this.scoreboardTimer());
 			
 			if (this.isGameInProgress()) {
 				String winner = this.getWinningPlayer();
-				
 				this.setScoreboardField("Highest Score", this.getPointboard().get(winner).intValue());
 				
 			} else {
 				this.setScoreboardField("Highest Score", 0);
-				
 			}
 			
 			this.setScoreboardField("Elo Average", this.getAvgElo());
@@ -74,10 +72,8 @@ public class FfaRoom extends Room {
 				
 			if (minute == 0) {
 				str = str + "0";
-					
 			} else {
 				str = str + minute;
-					
 			}
 			
 			if (seconds % 2 != 0) {
@@ -88,26 +84,21 @@ public class FfaRoom extends Room {
 				
 			if (seconds < 10) {
 				str = str + "0" + seconds;
-				
 			} else {
 				str = str + seconds;
-				
 			}
 			
 		} else if (this.isGameInWaiting()) {
 			str = ChatColor.AQUA + "" + ChatColor.BOLD + "Wait: " + ChatColor.YELLOW;
 			
 			int timer = this.getWaitTimer();
-			
 			int minute = timer / 60;
 			int seconds = timer % 60;
 				
 			if (minute == 0) {
 				str = str + "0";
-					
 			} else {
 				str = str + minute;
-					
 			}
 			
 			if (seconds % 2 != 0) {
@@ -118,19 +109,15 @@ public class FfaRoom extends Room {
 				
 			if (seconds < 10) {
 				str = str + "0" + seconds;
-				
 			} else {
 				str = str + seconds;
-				
 			}
 			
 		} else {
 			str = ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Waiting";
-			
 		}
 		
 		return str;
-		
 	}
 	
 	public void giveKit(Player p, int kitnum) {
@@ -138,7 +125,7 @@ public class FfaRoom extends Room {
 		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been given a " + kitname + " kit.");
 		
 		PlayerInventory inv = p.getInventory();
-		inv.setItem(8, InvUtil.getKitSelector()); // Give the player a kit selector first
+		inv.setItem(0, InvUtil.getKitSelector()); // Give the player a kit selector first
 		
 		int playerkit = this.kit.get(p); // Get what kit the player has.
 		
@@ -149,32 +136,37 @@ public class FfaRoom extends Room {
 			if (inv.getHelmet() == null && i.getType().name().contains("HELMET")) {
 				inv.setHelmet(i);
 				continue;
+				
 			}
 			
-
 			if (inv.getHelmet() == null && i.getType().name().equals(Material.PUMPKIN)) {
 				inv.setHelmet(i);
 				continue;
+				
 			}
 			
 			if (inv.getHelmet() == null && i.getType().name().equals(Material.JACK_O_LANTERN)) {
 				inv.setHelmet(i);
 				continue;
+				
 			}
 			
 			if (inv.getChestplate() == null && i.getType().name().contains("CHESTPLATE")) {
 				inv.setChestplate(i);
 				continue;
+				
 			}
 			
 			if (inv.getLeggings() == null && i.getType().name().contains("LEGGINGS")) {
 				inv.setLeggings(i);
 				continue;
+				
 			}
 			
 			if (inv.getBoots() == null && i.getType().name().contains("BOOTS")) {
 				inv.setBoots(i);
 				continue;
+				
 			}
 			
 			inv.addItem(i);
@@ -182,7 +174,6 @@ public class FfaRoom extends Room {
 		}
 		
 		InvUtil.updatePlayerInv(p);
-		
 	}
 	
 	public void resetKit(Player p) {
@@ -191,8 +182,8 @@ public class FfaRoom extends Room {
 			p.getInventory().setArmorContents(null);
 			p.getInventory().clear();
 			this.giveKit(p, kitnum);
+			
 		}
-		
 	}
 	
 	public String getWinningPlayer() {
@@ -207,13 +198,14 @@ public class FfaRoom extends Room {
 				firstLoop = false;
 				player = name;
 				score = amt;
+				
 			}
 			
 			if (score < amt) {
 				player = name;
 				score = amt;
+				
 			}
-			
 		}
 		
 		return player;
@@ -229,7 +221,6 @@ public class FfaRoom extends Room {
 		
 		int half = set.size() / 2;
 		return (int) set.toArray()[half];
-		
 	}
 	
 	public int getAvgElo() {
@@ -318,58 +309,41 @@ public class FfaRoom extends Room {
 		
 		if (cause.equals(DamageCause.BLOCK_EXPLOSION)) {
 			c = "has been exploded by TNT";
-			
 		} else if (cause.equals(DamageCause.CONTACT)) {
-			c = "is pricked to death by Cactus";
-			
+			c = "is pricked to death by cactus";
 		} else if (cause.equals(DamageCause.DROWNING)) {
 			c = "drowned in water";
-			
 		} else if (cause.equals(DamageCause.FALL)) {
 			c = "fell too far";
-			
 		} else if (cause.equals(DamageCause.FALLING_BLOCK)) {
 			c = "got severed in the head";
-			
 		} else if (cause.equals(DamageCause.FIRE)) {
 			c = "burnt into ashes";
-			
 		} else if (cause.equals(DamageCause.LAVA)) {
 			c = "swam in lava";
-			
 		} else if (cause.equals(DamageCause.LIGHTNING)) {
 			c = "has been struck by lightning";
-			
 		} else if (cause.equals(DamageCause.MAGIC)) {
 			c = "died by magic";
-			
 		} else if (cause.equals(DamageCause.POISON)) {
 			c = "poisoned to death";
-			
 		} else if (cause.equals(DamageCause.STARVATION)) {
 			c = "starved to death";
-			
 		} else if (cause.equals(DamageCause.SUFFOCATION)) {
 			c = "couldn't breath";
-			
 		} else if (cause.equals(DamageCause.THORNS)) {
 			c = "died by parried damage";
-			
 		} else if (cause.equals(DamageCause.WITHER)) {
 			c = "withered away";
-			
 		} else {
 			c = "died";
-			
 		}
 		
 		this.playerDied(p, 2, p.getName() + " " + c + ".");
-		
 	}
 
 	public void playerDied(Player p) {
 		this.playerDied(p, 2, p.getName() + " died.");
-
 	}
 	
 	public void startGame() {
@@ -392,7 +366,6 @@ public class FfaRoom extends Room {
 				}
 				
 				InvUtil.clearPlayerInv(p);
-				
 				int playerkit = this.kit.get(p); 
 				this.giveKit(p, playerkit);
 				
@@ -450,10 +423,8 @@ public class FfaRoom extends Room {
 				String setl3 = ChatColor.GREEN + "Queue Open";
 				if (this.isGameInProgress()) {
 					setl3 = ChatColor.YELLOW + "In Progress";
-					
 				} else if (this.isGameInWaiting()) {
 					setl3 = ChatColor.AQUA + "Starting Soon";
-					
 				}
 				
 				sign.setLine(3, setl3);
@@ -465,7 +436,6 @@ public class FfaRoom extends Room {
 				
 				for (Location l : locs) { // Copy the list first
 					signlocs.add(l);
-					
 				}
 				
 				FfaConfig.clearSignLocations(this.getRoomId());
@@ -485,7 +455,6 @@ public class FfaRoom extends Room {
 						BlockState state = b.getState();
 						if (!(state instanceof Sign)) {
 							continue;
-							
 						}
 							
 						FfaConfig.setSignLocation(this.getRoomId(), i, l);
@@ -509,7 +478,6 @@ public class FfaRoom extends Room {
 			
 			for (Player p : this.getPlayers()) {
 				p.setLevel(0);
-				
 			}
 			
 			this.setMapName(null);
@@ -550,12 +518,9 @@ public class FfaRoom extends Room {
 	
 	public String getMapNameFancy() {
 		return FfaConfig.get().getString("ffa.maps." + this.getMapName() + ".info.map-name");
-		
 	}
 	
 	public String getMapAuthor() {
 		return FfaConfig.get().getString("ffa.maps." + this.getMapName() + ".info.author");
-		
 	}
-	
 }

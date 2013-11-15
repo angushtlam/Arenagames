@@ -43,15 +43,12 @@ public class RoomCommand implements CommandExecutor {
 				
 				for (String r : Room.ROOMS.keySet()) {
 					rooms = rooms + " " + r;
-					
 				}
 				
 				if (!(s instanceof Player)) {
 					s.sendMessage("List of queues:" + rooms);
-
 				} else {
 					s.sendMessage(ChatColor.YELLOW + "List of queues: " + ChatColor.ITALIC + rooms);
-					
 				}
 				
 				return true;
@@ -113,7 +110,6 @@ public class RoomCommand implements CommandExecutor {
 									
 									} else {
 										room.waitStartMessage(p, RoomType.FFA);
-										
 									}
 								} else {
 									room.waitCancelledMessage(RoomType.FFA);
@@ -130,7 +126,6 @@ public class RoomCommand implements CommandExecutor {
 							Location[] blocs = FfaConfig.getSignsStored(room.getRoomId());
 							for (Location bloc : blocs) {
 								ParticleEffect.ANGRY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 1);
-								
 							}
 						}
 						
@@ -170,7 +165,6 @@ public class RoomCommand implements CommandExecutor {
 							Location[] blocs = LflConfig.getSignsStored(room.getRoomId());
 							for (Location bloc : blocs) {
 								ParticleEffect.ANGRY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 1);
-								
 							}
 						}
 						
@@ -211,14 +205,16 @@ public class RoomCommand implements CommandExecutor {
 					p.sendMessage(ChatColor.YELLOW + "Type: " + ChatColor.ITALIC + room.getRoomType());
 					p.sendMessage(ChatColor.YELLOW + "Premium?: " + ChatColor.ITALIC + (room.isPremium() ? "Yes" : "No"));
 					
-					if (room.isGameInProgress()) { // Why did I even bother lmao
-						// p.sendMessage(ChatColor.YELLOW + "Game In Progress?: " + ChatColor.ITALIC + "Yes");
+					if (room.isGameInProgress()) {
+						p.sendMessage(ChatColor.YELLOW + "Game In Progress?: " + ChatColor.ITALIC + "Yes");
 						if (room.getRoomType() == RoomType.FFA) {
 							p.sendMessage(ChatColor.YELLOW + "Map: " + ChatColor.ITALIC + ((FfaRoom) room).getMapName());
+						} else if (room.getRoomType() == RoomType.LFL) {
+							p.sendMessage(ChatColor.YELLOW + "Map: " + ChatColor.ITALIC + ((LflRoom) room).getMapName());
 						}
 						
 					} else {
-						p.sendMessage(ChatColor.YELLOW + "Game Starting Soon?: " + ChatColor.ITALIC + (room.isGameInWaiting() ? "Yes" : "No"));
+						p.sendMessage(ChatColor.YELLOW + "Starting Soon?: " + ChatColor.ITALIC + (room.isGameInWaiting() ? "Yes" : "No"));
 						
 					}
 					
@@ -233,17 +229,14 @@ public class RoomCommand implements CommandExecutor {
 					return true;
 					
 				}
-				
 			}
 			
 			String msg = ChatColor.YELLOW + "Usage: " + ChatColor.ITALIC + "/queue <info/list/leave>";
 			
 			if (!(s instanceof Player)) {
 				s.sendMessage(ChatColor.stripColor(msg));
-
 			} else {
 				s.sendMessage(msg);
-				
 			}
 			
 			return true;
@@ -253,5 +246,4 @@ public class RoomCommand implements CommandExecutor {
 		return false;
 		
 	}
-	
 }

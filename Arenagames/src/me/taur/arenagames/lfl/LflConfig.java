@@ -28,37 +28,42 @@ public class LflConfig {
 		if (file == null) {
 			file = new File(Arenagames.plugin.getDataFolder(), filename);
 		}
+		
 		config = YamlConfiguration.loadConfiguration(file);
 
 		InputStream defConfigStream = Arenagames.plugin.getResource(filename);
 		if (defConfigStream != null) {
 			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
 			config.setDefaults(defConfig);
+			
 		}
+		
 	}
 
 	public static FileConfiguration get() {
 		if (config == null) {
 			reload();
 		}
+		
 		return config;
+		
 	}
 
 	public static void save() {
 		if ((config == null) || (file == null)) {
 			return;
 		}
+		
 		try {
 			config.save(file);
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			Logger.getLogger(JavaPlugin.class.getName()).log(java.util.logging.Level.SEVERE, "Could not save config to " + file, ex);
 		}
+		
 	}
 	
 	public static int getCrankedTimer() {
 		return get().getInt("lfl.settings.cranked-timer");
-		
 	}
 	
 	public static Location getPossibleSpawnLocation(LflRoom room) {
@@ -86,21 +91,19 @@ public class LflConfig {
 		}
 		
 		return new Location(Bukkit.getWorld(w), x + 0.5, y, z + 0.5);
+		
 	}
 	
 	public static boolean canPremiumPlayMap(String map) {
 		return get().getBoolean("lfl.maps." + map + ".info.premium-mode-pool", false);
-		
 	}
 	
 	public static boolean canNormalPlayMap(String map) {
 		return get().getBoolean("lfl.maps." + map + ".info.normal-mode-pool", false);
-		
 	}
 	
 	public static ConfigurationSection getSigns(String queue) {
 		return get().getConfigurationSection("lfl.queue." + queue + ".signs");
-		
 	}
 	
 	public static Location[] getSignsStored(String queue) {
@@ -122,6 +125,7 @@ public class LflConfig {
 			}
 			
 			return locs;
+			
 		}
 		
 		return null;
@@ -145,27 +149,22 @@ public class LflConfig {
 	
 	public static ConfigurationSection getKits() {
 		return get().getConfigurationSection("lfl.items");
-		
 	}
 	
 	public static List<String> getKitItems(int kit) {
 		return get().getStringList("lfl.items.kit-" + kit + ".items");
-		
 	}
 	
 	public static List<String> getKitRefill(int kit) {
 		return get().getStringList("lfl.items.kit-" + kit + ".refill");
-		
 	}
 	
 	public static String getKitName(int kit) {
 		return get().getString("lfl.items.kit-" + kit + ".kit-name");
-		
 	}
 	
 	public static String getKitDescription(int kit) {
 		return get().getString("lfl.items.kit-" + kit + ".kit-description");
-		
 	}
 	
 	public static Material getKitMenuIcon(int kit) {
@@ -174,7 +173,6 @@ public class LflConfig {
 		
 		if (material != null) { // Make sure the material is a valid material.
 			return material;
-			
 		}
 		
 		return Material.SPONGE; // Debug check
@@ -183,7 +181,6 @@ public class LflConfig {
 	
 	public static boolean isKitPremium(int kit) {
 		return get().getBoolean("lfl.items.kit-" + kit + ".premium-only");
-		
 	}
 	
 	public static Location getLobby() {
@@ -252,10 +249,8 @@ public class LflConfig {
 		}
 		
 		get().options().copyDefaults(true);
-		
 		get().set("generate-default-config", false);
 		save();
 		
 	}
-	
 }

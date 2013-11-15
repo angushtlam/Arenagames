@@ -26,7 +26,6 @@ import org.bukkit.entity.Player;
  * @author DarkBlade12
  */
 public enum ParticleEffect {
-
 	HUGE_EXPLOSION("hugeexplosion", 0),
 	LARGE_EXPLODE("largeexplode", 1),
 	FIREWORKS_SPARK("fireworksSpark", 2),

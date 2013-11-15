@@ -32,6 +32,7 @@ public class SignCreateListener implements Listener {
 				return;
 				
 			}
+			
 			String l1 = evt.getLine(1).toLowerCase();
 			if (!Room.ROOMS.containsKey(l1)) {
 				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have inserted an incorrect queue ID.");
@@ -75,7 +76,6 @@ public class SignCreateListener implements Listener {
 							
 							if (!sign.getLine(0).contains("[FFA]")) {
 								continue;
-								
 							}
 							
 							if (sign.getLine(1).equals(l1)) {
@@ -127,6 +127,7 @@ public class SignCreateListener implements Listener {
 				return;
 				
 			}
+			
 			String l1 = evt.getLine(1).toLowerCase();
 			if (!Room.ROOMS.containsKey(l1)) {
 				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have inserted an incorrect queue ID.");
@@ -170,7 +171,6 @@ public class SignCreateListener implements Listener {
 							
 							if (!sign.getLine(0).contains("[Lifeline]")) {
 								continue;
-								
 							}
 							
 							if (sign.getLine(1).equals(l1)) {
@@ -214,7 +214,5 @@ public class SignCreateListener implements Listener {
 			room.updateSigns();
 			
 		}
-		
 	}
-
 }

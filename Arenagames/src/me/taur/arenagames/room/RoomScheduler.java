@@ -11,7 +11,6 @@ public class RoomScheduler {
 		Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
 			public void run() {
 				start(); // Loops the scheduler.
-				
 			}
 		}, 20L);
 		

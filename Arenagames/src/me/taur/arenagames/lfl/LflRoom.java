@@ -43,22 +43,19 @@ public class LflRoom extends Room {
 		this.setRoomId(roomId);
 		this.setRoomType(RoomType.LFL);
 		this.createScoreboard();
+		
 	}
 	
 	public void updateScoreboard() {
 		if (Room.SCOREBOARDS.get(this.getRoomId()) != null) {
-			
 			this.setScoreboardTitle(this.scoreboardTimer());
 			
 			if (this.isGameInProgress() && this.getWinningPlayer() != null) {
 				String winner = this.getWinningPlayer();
-				
 				this.setScoreboardField("Most Kills", this.getPointboard().get(winner).intValue());
 				
 			} else {
 				this.setScoreboardField("Most Kills", 0);
-				
-				
 			}
 			
 			this.setScoreboardField("Elo Average", this.getAvgElo());
@@ -72,17 +69,15 @@ public class LflRoom extends Room {
 		
 		if (this.isGameInProgress()) {
 			str = ChatColor.GOLD + "" + ChatColor.BOLD + "Game: " + ChatColor.YELLOW;
-			int timer = this.getCountdownTimer();
 			
+			int timer = this.getCountdownTimer();
 			int minute = timer / 60;
 			int seconds = timer % 60;
 				
 			if (minute == 0) {
 				str = str + "0";
-					
 			} else {
 				str = str + minute;
-					
 			}
 			
 			if (seconds % 2 != 0) {
@@ -93,17 +88,14 @@ public class LflRoom extends Room {
 				
 			if (seconds < 10) {
 				str = str + "0" + seconds;
-				
 			} else {
 				str = str + seconds;
-				
 			}
 			
 		} else if (this.isGameInWaiting()) {
 			str = ChatColor.AQUA + "" + ChatColor.BOLD + "Wait: " + ChatColor.YELLOW;
 			
 			int timer = this.getWaitTimer();
-			
 			int minute = timer / 60;
 			int seconds = timer % 60;
 				
@@ -123,15 +115,12 @@ public class LflRoom extends Room {
 				
 			if (seconds < 10) {
 				str = str + "0" + seconds;
-				
 			} else {
 				str = str + seconds;
-				
 			}
 			
 		} else {
 			str = ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Waiting";
-			
 		}
 		
 		return str;
@@ -202,7 +191,12 @@ public class LflRoom extends Room {
 				continue;
 			}
 			
-			if (inv.getHelmet() == null && (i.getType().name().equals(Material.PUMPKIN) || i.getType().name().equals(Material.JACK_O_LANTERN))) {
+			if (inv.getHelmet() == null && i.getType().name().equals(Material.PUMPKIN)) {
+				inv.setHelmet(i);
+				continue;
+			}
+			
+			if (inv.getHelmet() == null && i.getType().name().equals(Material.JACK_O_LANTERN)) {
 				inv.setHelmet(i);
 				continue;
 			}
@@ -242,13 +236,14 @@ public class LflRoom extends Room {
 				firstLoop = false;
 				player = name;
 				score = amt;
+				
 			}
 			
 			if (score < amt) {
 				player = name;
 				score = amt;
+				
 			}
-			
 		}
 		
 		return player;
@@ -285,7 +280,6 @@ public class LflRoom extends Room {
 		
 		if (pl == 0) {
 			pl = 1;
-			
 		}
 		
 		return total / pl;
@@ -366,49 +360,34 @@ public class LflRoom extends Room {
 		
 		if (cause.equals(DamageCause.BLOCK_EXPLOSION)) {
 			c = "has been exploded by TNT";
-			
 		} else if (cause.equals(DamageCause.CONTACT)) {
-			c = "is pricked to death by Cactus";
-			
+			c = "is pricked to death by cactus";
 		} else if (cause.equals(DamageCause.DROWNING)) {
 			c = "drowned in water";
-			
 		} else if (cause.equals(DamageCause.FALL)) {
 			c = "fell too far";
-			
 		} else if (cause.equals(DamageCause.FALLING_BLOCK)) {
 			c = "got severed in the head";
-			
 		} else if (cause.equals(DamageCause.FIRE)) {
 			c = "burnt into ashes";
-			
 		} else if (cause.equals(DamageCause.LAVA)) {
 			c = "swam in lava";
-			
 		} else if (cause.equals(DamageCause.LIGHTNING)) {
 			c = "has been struck by lightning";
-			
 		} else if (cause.equals(DamageCause.MAGIC)) {
 			c = "died by magic";
-			
 		} else if (cause.equals(DamageCause.POISON)) {
 			c = "poisoned to death";
-			
 		} else if (cause.equals(DamageCause.STARVATION)) {
 			c = "starved to death";
-			
 		} else if (cause.equals(DamageCause.SUFFOCATION)) {
 			c = "couldn't breath";
-			
 		} else if (cause.equals(DamageCause.THORNS)) {
 			c = "died by parried damage";
-			
 		} else if (cause.equals(DamageCause.WITHER)) {
 			c = "withered away";
-			
 		} else {
 			c = "died";
-			
 		}
 		
 		this.playerDied(p, p.getName() + " " + c + ".");
@@ -417,7 +396,6 @@ public class LflRoom extends Room {
 
 	public void playerDied(Player p) {
 		this.playerDied(p, p.getName() + " died.");
-
 	}
 	
 	public void startGame() {
@@ -501,10 +479,8 @@ public class LflRoom extends Room {
 				String setl3 = ChatColor.GREEN + "Queue Open";
 				if (this.isGameInProgress()) {
 					setl3 = ChatColor.YELLOW + "In Progress";
-					
 				} else if (this.isGameInWaiting()) {
 					setl3 = ChatColor.AQUA + "Starting Soon";
-					
 				}
 				
 				sign.setLine(3, setl3);
@@ -536,7 +512,6 @@ public class LflRoom extends Room {
 						BlockState state = b.getState();
 						if (!(state instanceof Sign)) {
 							continue;
-							
 						}
 							
 						LflConfig.setSignLocation(this.getRoomId(), i, l);
@@ -563,7 +538,6 @@ public class LflRoom extends Room {
 			
 			for (Player p : this.getPlayers()) {
 				p.setLevel(0);
-				
 			}
 			
 			this.setPlayerAlive(0);
@@ -576,12 +550,10 @@ public class LflRoom extends Room {
 	
 	public String getMapNameFancy() {
 		return LflConfig.get().getString("lfl.maps." + this.getMapName() + ".info.map-name");
-		
 	}
 	
 	public String getMapAuthor() {
 		return LflConfig.get().getString("lfl.maps." + this.getMapName() + ".info.author");
-		
 	}
 	
 	public String getMapName() {
@@ -627,5 +599,4 @@ public class LflRoom extends Room {
 	public void setPlayerAlive(int playerAlive) {
 		this.playerAlive = playerAlive;
 	}
-	
 }

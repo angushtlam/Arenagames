@@ -10,4 +10,5 @@ public class Premium {
 	public static boolean isPremium(String name) {
 		return true; // TODO
 	}
+	
 }

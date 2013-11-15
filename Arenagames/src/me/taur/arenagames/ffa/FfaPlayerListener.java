@@ -35,8 +35,8 @@ public class FfaPlayerListener implements Listener {
 
 					if (room.getPlayersInRoom() == 0) {
 						Bukkit.broadcastMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + room.getRoomId() + " queue has reopened.");
-						
 						r.resetRoom(true);
+						
 					}
 
 				} else { // Left the queue
@@ -47,8 +47,7 @@ public class FfaPlayerListener implements Listener {
 							}
 						}
 					}
-
-
+					
 					// Check if there are enough people in the room.
 					int needed = room.getPlayersInRoom();
 					if (needed > Config.getMinPlayersInWait(RoomType.FFA) - 1) {
@@ -59,7 +58,6 @@ public class FfaPlayerListener implements Listener {
 
 						} else {
 							room.waitStartMessage(p, RoomType.FFA);
-
 						}
 						
 					} else {
@@ -85,16 +83,13 @@ public class FfaPlayerListener implements Listener {
 		
 		if (!Room.PLAYERS.containsKey(p)) {
 			return;
-			
 		}
 		
 		Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
 		if (room != null) {
 			if (room.getRoomType() == RoomType.FFA) {
 				evt.setCancelled(true);
-				
 			}
-			
 		}
 	}
 }

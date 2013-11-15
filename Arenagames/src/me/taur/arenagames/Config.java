@@ -109,5 +109,4 @@ public class Config {
 		return new Location(Bukkit.getWorld(w), x, y, z);
 		
 	}
-	
 }

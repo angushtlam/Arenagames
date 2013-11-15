@@ -21,7 +21,6 @@ public class FfaRoomListener implements Listener {
 	public void roomEnd(RoomEndEvent evt) {
 		if (evt.getRoom() == null) { // Make sure the room exists.
 			return;
-			
 		}
 		
 		Room r = evt.getRoom();
@@ -48,18 +47,15 @@ public class FfaRoomListener implements Listener {
 								} catch (Exception e) {
 									
 								}
-								
 							} else {
 								try {
 									newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
 								} catch (Exception e) {
 									
 								}
-								
 							}
 							
 							int diff = newelo - oldelo;
-							
 							data.setFfaRanking(newelo);
 							data.save(p);
 							
@@ -115,18 +111,15 @@ public class FfaRoomListener implements Listener {
 								} catch (Exception e) {
 									
 								}
-
 							} else {
 								try {
 									newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
 								} catch (Exception e) {
 									
 								}
-
 							}
 
 							int diff = newelo - oldelo;
-
 							data.setFfaRanking(newelo);
 							data.save(p);
 							
@@ -157,7 +150,6 @@ public class FfaRoomListener implements Listener {
 						// Teleport the player to the lobby.
 						p.teleport(FfaConfig.getLobby());
 						p.setLevel(0); // Change their levels because the countdown is not 0 yet.
-
 						FfaSpawnManager.purgeEffects(p);
 						InvUtil.setLobbyInventory(p);
 						
@@ -172,8 +164,6 @@ public class FfaRoomListener implements Listener {
 				Bukkit.getPluginManager().callEvent(event);
 				
 			}
-			
 		}
-		
 	}
 }

@@ -18,8 +18,7 @@ import org.bukkit.entity.Player;
 
 public class FfaActive {
 	public static void run() {
-		// Get each room in stored Rooms.
-		for (String s : Room.ROOMS.keySet()) {
+		for (String s : Room.ROOMS.keySet()) { // Get each room in stored Rooms.
 			Room r = Room.ROOMS.get(s);
 
 			if (r.getRoomType() == RoomType.FFA) {

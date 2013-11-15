@@ -22,18 +22,15 @@ public class FfaDeathListener implements Listener {
 	public void playerDiedInArena(EntityDamageEvent evt) {
 		if (!(evt.getEntity() instanceof Player)) { // Players are only affected by this listener.
 			return;
-			
 		}
 		
 		Player p = (Player) evt.getEntity();
 		if ((p.getHealth() - evt.getDamage()) > 0) { // Check if player was killed.
 			return;
-			
 		}
 		
 		if (!Room.PLAYERS.containsKey(p)) { // Only apply when the player who died is killed by playing in an arena.
 			return;
-			
 		}
 		
 		Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
@@ -56,20 +53,18 @@ public class FfaDeathListener implements Listener {
 								Player d = (Player) damager;
 								if (Room.PLAYERS.containsKey(d)) { // If the player who killed the player is playing
 									r.playerDied(p, d); // Tell the room that the player has been slain by another player.
-
 								} else {
 									r.playerDied(p); // The player died by themselves.
-
 								}
 
 							} else if (damager instanceof Monster) {
 								Monster d = (Monster) damager;
 								r.playerDied(p, d.getType()); // Tell the room that the player has been slain by an monster.
+								
 							}
 
 						} else {
 							r.playerDied(p); // Tell the room that the player has been slain mysteriously.
-							
 						}
 						
 					} else if (c.equals(DamageCause.PROJECTILE)) {
@@ -95,7 +90,6 @@ public class FfaDeathListener implements Listener {
 
 								} else {
 									r.playerDied(p, a.getShooter().getType()); // Tell the room that the player has been slain by an monster.
-
 								}
 							}
 						}
@@ -129,17 +123,14 @@ public class FfaDeathListener implements Listener {
 						
 					} else if (c.equals(DamageCause.ENTITY_EXPLOSION)) {
 						r.playerDied(p, EntityType.CREEPER); // Tell the room that the player has been slain by a Creeper.
-						
-
 					} else {
 						r.playerDied(p, c); // Tell the room that the player has been slain by something else.
-						
 					}
+					
 				}
 			}
 		} else { // If the player is not in a game room and died.
 			p.teleport(Config.getGlobalLobby());
-
 		}
 	}
 }

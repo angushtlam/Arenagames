@@ -5,22 +5,16 @@ public class EloUtil {
 	public static int getConstantByElo(int elo) {
 		if (elo < 501) {
 			return 20;
-			
 		} else if (501 < elo && elo < 801) {
 			return 18;
-			
 		} else if (801 < elo && elo < 1501) {
 			return 16;
-			
 		} else if (1501 < elo && elo < 2601) {
 			return 12;
-			
 		} else if (2601 < elo && elo < 3301) {
 			return 6;
-			
 		} else {
 			return 0;
-			
 		}
 		
 	}
@@ -34,7 +28,6 @@ public class EloUtil {
 		
 		if (newelo > 4000) {
 			newelo = 4000;
-			
 		}
 		
 		return newelo;
@@ -50,7 +43,6 @@ public class EloUtil {
 		
 		if (newelo < 0) {
 			newelo = 0;
-			
 		}
 		
 		return newelo;

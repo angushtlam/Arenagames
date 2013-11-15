@@ -67,6 +67,7 @@ public class LflUtil {
         				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You don't have permission to use this kit.");
         				menuevt.setWillClose(true);
         				return;
+        				
         			}
         		}
                 

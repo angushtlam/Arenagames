@@ -27,13 +27,11 @@ public class PlayerDataListener implements Listener {
 	public void serverOn(PluginEnableEvent evt) {
 		if (Bukkit.getOnlinePlayers() == null) {
 			return;
-			
 		}
 		
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if (p == null) {
 				return;
-				
 			}
 			
 			
@@ -42,6 +40,7 @@ public class PlayerDataListener implements Listener {
 				PlayerData.STORE.put(p, data);
 				
 			}
+			
 		}
 		
 	}
@@ -58,20 +57,17 @@ public class PlayerDataListener implements Listener {
 		
 		PlayerData.STORE.remove(p);
 		
-		
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void serverOff(PluginDisableEvent evt) {
 		if (Bukkit.getOnlinePlayers() == null) {
 			return;
-			
 		}
 		
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if (p == null) {
 				return;
-				
 			}
 			
 			if (PlayerData.isLoaded(p)) {
@@ -81,7 +77,7 @@ public class PlayerDataListener implements Listener {
 			}
 			
 			PlayerData.STORE.remove(p);
+			
 		}
 	}
-	
 }

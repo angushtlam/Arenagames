@@ -35,5 +35,4 @@ public class CustomPotion {
 		CustomItem.STORE.put("POTION_OF_GRIM", i);
 		
 	}
-	
 }

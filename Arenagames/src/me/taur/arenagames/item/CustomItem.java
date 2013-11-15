@@ -6,5 +6,4 @@ import org.bukkit.inventory.ItemStack;
 
 public class CustomItem {
 	public static HashMap<String, ItemStack> STORE = new HashMap<String, ItemStack>();
-	
 }

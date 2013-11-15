@@ -11,7 +11,7 @@ public class PlayerData {
 	
 	private long firstJoined, lastLogin, recentPremiumPayment;
 	private int premiumForMonths;
-	private double moneySpentInUSD;
+	private double moneySpent;
 	
 	private int moderatorRank, violationLevel;
 	private int currency, currencyLifetime, cash, cashLifetime, exp;
@@ -26,9 +26,6 @@ public class PlayerData {
 	
 	private int perkFfaFireworks, perkFfaSpawnSpeed, perkFfaSpawnInvis;
 	private int perkLflFireworks, perkLflSpawnSpeed, perkLflSpawnInvis;
-	private int perkPetChicken, perkPetCow, perkPetOcelot, perkPetPig, perkPetSheep, perkPetHorse, perkPetBat,
-				perkPetMooshroom, perkPetWolf, perkPetSlime, perkPetZombie, perkPetSilverfish, perkPetMagmaCube,
-				perkPetIronGolem;
 	
 	private int perkTrailWater, perkTrailCloud, perkTrailMystic, perkTrailStar, perkTrailFlame, perkTrailBlood,
 				perkTrailHeart;
@@ -47,6 +44,7 @@ public class PlayerData {
 		}
 		
 		return false;
+		
 	}
 	
 	public static PlayerData get(Player p) {
@@ -105,12 +103,12 @@ public class PlayerData {
 		this.premiumForMonths = premiumForMonths;
 	}
 
-	public double getMoneySpentInUSD() {
-		return moneySpentInUSD;
+	public double getMoneySpent() {
+		return moneySpent;
 	}
 
-	public void setMoneySpentInUSD(double moneySpentInUSD) {
-		this.moneySpentInUSD = moneySpentInUSD;
+	public void setMoneySpent(double moneySpent) {
+		this.moneySpent = moneySpent;
 	}
 
 	public int getModeratorRank() {
@@ -327,118 +325,6 @@ public class PlayerData {
 
 	public void setPerkLflSpawnInvis(int perkLflSpawnInvis) {
 		this.perkLflSpawnInvis = perkLflSpawnInvis;
-	}
-
-	public int getPerkPetChicken() {
-		return perkPetChicken;
-	}
-
-	public void setPerkPetChicken(int perkPetChicken) {
-		this.perkPetChicken = perkPetChicken;
-	}
-
-	public int getPerkPetCow() {
-		return perkPetCow;
-	}
-
-	public void setPerkPetCow(int perkPetCow) {
-		this.perkPetCow = perkPetCow;
-	}
-
-	public int getPerkPetOcelot() {
-		return perkPetOcelot;
-	}
-
-	public void setPerkPetOcelot(int perkPetOcelot) {
-		this.perkPetOcelot = perkPetOcelot;
-	}
-
-	public int getPerkPetPig() {
-		return perkPetPig;
-	}
-
-	public void setPerkPetPig(int perkPetPig) {
-		this.perkPetPig = perkPetPig;
-	}
-
-	public int getPerkPetSheep() {
-		return perkPetSheep;
-	}
-
-	public void setPerkPetSheep(int perkPetSheep) {
-		this.perkPetSheep = perkPetSheep;
-	}
-
-	public int getPerkPetHorse() {
-		return perkPetHorse;
-	}
-
-	public void setPerkPetHorse(int perkPetHorse) {
-		this.perkPetHorse = perkPetHorse;
-	}
-
-	public int getPerkPetBat() {
-		return perkPetBat;
-	}
-
-	public void setPerkPetBat(int perkPetBat) {
-		this.perkPetBat = perkPetBat;
-	}
-
-	public int getPerkPetMooshroom() {
-		return perkPetMooshroom;
-	}
-
-	public void setPerkPetMooshroom(int perkPetMooshroom) {
-		this.perkPetMooshroom = perkPetMooshroom;
-	}
-
-	public int getPerkPetWolf() {
-		return perkPetWolf;
-	}
-
-	public void setPerkPetWolf(int perkPetWolf) {
-		this.perkPetWolf = perkPetWolf;
-	}
-
-	public int getPerkPetSlime() {
-		return perkPetSlime;
-	}
-
-	public void setPerkPetSlime(int perkPetSlime) {
-		this.perkPetSlime = perkPetSlime;
-	}
-
-	public int getPerkPetZombie() {
-		return perkPetZombie;
-	}
-
-	public void setPerkPetZombie(int perkPetZombie) {
-		this.perkPetZombie = perkPetZombie;
-	}
-
-	public int getPerkPetSilverfish() {
-		return perkPetSilverfish;
-	}
-
-	public void setPerkPetSilverfish(int perkPetSilverfish) {
-		this.perkPetSilverfish = perkPetSilverfish;
-	}
-
-	public int getPerkPetMagmaCube() {
-		return perkPetMagmaCube;
-	}
-
-	public void setPerkPetMagmaCube(int perkPetMagmaCube) {
-		this.perkPetMagmaCube = perkPetMagmaCube;
-	}
-
-	public int getPerkPetIronGolem() {
-		return perkPetIronGolem;
-	}
-
-	public void setPerkPetIronGolem(int perkPetIronGolem) {
-		this.perkPetIronGolem = perkPetIronGolem;
 	}
 
 	public int getPerkTrailWater() {

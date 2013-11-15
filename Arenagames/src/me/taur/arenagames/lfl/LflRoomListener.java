@@ -21,7 +21,6 @@ public class LflRoomListener implements Listener {
 	public void roomEnd(RoomEndEvent evt) {
 		if (evt.getRoom() == null) { // Make sure the room exists.
 			return;
-			
 		}
 		
 		Room r = evt.getRoom();
@@ -33,7 +32,6 @@ public class LflRoomListener implements Listener {
 			if (result == RoomEndResult.TIMER_OVER) { // If the game ended by timer:
 				if (room.getWinningPlayer() != null) {
 					room.gameOverMessage(room.getWinningPlayer()); // Broadcast who won.
-					
 				}
 
 				if (Config.isEloEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
@@ -49,18 +47,15 @@ public class LflRoomListener implements Listener {
 								} catch (Exception e) {
 									
 								}
-
 							} else {
 								try {
 									newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
 								} catch (Exception e) {
 									
 								}
-								
 							}
 							
 							int diff = newelo - oldelo;
-							
 							data.setLflRanking(newelo);
 							data.save(p);
 							
@@ -87,6 +82,7 @@ public class LflRoomListener implements Listener {
 							}
 							
 							data.save(p);
+							
 						}
 						
 						Room.PLAYERS.remove(p);
@@ -108,6 +104,7 @@ public class LflRoomListener implements Listener {
 							}
 							
 							data.save(p);
+							
 						}
 						
 						Room.PLAYERS.remove(p);
@@ -125,7 +122,6 @@ public class LflRoomListener implements Listener {
 			} else if (result == RoomEndResult.NOT_ENOUGH_PLAYERS) {
 				if (room.getWinningPlayer() != null) {
 					room.gameOverMessage(room.getWinningPlayer()); // Broadcast who won.
-					
 				}
 
 				if (Config.isEloEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
@@ -141,18 +137,15 @@ public class LflRoomListener implements Listener {
 								} catch (Exception e) {
 									
 								}
-
 							} else {
 								try {
 									newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
 								} catch (Exception e) {
 									
 								}
-								
 							}
 							
 							int diff = newelo - oldelo;
-							
 							data.setLflRanking(newelo);
 							data.save(p);
 							
@@ -176,6 +169,7 @@ public class LflRoomListener implements Listener {
 							}
 							
 							data.save(p);
+							
 						}
 						
 						Room.PLAYERS.remove(p);
@@ -196,7 +190,6 @@ public class LflRoomListener implements Listener {
 			} else if (result == RoomEndResult.LAST_PERSON_STANDING) {
 				if (room.getWinningPlayer() != null) {
 					room.gameOverMessage(room.getWinningPlayer()); // Broadcast who won.
-					
 				}
 
 				if (Config.isEloEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
@@ -212,18 +205,15 @@ public class LflRoomListener implements Listener {
 								} catch (Exception e) {
 									
 								}
-
 							} else {
 								try {
 									newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
 								} catch (Exception e) {
 									
 								}
-								
 							}
 							
 							int diff = newelo - oldelo;
-							
 							data.setLflRanking(newelo);
 							data.save(p);
 							
@@ -269,8 +259,6 @@ public class LflRoomListener implements Listener {
 				Bukkit.getPluginManager().callEvent(event);
 				
 			}
-			
 		}
-		
 	}
 }

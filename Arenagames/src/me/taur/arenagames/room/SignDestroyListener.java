@@ -21,7 +21,6 @@ public class SignDestroyListener implements Listener {
 		
 		if (!b.getType().name().contains("SIGN")) {
 			return;
-			
 		}
 		
 		Sign sign = (Sign) b.getState();
@@ -38,7 +37,6 @@ public class SignDestroyListener implements Listener {
 			String l1 = sign.getLine(1).toLowerCase();
 			if (!Room.ROOMS.containsKey(l1)) {
 				return;
-				
 			}
 			
 			Room r = Room.ROOMS.get(l1);
@@ -61,7 +59,6 @@ public class SignDestroyListener implements Listener {
 			String l1 = sign.getLine(1).toLowerCase();
 			if (!Room.ROOMS.containsKey(l1)) {
 				return;
-				
 			}
 			
 			Room r = Room.ROOMS.get(l1);
@@ -70,6 +67,7 @@ public class SignDestroyListener implements Listener {
 				room.updateSigns();
 				
 				p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have removed a queue sign for " + r.getRoomId() + ".");
+				
 			}
 		}
 	}

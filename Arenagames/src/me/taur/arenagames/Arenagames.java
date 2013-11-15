@@ -77,12 +77,10 @@ public class Arenagames extends JavaPlugin {
 	
 	public static void regEvent(Listener file) {
 		Bukkit.getServer().getPluginManager().registerEvents(file, Arenagames.plugin);
-		
 	}
 
 	public static void regCmd(String cmd, CommandExecutor exe) {
 		Bukkit.getServer().getPluginCommand(cmd).setExecutor(exe);
-		
 	}
 
 	private static void regFfa() {		

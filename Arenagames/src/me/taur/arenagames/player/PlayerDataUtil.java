@@ -16,7 +16,6 @@ public class PlayerDataUtil {
 			File dir = new File(Arenagames.plugin.getDataFolder(), "players");
 			if (!dir.exists()) {
 				dir.mkdir();
-
 			}
 
 			File file = new File(Arenagames.plugin.getDataFolder(), "players/" + p.getName().toLowerCase() + ".yml");
@@ -59,21 +58,6 @@ public class PlayerDataUtil {
 					conf.addDefault("user.lfl.deaths", 0);
 					conf.addDefault("user.lfl.currency-earned", 0);
 					
-					conf.addDefault("user.perk.pet.chicken", 0);
-					conf.addDefault("user.perk.pet.cow", 0);
-					conf.addDefault("user.perk.pet.ocelot", 0);
-					conf.addDefault("user.perk.pet.pig", 0);
-					conf.addDefault("user.perk.pet.sheep", 0);
-					conf.addDefault("user.perk.pet.horse", 0);
-					conf.addDefault("user.perk.pet.bat", 0);
-					conf.addDefault("user.perk.pet.mooshroom", 0);
-					conf.addDefault("user.perk.pet.wolf", 0);
-					conf.addDefault("user.perk.pet.slime", 0);
-					conf.addDefault("user.perk.pet.zombie", 0);
-					conf.addDefault("user.perk.pet.silverfish", 0);
-					conf.addDefault("user.perk.pet.magma-cube", 0);
-					conf.addDefault("user.perk.pet.iron-golem", 0);
-					
 					conf.addDefault("user.perk.trail.water", 0);
 					conf.addDefault("user.perk.trail.cloud", 0);
 					conf.addDefault("user.perk.trail.mystic", 0);
@@ -84,18 +68,15 @@ public class PlayerDataUtil {
 					
 					conf.options().copyDefaults(true);
 					conf.save(file);
-
 					return true;
 					
 				} catch (Exception e) {
 
 				}
-				
 			}
 		}
 		
 		return false;
-		
 	}
 	
 	public static boolean loadData(Player p) {
@@ -103,7 +84,6 @@ public class PlayerDataUtil {
 			File dir = new File(Arenagames.plugin.getDataFolder(), "players");
 			if (!dir.exists()) {
 				createFile(p);
-
 			}
 
 			File file = new File(Arenagames.plugin.getDataFolder(), "players/" + p.getName().toLowerCase() + ".yml");
@@ -128,7 +108,7 @@ public class PlayerDataUtil {
 				
 				data.setRecentPremiumPayment(conf.getLong("user.premium.recent-payment"));
 				data.setPremiumForMonths(conf.getInt("user.premium.for-months"));
-				data.setMoneySpentInUSD(conf.getDouble("user.premium.money-spent"));
+				data.setMoneySpent(conf.getDouble("user.premium.money-spent"));
 				
 				data.setModeratorRank(conf.getInt("user.moderation.mod-rank"));
 				data.setViolationLevel(conf.getInt("user.moderation.violation"));
@@ -138,51 +118,35 @@ public class PlayerDataUtil {
 				data.setCash(conf.getInt("user.economy.cash"));
 				data.setCashLifetime(conf.getInt("user.economy.cash-lifetime"));
 				
-				conf.getInt("user.ffa.games-won");
-				conf.getInt("user.ffa.games-played");
-				conf.getInt("user.ffa.ranking");
-				conf.getInt("user.ffa.record");
-				conf.getInt("user.ffa.kills");
-				conf.getInt("user.ffa.deaths");
-				conf.getInt("user.ffa.currency-earned");
+				data.setFfaGamesWon(conf.getInt("user.ffa.games-won"));
+				data.setFfaGamesPlayed(conf.getInt("user.ffa.games-played"));
+				data.setFfaRanking(conf.getInt("user.ffa.ranking"));
+				data.setFfaRecord(conf.getInt("user.ffa.record"));
+				data.setFfaTotalKills(conf.getInt("user.ffa.kills"));
+				data.setFfaTotalDeaths(conf.getInt("user.ffa.deaths"));
+				data.setFfaCurrencyEarned(conf.getInt("user.ffa.currency-earned"));
 				
-				conf.getInt("user.lfl.games-won");
-				conf.getInt("user.lfl.games-played");
-				conf.getInt("user.lfl.ranking");
-				conf.getInt("user.lfl.record");
-				conf.getInt("user.lfl.kills");
-				conf.getInt("user.lfl.deaths");
-				conf.getInt("user.lfl.currency-earned");
+				data.setLflGamesWon(conf.getInt("user.lfl.games-won"));
+				data.setLflGamesPlayed(conf.getInt("user.lfl.games-played"));
+				data.setLflRanking(conf.getInt("user.lfl.ranking"));
+				data.setLflRecord(conf.getInt("user.lfl.record"));
+				data.setLflTotalKills(conf.getInt("user.lfl.kills"));
+				data.setLflTotalDeaths(conf.getInt("user.lfl.deaths"));
+				data.setLflCurrencyEarned(conf.getInt("user.lfl.currency-earned"));
 				
-				conf.getInt("user.perk.pet.chicken");
-				conf.getInt("user.perk.pet.cow");
-				conf.getInt("user.perk.pet.ocelot");
-				conf.getInt("user.perk.pet.pig");
-				conf.getInt("user.perk.pet.sheep");
-				conf.getInt("user.perk.pet.horse");
-				conf.getInt("user.perk.pet.bat");
-				conf.getInt("user.perk.pet.mooshroom");
-				conf.getInt("user.perk.pet.wolf");
-				conf.getInt("user.perk.pet.slime");
-				conf.getInt("user.perk.pet.zombie");
-				conf.getInt("user.perk.pet.silverfish");
-				conf.getInt("user.perk.pet.magma-cube");
-				conf.getInt("user.perk.pet.iron-golem");
-				
-				conf.getInt("user.perk.trail.water");
-				conf.getInt("user.perk.trail.cloud");
-				conf.getInt("user.perk.trail.mystic");
-				conf.getInt("user.perk.trail.star");
-				conf.getInt("user.perk.trail.flame");
-				conf.getInt("user.perk.trail.blood");
-				conf.getInt("user.perk.trail.heart");
+				data.setPerkTrailWater(conf.getInt("user.perk.trail.water"));
+				data.setPerkTrailCloud(conf.getInt("user.perk.trail.cloud"));
+				data.setPerkTrailMystic(conf.getInt("user.perk.trail.mystic"));
+				data.setPerkTrailStar(conf.getInt("user.perk.trail.star"));
+				data.setPerkTrailFlame(conf.getInt("user.perk.trail.flame"));
+				data.setPerkTrailBlood(conf.getInt("user.perk.trail.blood"));
+				data.setPerkTrailHeart(conf.getInt("user.perk.trail.heart"));
 				
 				return true;
 			}
 		}
 		
 		return false;
-		
 	}
 	
 	public static boolean save(Player p) {
@@ -190,7 +154,6 @@ public class PlayerDataUtil {
 			File dir = new File(Arenagames.plugin.getDataFolder(), "players");
 			if (!dir.exists()) {
 				dir.mkdir();
-
 			}
 
 			File file = new File(Arenagames.plugin.getDataFolder(), "players/" + p.getName().toLowerCase() + ".yml");
@@ -205,18 +168,50 @@ public class PlayerDataUtil {
 				data = PlayerData.get(p);
 				
 				FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
-//				conf.set("user.name", p.getName());
-//				conf.set("user.premium", this.isPremium());
-//
-//				conf.set("user.ffa.games", this.getFfaGamesPlayed());
-//				conf.set("user.ffa.elo", this.getFfaEloRank());
-//				conf.set("user.ffa.record", this.getFfaRecord());
-//				
-//				conf.set("user.lfl.games", this.getLflGamesPlayed());
-//				conf.set("user.lfl.elo", this.getLflEloRank());
-//				conf.set("user.lfl.record", this.getLflRecord());
+				conf.set("user.player.name", p.getName());
+				conf.set("user.player.uuid", data.getMojangUUID());
+				conf.set("user.player.exp", data.getExp());
+				
+				conf.set("user.time.first-joined", data.getFirstJoined());
+				conf.set("user.time.last-login", data.getLastLogin());
+				
+				conf.set("user.premium.recent-payment", data.getRecentPremiumPayment());
+				conf.set("user.premium.for-months", data.getPremiumForMonths());
+				conf.set("user.premium.money-spent", data.getMoneySpent());
+				
+				conf.set("user.moderation.mod-rank", data.getModeratorRank());
+				conf.set("user.moderation.violation", data.getViolationLevel());
+				
+				conf.set("user.economy.currency", data.getCurrency());
+				conf.set("user.economy.currency-lifetime", data.getCurrencyLifetime());
+				conf.set("user.economy.cash", data.getCash());
+				conf.set("user.economy.cash-lifetime", data.getCashLifetime());
+				
+				conf.set("user.ffa.games-won", data.getFfaGamesWon());
+				conf.set("user.ffa.games-played", data.getFfaGamesPlayed());
+				conf.set("user.ffa.ranking", data.getFfaRanking());
+				conf.set("user.ffa.record", data.getFfaRecord());
+				conf.set("user.ffa.kills", data.getFfaTotalKills());
+				conf.set("user.ffa.deaths", data.getFfaTotalDeaths());
+				conf.set("user.ffa.currency-earned", data.getFfaCurrencyEarned());
+				
+				conf.set("user.lfl.games-won", data.getLflGamesWon());
+				conf.set("user.lfl.games-played", data.getLflGamesPlayed());
+				conf.set("user.lfl.ranking", data.getLflRanking());
+				conf.set("user.lfl.record", data.getLflRecord());
+				conf.set("user.lfl.kills", data.getLflTotalKills());
+				conf.set("user.lfl.deaths", data.getLflTotalDeaths());
+				conf.set("user.lfl.currency-earned", data.getLflCurrencyEarned());
+				
+				conf.set("user.perk.trail.water", data.getPerkTrailWater());
+				conf.set("user.perk.trail.cloud", data.getPerkTrailCloud());
+				conf.set("user.perk.trail.mystic", data.getPerkTrailMystic());
+				conf.set("user.perk.trail.star", data.getPerkTrailStar());
+				conf.set("user.perk.trail.flame", data.getPerkTrailFlame());
+				conf.set("user.perk.trail.blood", data.getPerkTrailBlood());
+				conf.set("user.perk.trail.heart", data.getPerkTrailHeart());
+				
 				conf.save(file);
-
 				return true;
 				
 			} catch (Exception e) {
@@ -225,6 +220,5 @@ public class PlayerDataUtil {
 		}
 		
 		return false;
-		
 	}
 }

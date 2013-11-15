@@ -27,11 +27,10 @@ public class InvUtil {
 			
 			if (p1 < 1) {
 				amt = 1;
-				
 			} else {
 				amt = p1;
-				
 			}
+			
 		}
 		
 		if (blob.contains("|")) { // Check for enchantments
@@ -51,7 +50,6 @@ public class InvUtil {
 		Material mat = Material.getMaterial(blob);
 		if (mat != null) { // Check if the material is a real material.
 			material = mat;
-				
 		}
 		
 		if (dataBlob != null) { // Damage value on item.
@@ -60,33 +58,26 @@ public class InvUtil {
             String name = material.name();
             if (dmg < 0) {
             	dmg = 0;
-            	
             }
             
             if (dmg == 0) {
             	if (name.contains("_SWORD")) {
             		dmg = material.getMaxDurability();
-            		
             	} else if (name.contains("_HELMET")) {
             		dmg = material.getMaxDurability();
-            		
             	} else if (name.contains("_CHESTPLATE")) {
             		dmg = material.getMaxDurability();
-            		
             	} else if (name.contains("_LEGGINGS")) {
             		dmg = material.getMaxDurability();
-            		
             	} else if (name.contains("_BOOTS")) {
             		dmg = material.getMaxDurability();
-            		
             	} else if (name.equals("BOW")) {
             		dmg = material.getMaxDurability();
-            		
             	}
+            	
             }
         } else {
         	dmg = 0;
-        	
         }
 		
 		ItemStack i = null;
@@ -120,6 +111,7 @@ public class InvUtil {
                     if (possible.getName().toLowerCase().replaceAll("[_\\-]", "").equals(testName)) {
                         ench = possible;
                         break;
+                        
                     }
                 }
 
@@ -127,15 +119,13 @@ public class InvUtil {
                 	if (ench.canEnchantItem(i)) {
                 		if (ench.getMaxLevel() < level) {
                 			level = ench.getMaxLevel();
-                			
                 		}
 
                 		i.addUnsafeEnchantment(ench, level);
+                		
                 	}
                 }
-                
             }
-
         }
 		
 		return i;
@@ -148,7 +138,6 @@ public class InvUtil {
 		im.setDisplayName(ChatColor.GREEN + "Kit Selector");
 		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to select your kit."));
 		i.setItemMeta(im);
-		
 		return i;
 		
 	}
@@ -159,7 +148,6 @@ public class InvUtil {
 		im.setDisplayName(ChatColor.GOLD + "Profile Book");
 		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to check your profile."));
 		i.setItemMeta(im);
-		
 		return i;
 		
 	}
@@ -172,12 +160,12 @@ public class InvUtil {
 		
 		inv.setItem(8, InvUtil.getProfileBook());
 		updatePlayerInv(p);
+		
 	}
 	
 	@SuppressWarnings("deprecation")
 	public static void updatePlayerInv(Player p) {
 		p.updateInventory();
-		
 	}
 	
 	public static void clearPlayerInv(Player p) {

@@ -52,6 +52,7 @@ public class FfaSpawnManager {
 
 		p.teleport(tp); // Teleport player
 		purgeEffects(p);
+		
 	}
 	
 	public static void purgeEffects(Player p) {
@@ -60,6 +61,7 @@ public class FfaSpawnManager {
 		}
 		
 		p.setFireTicks(0); // Remove fire
+		
 	}
 	
 	public static void respawn(Player p, Location tp) {
@@ -75,5 +77,6 @@ public class FfaSpawnManager {
 		    	}
 		    }
 		}, 40L);
+		
 	}
 }

@@ -57,12 +57,12 @@ public class PlayerProfileListener implements Listener {
 			Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() { // Player has 6 seconds to read the book until it needs to reset again.
 			    public void run() {
 			    	PlayerProfile.READ.remove(p);
-			    	
 			    }
 			}, 120L);
 			
 		} else {
 			PlayerProfile.READ.remove(p); // If they are already reading, remove the player so the next time they read, it has to be reset again.
 		}
+		
 	}
 }

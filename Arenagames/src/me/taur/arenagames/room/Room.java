@@ -113,7 +113,6 @@ public class Room {
 		
 		for (int i = 0; i < length; i++) {
 			set[i] = players[i];
-			
 		}
 		
 		set[length] = p; 
@@ -142,7 +141,6 @@ public class Room {
 	
 	public void removeAllPlayers() {
 		this.players = null;
-		
 	}
 	
 	public void createScoreboard() {
@@ -155,21 +153,18 @@ public class Room {
 			SCOREBOARDS.put(roomId, board);
 			
 		}
-		
 	}
 	
 	public void setScoreboardTitle(String str) {
 		if (SCOREBOARDS.get(roomId) != null) { // Make sure the board is not null
 			SCOREBOARDS.get(roomId).getObjective(DisplaySlot.SIDEBAR).setDisplayName(str);
 		}
-		
 	}
 	
 	public void setPlayerScoreboard(Player p) {
 		if (SCOREBOARDS.get(roomId) != null) { // Make sure the board is not null
 			p.setScoreboard(SCOREBOARDS.get(roomId));
 		}
-		
 	}
 	
 	public void removePlayerScoreboard(Player p) {
@@ -184,13 +179,11 @@ public class Room {
 			score.setScore(value);
 			
 		}
-		
 	}
 	
 	public void setScoreboardField(String str, int value) {
 		if (str.length() > 15) {
 			str.substring(0, 16);
-			
 		}
 		
 		OfflinePlayer op = Bukkit.getOfflinePlayer(str);
@@ -201,7 +194,6 @@ public class Room {
 	public int getScoreboardField(OfflinePlayer op) {
 		if (Room.SCOREBOARDS.get(roomId) != null) {
 			return Room.SCOREBOARDS.get(roomId).getObjective(DisplaySlot.SIDEBAR).getScore(op).getScore();
-			
 		}
 		
 		return 0;
@@ -213,23 +205,19 @@ public class Room {
 			for (Player p : this.getPlayers()) {
 				if (p != null) {
 					removePlayerScoreboard(p);
-					
 				}
 			}
 		}
-		
 	}
 	
 	public boolean isPlayerInRoom(Player p) {
 		if (getPlayers() == null) {
 			return false;
-			
 		}
 		
 		for (Player pl : getPlayers()) {
 			if (pl == p) {
 				return true;
-				
 			}
 		}
 		
@@ -241,10 +229,8 @@ public class Room {
 		if (this.getPlayers() != null) {
 			for (Player p : this.getPlayers()) {
 				p.teleport(FfaConfig.getLobby());
-				
 			}
 		}
-		
 	}
 	
 	public void gameOverMessage(String winner) {
@@ -309,7 +295,5 @@ public class Room {
 			gameInProgress = false;
 			// Set countdown timer on start, not here.
 		}
-		
 	}
-	
 }

@@ -43,7 +43,6 @@ public class PlayerProfile {
 			
 		} else {
 			page.add(ChatColor.ITALIC + "Error loading PlayerData.");
-			
 		}
 		
 		return page;

@@ -62,7 +62,6 @@ public class LflPlayerListener implements Listener {
 
 						} else {
 							room.waitStartMessage(p, RoomType.LFL);
-
 						}
 						
 					} else {
@@ -85,16 +84,13 @@ public class LflPlayerListener implements Listener {
 		
 		if (!Room.PLAYERS.containsKey(p)) {
 			return;
-			
 		}
 		
 		Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
 		if (room != null) {
 			if (room.getRoomType() == RoomType.LFL) {
 				evt.setCancelled(true);
-				
 			}
-			
 		}
 	}
 	
@@ -104,7 +100,6 @@ public class LflPlayerListener implements Listener {
 		
 		if (!Room.PLAYERS.containsKey(p)) {
 			return;
-			
 		}
 		
 		Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
@@ -114,7 +109,6 @@ public class LflPlayerListener implements Listener {
 				if (r != null) {
 					if (!r.getTimer().containsKey(p)) {
 						evt.setCancelled(true);
-						
 					} else {
 						if (r.getTimer().get(p) < 1) {
 							evt.setCancelled(true);
@@ -130,14 +124,12 @@ public class LflPlayerListener implements Listener {
 	public void playerDisableDamageWhenDead(EntityDamageEvent evt) {
 		if (!(evt.getEntity() instanceof Player)) { // Players are only affected by this listener.
 			return;
-			
 		}
 		
 		Player p = (Player) evt.getEntity();
 		
 		if (!Room.PLAYERS.containsKey(p)) {
 			return;
-			
 		}
 		
 		Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
@@ -147,7 +139,6 @@ public class LflPlayerListener implements Listener {
 				if (r != null) {
 					if (!r.getTimer().containsKey(p)) {
 						evt.setCancelled(true);
-						
 					} else {
 						if (r.getTimer().get(p) < 1) {
 							evt.setCancelled(true);
@@ -158,5 +149,4 @@ public class LflPlayerListener implements Listener {
 		}
 		
 	}
-	
 }

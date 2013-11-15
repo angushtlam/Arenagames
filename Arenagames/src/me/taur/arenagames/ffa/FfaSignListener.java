@@ -23,13 +23,11 @@ public class FfaSignListener implements Listener {
 	public void joinRoomSign(PlayerInteractEvent evt) {
 		if (evt.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
-
 		}
 
 		Block b = evt.getClickedBlock();
 		if (!b.getType().name().contains("SIGN")) {
 			return;
-
 		}
 
 		Sign sign = (Sign) b.getState();
@@ -57,34 +55,40 @@ public class FfaSignListener implements Listener {
 					p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You're already in a different queue: " + pq);
 					p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "To leave a queue type /queue leave");
 					return;
+					
 				}
 			}
 
 			if (r.getRoomType() != RoomType.FFA) {
 				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "This sign points to an invalid Free For All queue.");
 				return;
+				
 			}
 
 			if (r.getRoomId().contains("-p")) {
 				if (!p.hasPermission("arenagames.premium")) {
 					p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "This queue is for Premium only.");
 					return;
+					
 				}
 			}
 
 			if (r.isPlayerInRoom(p)) {
 				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You're already in this queue.");
 				return;
+				
 			}
 
 			if (r.isGameInProgress()) {
 				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "This arena has already started.");
 				return;
+				
 			}
 
 			if (r.getPlayersInRoom() + 1 > Config.getPlayerLimit(r.getRoomType())) {
 				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "This queue is full.");
 				return;
+				
 			}
 
 			FfaRoom room = (FfaRoom) r;
@@ -117,7 +121,6 @@ public class FfaSignListener implements Listener {
 
 				} else {
 					room.waitStartMessage(p, RoomType.FFA);
-
 				}
 			} else {
 				room.waitCancelledMessage(RoomType.FFA);

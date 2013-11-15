@@ -28,6 +28,7 @@ public class FfaConfig {
 		if (file == null) {
 			file = new File(Arenagames.plugin.getDataFolder(), filename);
 		}
+		
 		config = YamlConfiguration.loadConfiguration(file);
 
 		InputStream defConfigStream = Arenagames.plugin.getResource(filename);
@@ -41,6 +42,7 @@ public class FfaConfig {
 		if (config == null) {
 			reload();
 		}
+		
 		return config;
 	}
 
@@ -48,10 +50,10 @@ public class FfaConfig {
 		if ((config == null) || (file == null)) {
 			return;
 		}
+		
 		try {
 			config.save(file);
-		}
-		catch (IOException ex) {
+		} catch (IOException ex) {
 			Logger.getLogger(JavaPlugin.class.getName()).log(java.util.logging.Level.SEVERE, "Could not save config to " + file, ex);
 		}
 	}
@@ -85,17 +87,14 @@ public class FfaConfig {
 	
 	public static boolean canPremiumPlayMap(String map) {
 		return get().getBoolean("ffa.maps." + map + ".info.premium-mode-pool", false);
-		
 	}
 	
 	public static boolean canNormalPlayMap(String map) {
 		return get().getBoolean("ffa.maps." + map + ".info.normal-mode-pool", false);
-		
 	}
 	
 	public static ConfigurationSection getSigns(String queue) {
 		return get().getConfigurationSection("ffa.queue." + queue + ".signs");
-		
 	}
 	
 	public static Location[] getSignsStored(String queue) {
@@ -120,7 +119,6 @@ public class FfaConfig {
 		}
 		
 		return null;
-		
 	}
 	
 	public static void setSignLocation(String queue, int signnum, Location loc) {
@@ -140,22 +138,18 @@ public class FfaConfig {
 	
 	public static ConfigurationSection getKits() {
 		return get().getConfigurationSection("ffa.items");
-		
 	}
 	
 	public static List<String> getKitItems(int kit) {
 		return get().getStringList("ffa.items.kit-" + kit + ".items");
-		
 	}
 	
 	public static String getKitName(int kit) {
 		return get().getString("ffa.items.kit-" + kit + ".kit-name");
-		
 	}
 	
 	public static String getKitDescription(int kit) {
 		return get().getString("ffa.items.kit-" + kit + ".kit-description");
-		
 	}
 	
 	public static Material getKitMenuIcon(int kit) {
@@ -164,7 +158,6 @@ public class FfaConfig {
 		
 		if (material != null) { // Make sure the material is a valid material.
 			return material;
-			
 		}
 		
 		return Material.SPONGE; // Debug check
@@ -173,7 +166,6 @@ public class FfaConfig {
 	
 	public static boolean isKitPremium(int kit) {
 		return get().getBoolean("ffa.items.kit-" + kit + ".premium-only");
-		
 	}
 	
 	public static Location getLobby() {
@@ -237,7 +229,6 @@ public class FfaConfig {
 		}
 		
 		get().options().copyDefaults(true);
-		
 		get().set("generate-default-config", false);
 		save();
 		
