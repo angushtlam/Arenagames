@@ -10,36 +10,61 @@ import org.bukkit.entity.Player;
 
 public class PlayerProfile {
 	public static Set<Player> READ = new HashSet<Player>();
-	public static String LINE_DIVIDER = ChatColor.GRAY + "" + ChatColor.BOLD + "\u2598\u2598\u2598\u2598\u2598\u2598\u2598\u2598\u2598\u2598\u2598\u2598\u2598\u2598\u2598\u2598\u2598\u2598\n" + ChatColor.RESET;
+	public static String FANCY_HEADING = "\u2523\u2542 \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 \u2542\u252b\n" + ChatColor.RESET;
 	
 	public static List<String> bookInformation(Player p) {
 		List<String> page = new ArrayList<String>();
 		if (PlayerData.isLoaded(p)) { // Make sure the PlayerData exists.
 			PlayerData data = PlayerData.STORE.get(p);
 			
-			page.add(ChatColor.BLACK + "" + ChatColor.BOLD + "Profile\n" + ChatColor.RESET + "" +
-					 LINE_DIVIDER +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Username: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + p.getName() + "\n\n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Premium: " + ChatColor.RESET + (Premium.isPremium(p) ? "\u2714" : "\u3128"));
+			page.add(FANCY_HEADING +
+					 ChatColor.GOLD + "" + ChatColor.BOLD + "       Profile" + ChatColor.RESET + "\n" +
+					 FANCY_HEADING +
+					 "\u258b " + (Premium.isPremium(p) ? ChatColor.GOLD + "" : "") + ChatColor.BOLD + "" + p.getName() + (Premium.isPremium(p) ? "[P]" : "") + ChatColor.RESET + "\n" +
+					 "   " + data.getExp() + ChatColor.ITALIC + " EXP" + ChatColor.RESET + "\n" +
+					 "\n" +
+					 "\u258b " + "Violations: " + data.getViolationLevel());
 			
-			page.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Free-For-All\n" + ChatColor.RESET + "" +
-					 LINE_DIVIDER +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Games Played: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + data.getFfaGamesPlayed() + "\n\n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Elo Ranking: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + data.getFfaRanking() + "\n\n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Highest Record: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + data.getFfaRecord());
+			if (Premium.isPremium(p)) {
+				page.add(FANCY_HEADING +
+						 ChatColor.GOLD + "" + ChatColor.BOLD + "       Profile" + ChatColor.RESET + "\n" +
+						 FANCY_HEADING +
+						 "\u258b " + Premium.daysLeft(p) + " Premium Days Left" + ChatColor.RESET + "\n" +
+						 "\n\n" +
+						 "\u258b " + data.getCash() + " Alphacash" + ChatColor.RESET + "\n" +
+						 "   " + data.getCurrency() + " \u20a6" + "uggets");
+			} else {
+				page.add(FANCY_HEADING +
+						 ChatColor.GOLD + "" + ChatColor.BOLD + "       Profile" + ChatColor.RESET + "\n" +
+						 FANCY_HEADING +
+						 " Support the server" + ChatColor.RESET +
+						 "by purchasing Premium!" + ChatColor.RESET +
+						 "\n\n" +
+						 "\u258b " + data.getCurrency() + " Nuggets" + ChatColor.RESET + "\n" +
+						 "   " + data.getCash() + " Alphacash");
+			}	
 			
-			page.add(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Lifeline\n" + ChatColor.RESET + "" +
-					 LINE_DIVIDER +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Games Played: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + data.getLflGamesPlayed() + "\n\n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Elo Ranking: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + data.getLflRanking() + "\n\n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + "" + ChatColor.BOLD + "Highest Record: \n" + ChatColor.RESET + "" +
-					 ChatColor.BLACK + data.getLflRecord());
+			page.add(FANCY_HEADING +
+					 ChatColor.DARK_RED + "" + ChatColor.BOLD + "   Free-For-All" + ChatColor.RESET + ChatColor.RESET + "\n" +
+					 FANCY_HEADING +
+					 "\u258b " + "1st Place: " + data.getFfaGamesWon() + ChatColor.RESET + "\n" +
+					 "   " + "Games: " + data.getFfaGamesPlayed() + ChatColor.RESET + "\n" +
+					 "   " + "Elo: " + data.getFfaRanking() + ChatColor.RESET + "\n" +
+					 "   " + "Record: " + data.getFfaRecord() + ChatColor.RESET + "\n" +
+					 "   " + "KDR: " + GameMathUtil.kdrCalculator(data.getFfaTotalKills(), data.getFfaTotalDeaths()) + ChatColor.RESET + "\n" +
+					 "\n" +
+					 "\u258b " + "Nuggets Earned: " + data.getFfaCurrencyEarned());
+			
+			page.add(FANCY_HEADING +
+					 ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "   Lifeline\n" + ChatColor.RESET + "" +
+					 FANCY_HEADING +
+					 "\u258b " + "1st Place: " + data.getLflGamesWon() + " Times" + "\n"+ ChatColor.RESET +
+					 "   " + "Games Played: " + data.getLflGamesPlayed() + "\n"+ ChatColor.RESET +
+					 "   " + "Elo Rank: " + data.getLflRanking() + " " + "\n"+ ChatColor.RESET +
+					 "   " + "Personal Record: " + data.getLflRecord() + " " + "\n"+ ChatColor.RESET +
+					 "   " + "KDR: " + GameMathUtil.kdrCalculator(data.getLflTotalKills(), data.getLflTotalDeaths()) + " " + "\n"+ ChatColor.RESET +
+					 "\n" +
+					 "\u258b " + "Earned in total " + data.getLflCurrencyEarned() + "\n20a6");
 			
 		} else {
 			page.add(ChatColor.ITALIC + "Error loading PlayerData.");

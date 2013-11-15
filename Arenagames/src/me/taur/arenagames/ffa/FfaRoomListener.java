@@ -2,7 +2,7 @@ package me.taur.arenagames.ffa;
 
 import me.taur.arenagames.Config;
 import me.taur.arenagames.event.RoomEndEvent;
-import me.taur.arenagames.player.EloUtil;
+import me.taur.arenagames.player.GameMathUtil;
 import me.taur.arenagames.player.PlayerData;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.InvUtil;
@@ -43,13 +43,13 @@ public class FfaRoomListener implements Listener {
 							
 							if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
 								try {
-									newelo = EloUtil.addElo(oldelo, room.getAvgElo());
+									newelo = GameMathUtil.addElo(oldelo, room.getAvgElo());
 								} catch (Exception e) {
 									
 								}
 							} else {
 								try {
-									newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+									newelo = GameMathUtil.removeElo(oldelo, room.getAvgElo());
 								} catch (Exception e) {
 									
 								}
@@ -107,13 +107,13 @@ public class FfaRoomListener implements Listener {
 
 							if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
 								try {
-									newelo = EloUtil.addElo(oldelo, room.getAvgElo());
+									newelo = GameMathUtil.addElo(oldelo, room.getAvgElo());
 								} catch (Exception e) {
 									
 								}
 							} else {
 								try {
-									newelo = EloUtil.removeElo(oldelo, room.getAvgElo());
+									newelo = GameMathUtil.removeElo(oldelo, room.getAvgElo());
 								} catch (Exception e) {
 									
 								}

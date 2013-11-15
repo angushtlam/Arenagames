@@ -1,7 +1,7 @@
 package me.taur.arenagames.player;
 
 
-public class EloUtil {
+public class GameMathUtil {
 	public static int getConstantByElo(int elo) {
 		if (elo < 501) {
 			return 20;
@@ -49,4 +49,14 @@ public class EloUtil {
 		
 	}
 	
+	public static double kdrCalculator(int kills, int deaths) {
+		if (deaths == 0) {
+			return (double) kills;
+		}
+		
+		double raw = ((double) kills) / ((double) deaths);
+		double roundOff = Math.round(raw * 100.0) / 100.0;
+		return roundOff;
+		
+	}
 }
