@@ -1,12 +1,12 @@
-package me.taur.arenagames.room;
+package me.taur.arenagames;
 
-import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.ffa.FfaActive;
+import me.taur.arenagames.item.CustomItem;
 import me.taur.arenagames.lfl.LflActive;
 
 import org.bukkit.Bukkit;
 
-public class RoomScheduler {
+public class Scheduler {
 	public static void start() {
 		Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
 			public void run() {
@@ -16,6 +16,8 @@ public class RoomScheduler {
 		
 		FfaActive.run();
 		LflActive.run();
+
+		CustomItem.startTimer();
 		
 	}
 }

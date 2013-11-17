@@ -1,5 +1,7 @@
 package me.taur.arenagames.player;
 
+import me.taur.arenagames.util.TimeUtil;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,10 +18,13 @@ public class PlayerDataListener implements Listener {
 		Player p = evt.getPlayer();
 		
 		if (!PlayerData.isLoaded(p)) {
-			PlayerData data = new PlayerData(p);
-			PlayerData.STORE.put(p, data);
-			
+			new PlayerData(p);
 		}
+		
+		PlayerData data = PlayerData.get(p);
+		data.setFirstJoined(p.getFirstPlayed());
+		data.setLastLogin(TimeUtil.currentMilliseconds());
+		data.save(p);
 		
 	}
 	
@@ -34,15 +39,11 @@ public class PlayerDataListener implements Listener {
 				return;
 			}
 			
-			
-			if (PlayerData.STORE.get(p.getName()) == null) {
-				PlayerData data = new PlayerData(p);
-				PlayerData.STORE.put(p, data);
+			if (PlayerData.get(p) == null) {
+				new PlayerData(p);
 				
 			}
-			
 		}
-		
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -50,12 +51,12 @@ public class PlayerDataListener implements Listener {
 		Player p = evt.getPlayer();
 		
 		if (PlayerData.isLoaded(p)) {
-			PlayerData data = PlayerData.STORE.get(p);
+			PlayerData data = PlayerData.get(p);
 			data.save(p);
 			
 		}
 		
-		PlayerData.STORE.remove(p);
+		PlayerData.remove(p);
 		
 	}
 	
@@ -71,12 +72,12 @@ public class PlayerDataListener implements Listener {
 			}
 			
 			if (PlayerData.isLoaded(p)) {
-				PlayerData data = PlayerData.STORE.get(p);
+				PlayerData data = PlayerData.get(p);
 				data.save(p);
 				
 			}
 			
-			PlayerData.STORE.remove(p);
+			PlayerData.remove(p);
 			
 		}
 	}

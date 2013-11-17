@@ -1,20 +1,20 @@
-package me.taur.arenagames.player;
+package me.taur.arenagames.util;
 
 
 public class GameMathUtil {
 	public static int getConstantByElo(int elo) {
 		if (elo < 501) {
-			return 20;
+			return 40;
 		} else if (501 < elo && elo < 801) {
-			return 18;
+			return 36;
 		} else if (801 < elo && elo < 1501) {
-			return 16;
+			return 28;
 		} else if (1501 < elo && elo < 2601) {
-			return 12;
+			return 20;
 		} else if (2601 < elo && elo < 3301) {
-			return 6;
+			return 14;
 		} else {
-			return 0;
+			return 10;
 		}
 		
 	}

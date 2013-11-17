@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
+import me.taur.arenagames.player.Premium;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.IconMenu;
 import me.taur.arenagames.util.RoomType;
@@ -63,7 +64,7 @@ public class LflUtil {
                 int id = menuevt.getPosition();
                 
                 if (LflConfig.isKitPremium(id)) {
-        			if (!p.hasPermission("arenagames.premium")) {
+        			if (!Premium.isPremium(p)) {
         				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You don't have permission to use this kit.");
         				menuevt.setWillClose(true);
         				return;

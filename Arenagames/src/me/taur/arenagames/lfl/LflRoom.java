@@ -7,7 +7,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import me.taur.arenagames.Config;
+import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.player.PlayerData;
+import me.taur.arenagames.player.Premium;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.RoomType;
@@ -141,31 +143,37 @@ public class LflRoom extends Room {
 			if (inv.getHelmet() == null && i.getType().name().contains("HELMET")) {
 				inv.setHelmet(i);
 				continue;
+				
 			}
 			
 			if (inv.getHelmet() == null && i.getType().name().equals(Material.PUMPKIN)) {
 				inv.setHelmet(i);
 				continue;
+				
 			}
 			
 			if (inv.getHelmet() == null && i.getType().name().equals(Material.JACK_O_LANTERN)) {
 				inv.setHelmet(i);
 				continue;
+				
 			}
 			
 			if (inv.getChestplate() == null && i.getType().name().contains("CHESTPLATE")) {
 				inv.setChestplate(i);
 				continue;
+				
 			}
 			
 			if (inv.getLeggings() == null && i.getType().name().contains("LEGGINGS")) {
 				inv.setLeggings(i);
 				continue;
+				
 			}
 			
 			if (inv.getBoots() == null && i.getType().name().contains("BOOTS")) {
 				inv.setBoots(i);
 				continue;
+				
 			}
 			
 			inv.addItem(i);
@@ -189,31 +197,37 @@ public class LflRoom extends Room {
 			if (inv.getHelmet() == null && i.getType().name().contains("HELMET")) {
 				inv.setHelmet(i);
 				continue;
+				
 			}
 			
 			if (inv.getHelmet() == null && i.getType().name().equals(Material.PUMPKIN)) {
 				inv.setHelmet(i);
 				continue;
+				
 			}
 			
 			if (inv.getHelmet() == null && i.getType().name().equals(Material.JACK_O_LANTERN)) {
 				inv.setHelmet(i);
 				continue;
+				
 			}
 			
 			if (inv.getChestplate() == null && i.getType().name().contains("CHESTPLATE")) {
 				inv.setChestplate(i);
 				continue;
+				
 			}
 			
 			if (inv.getLeggings() == null && i.getType().name().contains("LEGGINGS")) {
 				inv.setLeggings(i);
 				continue;
+				
 			}
 			
 			if (inv.getBoots() == null && i.getType().name().contains("BOOTS")) {
 				inv.setBoots(i);
 				continue;
+				
 			}
 			
 			inv.addItem(i);
@@ -299,11 +313,10 @@ public class LflRoom extends Room {
 		this.playertimer.put(p, reset); // Reset the player's timer.
 		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get another kill within " + reset + " seconds or you'll die!");
 		
-		int potionstr = (kill / 5) + 1; // Perks increases every 4 kills
+		int potionstr = (kill / 3); // Perks increases every 3 kills
 		if (potionstr > 0) {
 			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, LflConfig.getCrankedTimer() * 20, potionstr));
 			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, LflConfig.getCrankedTimer() * 20, potionstr));
-			// p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, LflConfig.getCrankedTimer() * 20, potionstr));
 			
 		}
 		
@@ -321,6 +334,23 @@ public class LflRoom extends Room {
 		
 		LflSpawnManager.kill(p);
 		InvUtil.clearPlayerInv(p);
+		
+	}
+	
+	public boolean isPlayerDead(Player p) {
+		if (p == null) {
+			return true;
+		}
+
+		if (!this.getTimer().containsKey(p)) {
+			return true;
+		}
+		
+		if (this.getTimer().get(p) < 0) {
+			return true;
+		}
+		
+		return false;
 		
 	}
 	
@@ -411,7 +441,19 @@ public class LflRoom extends Room {
 					int kits = cs.getKeys(false).size();
 					
 					Random rand = new Random();
-					int r = rand.nextInt(kits);
+					boolean kitloop = true;
+					int r = 0;
+					
+					while (kitloop) { // Make sure non-Premiums cannot random into Premium kits. 
+						r = rand.nextInt(kits);
+						
+						if (FfaConfig.isKitPremium(r) && !(Premium.isPremium(p))) {
+							continue;
+						}
+						
+						kitloop = false;
+						
+					}
 					
 					this.kit.put(p, r);
 					p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You forgot to set your kit while in queue. Here's a random one.");
@@ -472,8 +514,8 @@ public class LflRoom extends Room {
 				}
 				
 				Sign sign = (Sign) b.getState();
-				sign.setLine(0, ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "[Lifeline]");
-				sign.setLine(1, (this.isPremium() ? ChatColor.WHITE + "" : "") + this.getRoomId());
+				sign.setLine(0, ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "[Lifeline]");
+				sign.setLine(1, (this.isPremium() ? ChatColor.GOLD + "" : "") + this.getRoomId());
 				sign.setLine(2, ChatColor.ITALIC + "" + this.getPlayersInRoom() + "/" + Config.getPlayerLimit(RoomType.LFL));
 				
 				String setl3 = ChatColor.GREEN + "Queue Open";
@@ -487,7 +529,7 @@ public class LflRoom extends Room {
 				sign.update();
 			}
 			
-			if (fix) {
+			if (fix) { // Fix signs.
 				Set<Location> signlocs = new HashSet<Location>();
 				
 				for (Location l : locs) { // Copy the list first

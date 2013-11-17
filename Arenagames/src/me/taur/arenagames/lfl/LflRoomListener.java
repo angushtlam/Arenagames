@@ -2,9 +2,9 @@ package me.taur.arenagames.lfl;
 
 import me.taur.arenagames.Config;
 import me.taur.arenagames.event.RoomEndEvent;
-import me.taur.arenagames.player.GameMathUtil;
 import me.taur.arenagames.player.PlayerData;
 import me.taur.arenagames.room.Room;
+import me.taur.arenagames.util.GameMathUtil;
 import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.RoomEndResult;
 import me.taur.arenagames.util.RoomType;
@@ -116,7 +116,7 @@ public class LflRoomListener implements Listener {
 					}
 				}
 
-				Bukkit.broadcastMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Free For All match " + room.getRoomId() + " has ended.");
+				Bukkit.broadcastMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Lifeline match " + room.getRoomId() + " has ended.");
 				room.resetRoom(true);
 				
 			} else if (result == RoomEndResult.NOT_ENOUGH_PLAYERS) {

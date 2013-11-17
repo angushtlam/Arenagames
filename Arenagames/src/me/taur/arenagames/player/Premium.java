@@ -14,7 +14,7 @@ public class Premium {
 		data = PlayerData.get(p);
 		long expire = data.getRecentPremiumPayment() + TimeUtil.monthToMilliseconds(data.getPremiumForMonths());
 		
-		if (System.currentTimeMillis() % 1000 > expire) {
+		if (TimeUtil.currentMilliseconds() > expire) {
 			return false;
 		}
 		
@@ -30,7 +30,7 @@ public class Premium {
 		
 		data = PlayerData.get(p);
 		long expire = data.getRecentPremiumPayment() + TimeUtil.monthToMilliseconds(data.getPremiumForMonths());
-		long resultInMillis = expire - System.currentTimeMillis();
+		long resultInMillis = expire - TimeUtil.currentMilliseconds();
 		return (int) TimeUtil.millisecondsToDay(resultInMillis);
 		
 	}

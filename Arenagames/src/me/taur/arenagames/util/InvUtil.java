@@ -2,7 +2,7 @@ package me.taur.arenagames.util;
 
 import java.util.Arrays;
 
-import me.taur.arenagames.item.CustomItem;
+import me.taur.arenagames.item.CustomItemUtil;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -82,8 +82,8 @@ public class InvUtil {
 		
 		ItemStack i = null;
 		
-		if (CustomItem.STORE.containsKey(blob)) { // TODO: Check if item is a custom item.
-			i = CustomItem.STORE.get(blob);
+		if (CustomItemUtil.STORE.containsKey(blob)) { // TODO: Check if item is a custom item.
+			i = CustomItemUtil.STORE.get(blob);
 			i.setAmount(amt);
 			
 		} else {
@@ -158,7 +158,7 @@ public class InvUtil {
 		inv.setArmorContents(null);
 		inv.clear();
 		
-		inv.setItem(8, InvUtil.getProfileBook());
+		inv.setItem(0, InvUtil.getProfileBook());
 		updatePlayerInv(p);
 		
 	}

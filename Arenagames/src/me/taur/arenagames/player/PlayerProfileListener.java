@@ -1,12 +1,9 @@
 package me.taur.arenagames.player;
 
-import java.util.Arrays;
-
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.util.InvUtil;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,10 +38,8 @@ public class PlayerProfileListener implements Listener {
 		
 		final Player p = evt.getPlayer();
 		
-		ItemStack book = new ItemStack(Material.WRITTEN_BOOK, 1);
+		ItemStack book = InvUtil.getProfileBook();
 		BookMeta b = (BookMeta) book.getItemMeta();
-		b.setDisplayName(ChatColor.GOLD + "Profile Book");
-		b.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to check your profile."));		
 		b.setPages(PlayerProfile.bookInformation(p));
 		book.setItemMeta(b);
 		

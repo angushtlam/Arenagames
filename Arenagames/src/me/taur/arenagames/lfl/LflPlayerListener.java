@@ -110,7 +110,7 @@ public class LflPlayerListener implements Listener {
 					if (!r.getTimer().containsKey(p)) {
 						evt.setCancelled(true);
 					} else {
-						if (r.getTimer().get(p) < 1) {
+						if (r.getTimer().get(p) < 0) {
 							evt.setCancelled(true);
 						}
 					}
@@ -140,13 +140,12 @@ public class LflPlayerListener implements Listener {
 					if (!r.getTimer().containsKey(p)) {
 						evt.setCancelled(true);
 					} else {
-						if (r.getTimer().get(p) < 1) {
+						if (r.getTimer().get(p) < 0) {
 							evt.setCancelled(true);
 						}
 					}
 				}
 			}
 		}
-		
 	}
 }

@@ -8,7 +8,9 @@ import java.util.TreeSet;
 
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
+import me.taur.arenagames.item.CustomItem;
 import me.taur.arenagames.player.PlayerData;
+import me.taur.arenagames.player.Premium;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.RoomType;
@@ -125,7 +127,7 @@ public class FfaRoom extends Room {
 		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been given a " + kitname + " kit.");
 		
 		PlayerInventory inv = p.getInventory();
-		inv.setItem(0, InvUtil.getKitSelector()); // Give the player a kit selector first
+		inv.setItem(8, InvUtil.getKitSelector()); // Give the player a kit selector first
 		
 		int playerkit = this.kit.get(p); // Get what kit the player has.
 		
@@ -174,6 +176,7 @@ public class FfaRoom extends Room {
 		}
 		
 		InvUtil.updatePlayerInv(p);
+		
 	}
 	
 	public void resetKit(Player p) {
@@ -358,7 +361,19 @@ public class FfaRoom extends Room {
 					int kits = cs.getKeys(false).size();
 					
 					Random rand = new Random();
-					int r = rand.nextInt(kits);
+					boolean kitloop = true;
+					int r = 0;
+					
+					while (kitloop) { // Make sure non-Premiums cannot random into Premium kits. 
+						r = rand.nextInt(kits);
+						
+						if (FfaConfig.isKitPremium(r) && !(Premium.isPremium(p))) {
+							continue;
+						}
+						
+						kitloop = false;
+						
+					}
 					
 					this.kit.put(p, r);
 					p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You forgot to set your kit while in queue. Here's a random one.");
@@ -417,7 +432,7 @@ public class FfaRoom extends Room {
 				
 				Sign sign = (Sign) b.getState();
 				sign.setLine(0, ChatColor.DARK_RED + "" + ChatColor.BOLD + "[FFA]");
-				sign.setLine(1, (this.isPremium() ? ChatColor.WHITE + "" : "") + this.getRoomId());
+				sign.setLine(1, (this.isPremium() ? ChatColor.GOLD + "" : "") + this.getRoomId());
 				sign.setLine(2, ChatColor.ITALIC + "" + this.getPlayersInRoom() + "/" + Config.getPlayerLimit(RoomType.FFA));
 				
 				String setl3 = ChatColor.GREEN + "Queue Open";
@@ -429,9 +444,10 @@ public class FfaRoom extends Room {
 				
 				sign.setLine(3, setl3);
 				sign.update();
+				
 			}
 			
-			if (fix) {
+			if (fix) { // Fix signs.
 				Set<Location> signlocs = new HashSet<Location>();
 				
 				for (Location l : locs) { // Copy the list first
@@ -477,6 +493,7 @@ public class FfaRoom extends Room {
 			this.removeAllPlayerScoreboard();
 			
 			for (Player p : this.getPlayers()) {
+				CustomItem.clearPlayerTimers(p);
 				p.setLevel(0);
 			}
 			

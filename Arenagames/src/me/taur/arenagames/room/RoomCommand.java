@@ -93,8 +93,7 @@ public class RoomCommand implements CommandExecutor {
 						
 						// Only applies if the room is an FFA room.
 						if (room.getRoomType() == RoomType.FFA) {
-							if (!room.isGameInProgress()) {
-								// Check if there are enough people in the room.
+							if (!room.isGameInProgress()) { // Check if there are enough people in the room.
 								int needed = room.getPlayersInRoom();
 								if (needed > Config.getMinPlayersInWait(RoomType.FFA) - 1) {
 									if (!room.isGameInWaiting()) {

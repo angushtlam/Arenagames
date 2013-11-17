@@ -40,7 +40,7 @@ public class PlayerCommand implements CommandExecutor {
 				
 					// Need to load the player's PlayerData.
 					PlayerData data = new PlayerData(p);
-					PlayerData.STORE.put(p, data);
+					PlayerData.STORE.put(p.getName(), data);
 					
 					p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "Your Player Data has been created.");
 					return true;

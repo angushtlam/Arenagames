@@ -1,12 +1,26 @@
 package me.taur.arenagames.item;
 
+import java.util.HashMap;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class CustomItemUtil {
+	public static HashMap<String, ItemStack> STORE = new HashMap<String, ItemStack>();
+	
 	public static void enable() {
-		CustomPotion.loadSplashPotionOfDegeneration();
-		CustomPotion.loadSplashPotionOfGrimace();
+		CustomPotion.loadPotionOfDegeneration();
+		CustomPotion.loadPotionOfGrimace();
+		CustomPotion.loadPotionOfMercy();
+		CustomPotion.loadPotionOfRevitalization();
+		CustomPotion.loadElixirOfVictory();
+		CustomPotion.loadElixirOfShadows();
+		CustomPotion.loadElixirOfOnslaught();
+		CustomPotion.loadElixirOfFocus();
+		CustomPotion.loadElixirOfAdrenaline();
+		
+		CustomItem.loadCommandVacuum();
+		CustomItem.loadCommandEndure();
 		
 	}
 	
@@ -14,7 +28,7 @@ public class CustomItemUtil {
 		return new ItemStack(Material.POTION, 1, (short) 16384);
 	}
 	
-	public static ItemStack getDrinkingPotion() {
+	public static ItemStack getDrinkPotion() {
 		return new ItemStack(Material.POTION, 1);
 	}
 	

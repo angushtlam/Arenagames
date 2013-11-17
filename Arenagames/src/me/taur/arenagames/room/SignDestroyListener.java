@@ -34,7 +34,7 @@ public class SignDestroyListener implements Listener {
 				
 			}
 			
-			String l1 = sign.getLine(1).toLowerCase();
+			String l1 = ChatColor.stripColor(sign.getLine(1).toLowerCase());
 			if (!Room.ROOMS.containsKey(l1)) {
 				return;
 			}
@@ -56,7 +56,7 @@ public class SignDestroyListener implements Listener {
 				
 			}
 			
-			String l1 = sign.getLine(1).toLowerCase();
+			String l1 = ChatColor.stripColor(sign.getLine(1).toLowerCase());
 			if (!Room.ROOMS.containsKey(l1)) {
 				return;
 			}

@@ -10,7 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 public class PlayerData {
-	public static HashMap<Player, PlayerData> STORE = new HashMap<Player, PlayerData>();
+	public static HashMap<String, PlayerData> STORE = new HashMap<String, PlayerData>();
 	public static boolean USE_FLATFILE = true;
 	
 	private String playerName, mojangUUID;
@@ -37,15 +37,20 @@ public class PlayerData {
 				perkTrailHeart;
 	
 	public PlayerData(Player p) {
-		setPlayerName(p.getName());
-		this.createFile(p);
-		this.loadData(p);
-		STORE.put(p, this);
+		new PlayerData(p.getName());
+		
+	}
+	
+	public PlayerData(String name) {
+		setPlayerName(name);
+		this.createFile(name);
+		this.loadData(name);
+		STORE.put(name, this);
 		
 	}
 	
 	public static boolean isLoaded(Player p) {
-		if (STORE.get(p) != null) {
+		if (STORE.get(p.getName()) != null) {
 			return true;
 		}
 		
@@ -54,27 +59,43 @@ public class PlayerData {
 	}
 	
 	public static PlayerData get(Player p) {
-		return STORE.get(p);
+		return get(p.getName());
 	}
 	
-	public boolean createFile(Player p) { // Also loads the file and adds new unwritten values.
+	public static PlayerData get(String name) {
+		return STORE.get(name);
+	}
+	
+	public static void remove(Player p) {
+		STORE.remove(p.getName());
+	}
+	
+	public static void remove(String name) {
+		STORE.remove(name);
+	}
+	
+	public boolean createFile(Player p) {
+		return createFile(p.getName());
+	}
+	
+	public boolean createFile(String name) { // Also loads the file and adds new unwritten values.
 		if (USE_FLATFILE) {
 			File dir = new File(Arenagames.plugin.getDataFolder(), "players");
 			if (!dir.exists()) {
 				dir.mkdir();
 			}
 
-			File file = new File(Arenagames.plugin.getDataFolder(), "players/" + p.getName().toLowerCase() + ".yml");
+			File file = new File(Arenagames.plugin.getDataFolder(), "players/" + name.toLowerCase() + ".yml");
 			if (!file.exists()) {
 				try {
 					file.createNewFile();
 					FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
-					conf.addDefault("user.player.name", p.getName());
+					conf.addDefault("user.player.name", name);
 					conf.addDefault("user.player.uuid", "-1");
 					conf.addDefault("user.player.exp", 0);
 					
-					conf.addDefault("user.time.first-joined", p.getFirstPlayed());
-					conf.addDefault("user.time.last-login", p.getFirstPlayed());
+					conf.addDefault("user.time.first-joined", 0);
+					conf.addDefault("user.time.last-login", 0);
 					
 					conf.addDefault("user.premium.recent-payment", 0);
 					conf.addDefault("user.premium.for-months", 0);
@@ -135,15 +156,19 @@ public class PlayerData {
 	}
 	
 	public boolean loadData(Player p) {
+		return loadData(p.getName());
+	}
+	
+	public boolean loadData(String name) {
 		if (USE_FLATFILE) {
 			File dir = new File(Arenagames.plugin.getDataFolder(), "players");
 			if (!dir.exists()) {
-				createFile(p);
+				createFile(name);
 			}
 
-			File file = new File(Arenagames.plugin.getDataFolder(), "players/" + p.getName().toLowerCase() + ".yml");
+			File file = new File(Arenagames.plugin.getDataFolder(), "players/" + name.toLowerCase() + ".yml");
 			if (!file.exists()) {
-				createFile(p);
+				createFile(name);
 
 			} else {
 				PlayerData data = this;
@@ -207,19 +232,23 @@ public class PlayerData {
 	}
 	
 	public boolean save(Player p) {
+		return save(p.getName());
+	}
+	
+	public boolean save(String name) {
 		if (USE_FLATFILE) {
 			File dir = new File(Arenagames.plugin.getDataFolder(), "players");
 			if (!dir.exists()) {
 				dir.mkdir();
 			}
 
-			File file = new File(Arenagames.plugin.getDataFolder(), "players/" + p.getName().toLowerCase() + ".yml");
+			File file = new File(Arenagames.plugin.getDataFolder(), "players/" + name.toLowerCase() + ".yml");
 			try {
 				file.createNewFile();
 
 				PlayerData data = this;
 				FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
-				conf.set("user.player.name", p.getName());
+				conf.set("user.player.name", name);
 				conf.set("user.player.uuid", data.getMojangUUID());
 				conf.set("user.player.exp", data.getExp());
 				

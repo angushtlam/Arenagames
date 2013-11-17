@@ -1,6 +1,7 @@
 package me.taur.arenagames.ffa;
 
 import me.taur.arenagames.Config;
+import me.taur.arenagames.player.Premium;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.ParticleEffect;
@@ -66,7 +67,7 @@ public class FfaSignListener implements Listener {
 			}
 
 			if (r.getRoomId().contains("-p")) {
-				if (!p.hasPermission("arenagames.premium")) {
+				if (!Premium.isPremium(p)) {
 					p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "This queue is for Premium only.");
 					return;
 					

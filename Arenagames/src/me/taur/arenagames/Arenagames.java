@@ -1,11 +1,13 @@
 package me.taur.arenagames;
 
+import me.taur.arenagames.admin.AdminCommand;
 import me.taur.arenagames.ffa.FfaDeathListener;
 import me.taur.arenagames.ffa.FfaKitSelectorListener;
 import me.taur.arenagames.ffa.FfaPlayerListener;
 import me.taur.arenagames.ffa.FfaRoomListener;
-import me.taur.arenagames.ffa.FfaUtil;
 import me.taur.arenagames.ffa.FfaSignListener;
+import me.taur.arenagames.ffa.FfaUtil;
+import me.taur.arenagames.item.CustomItemListener;
 import me.taur.arenagames.item.CustomItemUtil;
 import me.taur.arenagames.lfl.LflDeathListener;
 import me.taur.arenagames.lfl.LflKitSelectorListener;
@@ -18,7 +20,6 @@ import me.taur.arenagames.player.PlayerDataListener;
 import me.taur.arenagames.player.PlayerProfileListener;
 import me.taur.arenagames.room.PlayerLoginListener;
 import me.taur.arenagames.room.RoomCommand;
-import me.taur.arenagames.room.RoomScheduler;
 import me.taur.arenagames.room.SignCreateListener;
 import me.taur.arenagames.room.SignDestroyListener;
 
@@ -39,6 +40,7 @@ public class Arenagames extends JavaPlugin {
 		
 		regCmd("queue", new RoomCommand());
 		regCmd("player", new PlayerCommand());
+		regCmd("admin", new AdminCommand());
 		loadGamemodes();
 		
 		regEvent(new PlayerLoginListener());
@@ -46,7 +48,9 @@ public class Arenagames extends JavaPlugin {
 		regEvent(new SignDestroyListener());
 		regEvent(new PlayerDataListener());
 		regEvent(new PlayerProfileListener());
-		RoomScheduler.start();
+		Scheduler.start();
+		
+		regEvent(new CustomItemListener());
 		
 		CustomItemUtil.enable();
 		

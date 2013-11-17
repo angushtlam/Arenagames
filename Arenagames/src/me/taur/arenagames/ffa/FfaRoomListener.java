@@ -2,9 +2,9 @@ package me.taur.arenagames.ffa;
 
 import me.taur.arenagames.Config;
 import me.taur.arenagames.event.RoomEndEvent;
-import me.taur.arenagames.player.GameMathUtil;
 import me.taur.arenagames.player.PlayerData;
 import me.taur.arenagames.room.Room;
+import me.taur.arenagames.util.GameMathUtil;
 import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.RoomEndResult;
 import me.taur.arenagames.util.RoomType;
@@ -41,7 +41,7 @@ public class FfaRoomListener implements Listener {
 							int oldelo = data.getFfaRanking();
 							int newelo = data.getFfaRanking();
 							
-							if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
+							if (room.getPointboard().get(p.getName()) > room.getPointMedian() || room.getWinningPlayer() == p.getName()) { // If the player won
 								try {
 									newelo = GameMathUtil.addElo(oldelo, room.getAvgElo());
 								} catch (Exception e) {
@@ -94,37 +94,10 @@ public class FfaRoomListener implements Listener {
 				room.resetRoom(true);
 				
 			} else if (result == RoomEndResult.NOT_ENOUGH_PLAYERS) {
-				if (room.getWinningPlayer() != null) {
-					room.gameOverMessage(room.getWinningPlayer()); // Broadcast who won.
-				}
-
 				if (Config.isEloEnabled(RoomType.FFA)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
-						if (PlayerData.isLoaded(p)) {
-							PlayerData data = PlayerData.get(p);
-							int oldelo = data.getFfaRanking();
-							int newelo = data.getFfaRanking();
-
-							if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
-								try {
-									newelo = GameMathUtil.addElo(oldelo, room.getAvgElo());
-								} catch (Exception e) {
-									
-								}
-							} else {
-								try {
-									newelo = GameMathUtil.removeElo(oldelo, room.getAvgElo());
-								} catch (Exception e) {
-									
-								}
-							}
-
-							int diff = newelo - oldelo;
-							data.setFfaRanking(newelo);
-							data.save(p);
-							
-							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your FFA Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
-
+						if (p != null) {
+							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your FFA Elo did not change due to a premature game ending.");
 						}
 					}
 				}
