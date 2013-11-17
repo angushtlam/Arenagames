@@ -193,6 +193,18 @@ public class LflConfig {
 		
 	}
 	
+	public static int getCurrencyFirst() {
+		return get().getInt("lfl.currency.first");
+	}
+	
+	public static int getCurrencyWinner() {
+		return get().getInt("lfl.currency.winner");
+	}
+	
+	public static int getCurrencyEveryone() {
+		return get().getInt("lfl.currency.everyone");
+	}
+	
 	public static void defaultConf() {
 		if (get().getBoolean("generate-default-config")) {
 			get().addDefault("lfl.settings.cranked-timer", 30);
@@ -245,6 +257,10 @@ public class LflConfig {
 			get().addDefault("lfl.lobby.x", 5.0);
 			get().addDefault("lfl.lobby.y", 70.0);
 			get().addDefault("lfl.lobby.z", 0.0);
+			
+			get().addDefault("lfl.currency.first", 30);
+			get().addDefault("lfl.currency.winner", 15);
+			get().addDefault("lfl.currency.everyone", 10);
 			
 		}
 		

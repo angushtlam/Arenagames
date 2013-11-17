@@ -178,6 +178,18 @@ public class FfaConfig {
 		
 	}
 	
+	public static int getCurrencyFirst() {
+		return get().getInt("ffa.currency.first");
+	}
+	
+	public static int getCurrencyWinner() {
+		return get().getInt("ffa.currency.winner");
+	}
+	
+	public static int getCurrencyEveryone() {
+		return get().getInt("ffa.currency.everyone");
+	}
+	
 	public static void defaultConf() {
 		if (get().getBoolean("generate-default-config")) {
 
@@ -225,6 +237,10 @@ public class FfaConfig {
 			get().addDefault("ffa.lobby.x", 5.0);
 			get().addDefault("ffa.lobby.y", 70.0);
 			get().addDefault("ffa.lobby.z", 0.0);
+			
+			get().addDefault("ffa.currency.first", 40);
+			get().addDefault("ffa.currency.winner", 30);
+			get().addDefault("ffa.currency.everyone", 15);
 			
 		}
 		

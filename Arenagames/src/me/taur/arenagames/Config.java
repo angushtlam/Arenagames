@@ -28,6 +28,7 @@ public class Config {
 				config.addDefault("gamemode." + gm + ".countdown.wait-in-seconds", 45);
 				config.addDefault("gamemode." + gm + ".countdown.min-players-to-start-wait", 2);
 				config.addDefault("gamemode." + gm + ".ranked.elo-enabled", true);
+				config.addDefault("gamemode." + gm + ".economy.currency-enabled", true);
 				config.addDefault("gamemode." + gm + ".rooms.normal", 2);
 				config.addDefault("gamemode." + gm + ".rooms.premium", 1);
 				config.addDefault("gamemode." + gm + ".player-limit", 18);
@@ -74,9 +75,15 @@ public class Config {
 	}
 	
 	
-	public static boolean isEloEnabled(RoomType type) {
+	public static boolean isRankedEnabled(RoomType type) {
 		String gm = type.toString().toLowerCase();
 		return Arenagames.plugin.getConfig().getBoolean("gamemode." + gm + ".ranked.elo-enabled");
+		
+	}
+	
+	public static boolean isEconomyEnabled(RoomType type) {
+		String gm = type.toString().toLowerCase();
+		return Arenagames.plugin.getConfig().getBoolean("gamemode." + gm + ".economy.currency-enabled");
 		
 	}
 	

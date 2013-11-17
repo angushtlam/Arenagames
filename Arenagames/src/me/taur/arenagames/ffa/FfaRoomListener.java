@@ -34,7 +34,7 @@ public class FfaRoomListener implements Listener {
 					room.gameOverMessage(room.getWinningPlayer()); // Broadcast who won.
 				}
 
-				if (Config.isEloEnabled(RoomType.FFA)) { // Only change the player's Elo if it is enabled.
+				if (Config.isRankedEnabled(RoomType.FFA)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
@@ -60,6 +60,34 @@ public class FfaRoomListener implements Listener {
 							data.save(p);
 							
 							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your FFA Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
+							
+						}
+					}
+				}
+				
+				if (Config.isEconomyEnabled(RoomType.FFA)) {
+					for (Player p : room.getPlayers()) {
+						if (PlayerData.isLoaded(p)) {
+							PlayerData data = PlayerData.get(p);
+							int currency = data.getCurrency();
+							int lifetime = data.getCurrencyLifetime();
+							int add = 0;
+							
+							if (room.getWinningPlayer() == p.getName()) { // If the player won
+								add = FfaConfig.getCurrencyFirst();
+							} else if (room.getPointboard().get(p.getName()) > room.getPointMedian()) {
+								add = FfaConfig.getCurrencyWinner();
+							} else {
+								add = FfaConfig.getCurrencyEveryone();
+							}
+							
+							data.setCurrency(currency + add);
+							data.setCurrencyLifetime(lifetime + add);
+							data.setFfaCurrencyEarned(data.getFfaCurrencyEarned() + add);
+							
+							data.save(p);
+							
+							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have gained " + add + (add == 1 ? " nugget." : " nuggets."));
 							
 						}
 					}
@@ -94,10 +122,18 @@ public class FfaRoomListener implements Listener {
 				room.resetRoom(true);
 				
 			} else if (result == RoomEndResult.NOT_ENOUGH_PLAYERS) {
-				if (Config.isEloEnabled(RoomType.FFA)) { // Only change the player's Elo if it is enabled.
+				if (Config.isRankedEnabled(RoomType.FFA)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
 						if (p != null) {
 							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your FFA Elo did not change due to a premature game ending.");
+						}
+					}
+				}
+				
+				if (Config.isEconomyEnabled(RoomType.FFA)) { // Only change the player's Elo if it is enabled.
+					for (Player p : room.getPlayers()) {
+						if (p != null) {
+							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You did not gain any nuggets due to a premature game ending.");
 						}
 					}
 				}

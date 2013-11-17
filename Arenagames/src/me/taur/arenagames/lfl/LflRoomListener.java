@@ -34,7 +34,7 @@ public class LflRoomListener implements Listener {
 					room.gameOverMessage(room.getWinningPlayer()); // Broadcast who won.
 				}
 
-				if (Config.isEloEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
+				if (Config.isRankedEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
@@ -60,6 +60,34 @@ public class LflRoomListener implements Listener {
 							data.save(p);
 							
 							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Lifeline Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
+							
+						}
+					}
+				}
+				
+				if (Config.isEconomyEnabled(RoomType.LFL)) {
+					for (Player p : room.getPlayers()) {
+						if (PlayerData.isLoaded(p)) {
+							PlayerData data = PlayerData.get(p);
+							int currency = data.getCurrency();
+							int lifetime = data.getCurrencyLifetime();
+							int add = 0;
+							
+							if (room.getWinningPlayer() == p.getName()) { // If the player won
+								add = LflConfig.getCurrencyFirst();
+							} else if (room.getPointboard().get(p.getName()) > room.getPointMedian()) {
+								add = LflConfig.getCurrencyWinner();
+							} else {
+								add = LflConfig.getCurrencyEveryone();
+							}
+							
+							data.setCurrency(currency + add);
+							data.setCurrencyLifetime(lifetime + add);
+							data.setLflCurrencyEarned(data.getLflCurrencyEarned() + add);
+							
+							data.save(p);
+							
+							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have gained " + add + (add == 1 ? " nugget." : " nuggets."));
 							
 						}
 					}
@@ -124,7 +152,7 @@ public class LflRoomListener implements Listener {
 					room.gameOverMessage(room.getWinningPlayer()); // Broadcast who won.
 				}
 
-				if (Config.isEloEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
+				if (Config.isRankedEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
@@ -192,7 +220,7 @@ public class LflRoomListener implements Listener {
 					room.gameOverMessage(room.getWinningPlayer()); // Broadcast who won.
 				}
 
-				if (Config.isEloEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
+				if (Config.isRankedEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
@@ -218,6 +246,34 @@ public class LflRoomListener implements Listener {
 							data.save(p);
 							
 							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Lifeline Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
+							
+						}
+					}
+				}
+				
+				if (Config.isEconomyEnabled(RoomType.LFL)) {
+					for (Player p : room.getPlayers()) {
+						if (PlayerData.isLoaded(p)) {
+							PlayerData data = PlayerData.get(p);
+							int currency = data.getCurrency();
+							int lifetime = data.getCurrencyLifetime();
+							int add = 0;
+							
+							if (room.getWinningPlayer() == p.getName()) { // If the player won
+								add = LflConfig.getCurrencyFirst();
+							} else if (room.getPointboard().get(p.getName()) > room.getPointMedian()) {
+								add = LflConfig.getCurrencyWinner();
+							} else {
+								add = LflConfig.getCurrencyEveryone();
+							}
+							
+							data.setCurrency(currency + add);
+							data.setCurrencyLifetime(lifetime + add);
+							data.setLflCurrencyEarned(data.getLflCurrencyEarned() + add);
+							
+							data.save(p);
+							
+							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have gained " + add + (add == 1 ? " nugget." : " nuggets."));
 							
 						}
 					}
