@@ -3,6 +3,7 @@ package me.taur.arenagames.util;
 import java.util.Arrays;
 
 import me.taur.arenagames.item.CustomItemUtil;
+import me.taur.arenagames.player.PlayerProfile;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -10,6 +11,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class InvUtil {
@@ -158,7 +160,12 @@ public class InvUtil {
 		inv.setArmorContents(null);
 		inv.clear();
 		
-		inv.setItem(0, InvUtil.getProfileBook());
+		ItemStack i = InvUtil.getProfileBook();
+		BookMeta bm = (BookMeta) i.getItemMeta();
+		bm.setPages(PlayerProfile.bookInformation(p));
+		i.setItemMeta(bm);
+		
+		inv.setItem(0, i);
 		updatePlayerInv(p);
 		
 	}

@@ -14,5 +14,9 @@ commands:
   player:
     description: Player related commands.
     aliases: [self]
-  admin:
-    description: Administration related commands.
+  premium:
+    description: Premium related commands.
+  curr:
+    description: Currency related commands.
+  cash:
+    description: Cash related commands.
