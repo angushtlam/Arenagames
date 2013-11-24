@@ -1,11 +1,13 @@
 package me.taur.arenagames.room;
 
+import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.ffa.FfaRoom;
 import me.taur.arenagames.lfl.LflConfig;
 import me.taur.arenagames.lfl.LflRoom;
 import me.taur.arenagames.util.RoomType;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -115,8 +117,14 @@ public class SignCreateListener implements Listener {
 			
 			p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have created a queue sign for " + r.getRoomId() + ".");
 			
-			FfaRoom room = (FfaRoom) r;
-			room.updateSigns();
+			final FfaRoom room = (FfaRoom) r; // Add a delay to the signs to update it.
+			Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
+				public void run() {
+					room.updateSigns();
+				}
+			}, 2L);
+			
+			
 			
 		}
 		
