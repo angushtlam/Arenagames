@@ -52,14 +52,22 @@ public class PlayerLoginListener implements Listener {
 			return;
 		}
 		
+		if (evt.getItemDrop().getItemStack().getItemMeta().getDisplayName() == null) {
+			return;
+		}
+		
 		String name = evt.getItemDrop().getItemStack().getItemMeta().getDisplayName();
 		
 		if (name.equalsIgnoreCase(InvUtil.getProfileItem().getItemMeta().getDisplayName())) {
 			evt.setCancelled(true);
+			return;
+			
 		}
 		
 		if (name.equalsIgnoreCase(InvUtil.getPerkItem().getItemMeta().getDisplayName())) {
 			evt.setCancelled(true);
+			return;
+			
 		}
 		
 	}
