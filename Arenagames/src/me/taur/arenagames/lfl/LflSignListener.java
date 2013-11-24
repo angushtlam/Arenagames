@@ -2,8 +2,8 @@ package me.taur.arenagames.lfl;
 
 import me.taur.arenagames.Config;
 import me.taur.arenagames.ffa.FfaConfig;
+import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.ParticleEffect;
 import me.taur.arenagames.util.RoomType;
 

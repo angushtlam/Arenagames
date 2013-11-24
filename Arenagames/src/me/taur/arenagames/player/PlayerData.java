@@ -30,11 +30,8 @@ public class PlayerData {
 	private int lflTotalKills, lflTotalDeaths;
 	private int lflCurrencyEarned;
 	
-	private int perkFfaFireworks, perkFfaSpawnSpeed, perkFfaSpawnInvis;
-	private int perkLflFireworks, perkLflSpawnSpeed, perkLflSpawnInvis;
-	
-	private int perkTrailWater, perkTrailCloud, perkTrailMystic, perkTrailStar, perkTrailFlame, perkTrailBlood,
-				perkTrailHeart;
+	private int perkFxStorm, perkFxBloom, perkFxMusic, perkFxCloud, perkFxSoil, perkFxEnder, perkFxFireScarf, perkFxFireTrail,
+				perkFxHeartScarf, perkFxHeartTrail, perkFxKnowledge, perkFxSuperchicken, perkFxBlood;
 	
 	public PlayerData(Player p) {
 		new PlayerData(p.getName());
@@ -124,22 +121,20 @@ public class PlayerData {
 					conf.addDefault("user.lfl.kills", 0);
 					conf.addDefault("user.lfl.deaths", 0);
 					conf.addDefault("user.lfl.currency-earned", 0);
-
-					conf.addDefault("user.ffa.perk.firework", 0);
-					conf.addDefault("user.ffa.perk.spawn-speed", 0);
-					conf.addDefault("user.ffa.perk.spawn-invisibility", 0);
 					
-					conf.addDefault("user.lfl.perk.firework", 0);
-					conf.addDefault("user.lfl.perk.spawn-speed", 0);
-					conf.addDefault("user.lfl.perk.spawn-invisibility", 0);
-					
-					conf.addDefault("user.perk.trail.water", 0);
-					conf.addDefault("user.perk.trail.cloud", 0);
-					conf.addDefault("user.perk.trail.mystic", 0);
-					conf.addDefault("user.perk.trail.star", 0);
-					conf.addDefault("user.perk.trail.flame", 0);
-					conf.addDefault("user.perk.trail.blood", 0);
-					conf.addDefault("user.perk.trail.heart", 0);
+					conf.addDefault("user.perk.fx.storm", 0);
+					conf.addDefault("user.perk.fx.bloom", 0);
+					conf.addDefault("user.perk.fx.music", 0);
+					conf.addDefault("user.perk.fx.cloud", 0);
+					conf.addDefault("user.perk.fx.soil", 0);
+					conf.addDefault("user.perk.fx.ender", 0);
+					conf.addDefault("user.perk.fx.firescarf", 0);
+					conf.addDefault("user.perk.fx.firetrail", 0);
+					conf.addDefault("user.perk.fx.heartscarf", 0);
+					conf.addDefault("user.perk.fx.hearttrail", 0);
+					conf.addDefault("user.perk.fx.knowledge", 0);
+					conf.addDefault("user.perk.fx.superchicken", 0);
+					conf.addDefault("user.perk.fx.blood", 0);
 					
 					conf.options().copyDefaults(true);
 					conf.save(file);
@@ -208,21 +203,19 @@ public class PlayerData {
 				data.setLflTotalDeaths(conf.getInt("user.lfl.deaths"));
 				data.setLflCurrencyEarned(conf.getInt("user.lfl.currency-earned"));
 				
-				data.setPerkFfaFireworks(conf.getInt("user.perk.ffa.firework"));
-				data.setPerkFfaSpawnSpeed(conf.getInt("user.perk.ffa.spawn-speed"));
-				data.setPerkFfaSpawnInvis(conf.getInt("user.perk.ffa.spawn-invisibility"));
-				
-				data.setPerkLflFireworks(conf.getInt("user.perk.lfl.firework"));
-				data.setPerkLflSpawnSpeed(conf.getInt("user.perk.lfl.spawn-speed"));
-				data.setPerkLflSpawnInvis(conf.getInt("user.perk.lfl.spawn-invisibility"));
-				
-				data.setPerkTrailWater(conf.getInt("user.perk.trail.water"));
-				data.setPerkTrailCloud(conf.getInt("user.perk.trail.cloud"));
-				data.setPerkTrailMystic(conf.getInt("user.perk.trail.mystic"));
-				data.setPerkTrailStar(conf.getInt("user.perk.trail.star"));
-				data.setPerkTrailFlame(conf.getInt("user.perk.trail.flame"));
-				data.setPerkTrailBlood(conf.getInt("user.perk.trail.blood"));
-				data.setPerkTrailHeart(conf.getInt("user.perk.trail.heart"));
+				data.setPerkFxStorm(conf.getInt("user.perk.fx.storm"));
+				data.setPerkFxBloom(conf.getInt("user.perk.fx.bloom"));
+				data.setPerkFxMusic(conf.getInt("user.perk.fx.music"));
+				data.setPerkFxCloud(conf.getInt("user.perk.fx.cloud"));
+				data.setPerkFxSoil(conf.getInt("user.perk.fx.soil"));
+				data.setPerkFxEnder(conf.getInt("user.perk.fx.ender"));
+				data.setPerkFxFireScarf(conf.getInt("user.perk.fx.firescarf"));
+				data.setPerkFxFireTrail(conf.getInt("user.perk.fx.firetrail"));
+				data.setPerkFxHeartScarf(conf.getInt("user.perk.fx.heartscarf"));
+				data.setPerkFxHeartTrail(conf.getInt("user.perk.fx.hearttrail"));
+				data.setPerkFxKnowledge(conf.getInt("user.perk.fx.knowledge"));
+				data.setPerkFxSuperchicken(conf.getInt("user.perk.fx.superchicken"));
+				data.setPerkFxBlood(conf.getInt("user.perk.fx.blood"));
 				
 				return true;
 			}
@@ -283,21 +276,19 @@ public class PlayerData {
 				conf.set("user.lfl.deaths", data.getLflTotalDeaths());
 				conf.set("user.lfl.currency-earned", data.getLflCurrencyEarned());
 				
-				conf.set("user.perk.ffa.firework", data.getPerkFfaFireworks());
-				conf.set("user.perk.ffa.spawn-speed", data.getPerkFfaSpawnSpeed());
-				conf.set("user.perk.ffa.spawn-invisibility", data.getPerkFfaSpawnInvis());
-				
-				conf.set("user.perk.lfl.firework", data.getPerkLflFireworks());
-				conf.set("user.perk.lfl.spawn-speed", data.getPerkLflSpawnSpeed());
-				conf.set("user.perk.lfl.spawn-invisibility", data.getPerkLflSpawnInvis());
-				
-				conf.set("user.perk.trail.water", data.getPerkTrailWater());
-				conf.set("user.perk.trail.cloud", data.getPerkTrailCloud());
-				conf.set("user.perk.trail.mystic", data.getPerkTrailMystic());
-				conf.set("user.perk.trail.star", data.getPerkTrailStar());
-				conf.set("user.perk.trail.flame", data.getPerkTrailFlame());
-				conf.set("user.perk.trail.blood", data.getPerkTrailBlood());
-				conf.set("user.perk.trail.heart", data.getPerkTrailHeart());
+				conf.set("user.perk.fx.storm", data.getPerkFxStorm());
+				conf.set("user.perk.fx.bloom", data.getPerkFxBlood());
+				conf.set("user.perk.fx.music", data.getPerkFxMusic());
+				conf.set("user.perk.fx.cloud", data.getPerkFxCloud());
+				conf.set("user.perk.fx.soil", data.getPerkFxSoil());
+				conf.set("user.perk.fx.ender", data.getPerkFxEnder());
+				conf.set("user.perk.fx.firescarf", data.getPerkFxFireScarf());
+				conf.set("user.perk.fx.firetrail", data.getPerkFxFireTrail());
+				conf.set("user.perk.fx.heartscarf", data.getPerkFxHeartScarf());
+				conf.set("user.perk.fx.hearttrail", data.getPerkFxHeartTrail());
+				conf.set("user.perk.fx.knowledge", data.getPerkFxKnowledge());
+				conf.set("user.perk.fx.superchicken", data.getPerkFxSuperchicken());
+				conf.set("user.perk.fx.blood", data.getPerkFxBlood());
 				
 				conf.save(file);
 				return true;
@@ -535,107 +526,108 @@ public class PlayerData {
 		this.lflCurrencyEarned = lflCurrencyEarned;
 	}
 
-	public int getPerkFfaFireworks() {
-		return perkFfaFireworks;
+	public int getPerkFxStorm() {
+		return perkFxStorm;
 	}
 
-	public void setPerkFfaFireworks(int perkFfaFireworks) {
-		this.perkFfaFireworks = perkFfaFireworks;
+	public void setPerkFxStorm(int perkFxStorm) {
+		this.perkFxStorm = perkFxStorm;
 	}
 
-	public int getPerkFfaSpawnSpeed() {
-		return perkFfaSpawnSpeed;
+	public int getPerkFxBloom() {
+		return perkFxBloom;
 	}
 
-	public void setPerkFfaSpawnSpeed(int perkFfaSpawnSpeed) {
-		this.perkFfaSpawnSpeed = perkFfaSpawnSpeed;
+	public void setPerkFxBloom(int perkFxBloom) {
+		this.perkFxBloom = perkFxBloom;
 	}
 
-	public int getPerkFfaSpawnInvis() {
-		return perkFfaSpawnInvis;
+	public int getPerkFxMusic() {
+		return perkFxMusic;
 	}
 
-	public void setPerkFfaSpawnInvis(int perkFfaSpawnInvis) {
-		this.perkFfaSpawnInvis = perkFfaSpawnInvis;
+	public void setPerkFxMusic(int perkFxMusic) {
+		this.perkFxMusic = perkFxMusic;
 	}
 
-	public int getPerkLflFireworks() {
-		return perkLflFireworks;
+	public int getPerkFxCloud() {
+		return perkFxCloud;
 	}
 
-	public void setPerkLflFireworks(int perkLflFireworks) {
-		this.perkLflFireworks = perkLflFireworks;
+	public void setPerkFxCloud(int perkFxCloud) {
+		this.perkFxCloud = perkFxCloud;
 	}
 
-	public int getPerkLflSpawnSpeed() {
-		return perkLflSpawnSpeed;
+	public int getPerkFxSoil() {
+		return perkFxSoil;
 	}
 
-	public void setPerkLflSpawnSpeed(int perkLflSpawnSpeed) {
-		this.perkLflSpawnSpeed = perkLflSpawnSpeed;
+	public void setPerkFxSoil(int perkFxSoil) {
+		this.perkFxSoil = perkFxSoil;
 	}
 
-	public int getPerkLflSpawnInvis() {
-		return perkLflSpawnInvis;
+	public int getPerkFxEnder() {
+		return perkFxEnder;
 	}
 
-	public void setPerkLflSpawnInvis(int perkLflSpawnInvis) {
-		this.perkLflSpawnInvis = perkLflSpawnInvis;
+	public void setPerkFxEnder(int perkFxEnder) {
+		this.perkFxEnder = perkFxEnder;
 	}
 
-	public int getPerkTrailWater() {
-		return perkTrailWater;
+	public int getPerkFxFireScarf() {
+		return perkFxFireScarf;
 	}
 
-	public void setPerkTrailWater(int perkTrailWater) {
-		this.perkTrailWater = perkTrailWater;
+	public void setPerkFxFireScarf(int perkFxFireScarf) {
+		this.perkFxFireScarf = perkFxFireScarf;
 	}
 
-	public int getPerkTrailCloud() {
-		return perkTrailCloud;
+	public int getPerkFxFireTrail() {
+		return perkFxFireTrail;
 	}
 
-	public void setPerkTrailCloud(int perkTrailCloud) {
-		this.perkTrailCloud = perkTrailCloud;
+	public void setPerkFxFireTrail(int perkFxFireTrail) {
+		this.perkFxFireTrail = perkFxFireTrail;
 	}
 
-	public int getPerkTrailMystic() {
-		return perkTrailMystic;
+	public int getPerkFxHeartScarf() {
+		return perkFxHeartScarf;
 	}
 
-	public void setPerkTrailMystic(int perkTrailMystic) {
-		this.perkTrailMystic = perkTrailMystic;
+	public void setPerkFxHeartScarf(int perkFxHeartScarf) {
+		this.perkFxHeartScarf = perkFxHeartScarf;
 	}
 
-	public int getPerkTrailStar() {
-		return perkTrailStar;
+	public int getPerkFxHeartTrail() {
+		return perkFxHeartTrail;
 	}
 
-	public void setPerkTrailStar(int perkTrailStar) {
-		this.perkTrailStar = perkTrailStar;
+	public void setPerkFxHeartTrail(int perkFxHeartTrail) {
+		this.perkFxHeartTrail = perkFxHeartTrail;
 	}
 
-	public int getPerkTrailFlame() {
-		return perkTrailFlame;
+	public int getPerkFxKnowledge() {
+		return perkFxKnowledge;
 	}
 
-	public void setPerkTrailFlame(int perkTrailFlame) {
-		this.perkTrailFlame = perkTrailFlame;
+	public void setPerkFxKnowledge(int perkFxKnowledge) {
+		this.perkFxKnowledge = perkFxKnowledge;
 	}
 
-	public int getPerkTrailBlood() {
-		return perkTrailBlood;
+	public int getPerkFxSuperchicken() {
+		return perkFxSuperchicken;
 	}
 
-	public void setPerkTrailBlood(int perkTrailBlood) {
-		this.perkTrailBlood = perkTrailBlood;
+	public void setPerkFxSuperchicken(int perkFxSuperchicken) {
+		this.perkFxSuperchicken = perkFxSuperchicken;
 	}
 
-	public int getPerkTrailHeart() {
-		return perkTrailHeart;
+	public int getPerkFxBlood() {
+		return perkFxBlood;
 	}
 
-	public void setPerkTrailHeart(int perkTrailHeart) {
-		this.perkTrailHeart = perkTrailHeart;
+	public void setPerkFxBlood(int perkFxBlood) {
+		this.perkFxBlood = perkFxBlood;
 	}
+
 }

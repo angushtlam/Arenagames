@@ -1,10 +1,11 @@
 package me.taur.arenagames.ffa;
 
+import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -56,6 +57,7 @@ public class FfaKitSelectorListener implements Listener {
 		
 		if (r.getRoomType() == RoomType.FFA) { // If the player is in a FFA room.
 			FfaUtil.ffaKitMenu.open(p);
+			p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1.0F, 0.3F);
 			return;
 		}
 		

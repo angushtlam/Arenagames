@@ -57,7 +57,7 @@ public class PlayerProfile {
 						 "\u258b  Alphacash: " + data.getCash() + ChatColor.RESET + "\n" +
 						 "\u258f   Lifetime AC.: " + data.getCashLifetime() + ChatColor.RESET + "\n" +
 						 "\n" +
-						 "\u258b " + "USD Spent: $" + moneyspent);
+						 "\u258b " + "USD Spent: " + moneyspent);
 				
 			}	
 			
@@ -84,7 +84,7 @@ public class PlayerProfile {
 					 "\u258b " + "Ngts Obt'd.: " + data.getLflCurrencyEarned());
 			
 		} else {
-			page.add(ChatColor.ITALIC + "Error loading PlayerData.");
+			page.add("\n\n\n\n" + ChatColor.ITALIC + " Loading PlayerData...");
 		}
 		
 		return page;

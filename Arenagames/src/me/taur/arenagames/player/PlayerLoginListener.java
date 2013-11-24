@@ -1,7 +1,8 @@
-package me.taur.arenagames.room;
+package me.taur.arenagames.player;
 
 import me.taur.arenagames.Config;
-import me.taur.arenagames.util.InvUtil;
+import me.taur.arenagames.item.InvUtil;
+import me.taur.arenagames.perk.PerkEffect;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -16,7 +17,7 @@ public class PlayerLoginListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void playerLoggedIn(PlayerJoinEvent evt) {
 		Player p = evt.getPlayer();
-		evt.setJoinMessage(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + p.getName() + " has signed onto the server.");
+		evt.setJoinMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + p.getName() + " has signed onto the server.");
 		
 		InvUtil.setLobbyInventory(p);
 		
@@ -34,6 +35,10 @@ public class PlayerLoginListener implements Listener {
 	public void playerLoggedOff(PlayerQuitEvent evt) {
 		Player p = evt.getPlayer();
 		evt.setQuitMessage(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + p.getName() + " has signed off the server.");
+		
+		// Remove stored player.
+		PerkEffect.MENU_STORE.remove(p);
+		PerkEffect.ACTIVE_EFFECT_PERK.remove(p);
 		
 	}
 }

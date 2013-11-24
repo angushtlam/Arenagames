@@ -1,10 +1,11 @@
-package me.taur.arenagames.lfl;
+package me.taur.arenagames.perk;
 
 import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.RoomType;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,7 +14,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class LflKitSelectorListener implements Listener {
+public class PerkSelectorListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void kitSelector(PlayerInteractEvent evt) {
 		Action a = evt.getAction();
@@ -31,35 +32,30 @@ public class LflKitSelectorListener implements Listener {
 		}
 		
 		String im = i.getItemMeta().getDisplayName();
-		String kitsel = InvUtil.getKitSelector().getItemMeta().getDisplayName();
+		String perksel = InvUtil.getPerkItem().getItemMeta().getDisplayName();
 		
-		if (im == null || kitsel == null) {
+		if (im == null || perksel == null) {
 			return;
 		}
 		
-		if (!im.equals(kitsel)) { // Make sure the item they're holding is the kit item.
+		if (!im.equals(perksel)) { // Make sure the item they're holding is the kit item.
 			return;
 		}
 		
 		Player p = evt.getPlayer();
-		if (!Room.PLAYERS.containsKey(p)) { // If the player is not in a game and has the kit selector.
-			p.getInventory().removeItem(i); // Remove it
+		if (Room.PLAYERS.containsKey(p)) { // If the player is in a game and has the perk selector.
+			if (Room.ROOMS.get(Room.PLAYERS.get(p)).isGameInProgress()) {
+				p.getInventory().removeItem(i); // Remove it
+			} else {
+				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You cannot change perks while in queue.");
+			}
+			
 			return;
 			
 		}
 		
-		Room r = Room.ROOMS.get(Room.PLAYERS.get(p));
-		
-		if (r == null) { // If the room doesn't exist
-			p.getInventory().removeItem(i); // Remove it
-			return;
-			
-		}
-		
-		if (r.getRoomType() == RoomType.LFL) { // If the player is in a FFA room.
-			LflUtil.lflKitMenu.open(p);
-			return;
-			
-		}
+		Perk.perkMenu.open(p);
+		p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1.0F, 0.3F);
+
 	}
 }

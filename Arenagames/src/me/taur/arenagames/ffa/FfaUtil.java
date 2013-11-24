@@ -32,9 +32,9 @@ public class FfaUtil {
 		}
 		
 		final int kitamt = FfaConfig.getKits().getKeys(false).size();
-		int lines = ((kitamt / 9) + 1) * 9; // Gets how many lines the plugin needs.
+		int box = ((kitamt / 9) + 1) * 9; // Gets how many box the plugin needs.
 		
-		ffaKitMenu = new IconMenu("Select A Kit", lines, new IconMenu.OptionClickEventHandler() {
+		ffaKitMenu = new IconMenu("Select A Kit", box, new IconMenu.OptionClickEventHandler() {
             @Override
             public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
                 Player p = menuevt.getPlayer();

@@ -1,8 +1,8 @@
 package me.taur.arenagames.ffa;
 
 import me.taur.arenagames.Arenagames;
+import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.ParticleEffect;
 
 import org.bukkit.Bukkit;
@@ -64,19 +64,16 @@ public class FfaSpawnManager {
 		
 	}
 	
-	public static void respawn(Player p, Location tp) {
+	public static void respawn(final Player p, final Location tp) {
 		kill(p);
 		
-		// Have to put a delay to prevent ConcurrentModificationExeception
-		final Player pl = p; // Finalize variables
-		final Location loc = tp;
 		Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
 		    public void run() {
-		    	if (Room.PLAYERS.get(pl) != null) {
-		    		spawn(pl, loc);
+		    	if (Room.PLAYERS.get(p) != null) {
+		    		spawn(p, tp);
 		    	}
 		    }
-		}, 40L);
+		}, 40L); // Spawn in 2 seconds.
 		
 	}
 }

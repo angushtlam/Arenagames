@@ -9,10 +9,10 @@ import java.util.TreeSet;
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.item.CustomItem;
+import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.player.PlayerData;
 import me.taur.arenagames.player.Premium;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
@@ -338,6 +338,8 @@ public class FfaRoom extends Room {
 			c = "died by parried damage";
 		} else if (cause.equals(DamageCause.WITHER)) {
 			c = "withered away";
+		} else if (cause.equals(DamageCause.VOID)) {
+			c = "fell into the void";
 		} else {
 			c = "died";
 		}

@@ -92,7 +92,7 @@ public class CustomPotion {
 		pm.addCustomEffect(effect, true);
 		pm.setMainEffect(effect.getType());
 		
-		PotionEffect effect2 = new PotionEffect(PotionEffectType.SLOW, 4 * 20, 1, true);
+		PotionEffect effect2 = new PotionEffect(PotionEffectType.SLOW, 4 * 20, 2, true);
 		pm.addCustomEffect(effect2, true);
 		
 		i.setItemMeta(pm);

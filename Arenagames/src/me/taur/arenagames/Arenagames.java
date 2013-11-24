@@ -9,6 +9,8 @@ import me.taur.arenagames.ffa.FfaPlayerListener;
 import me.taur.arenagames.ffa.FfaRoomListener;
 import me.taur.arenagames.ffa.FfaSignListener;
 import me.taur.arenagames.ffa.FfaUtil;
+import me.taur.arenagames.fix.ArrowFix;
+import me.taur.arenagames.fix.TeleportFix;
 import me.taur.arenagames.item.CustomItemListener;
 import me.taur.arenagames.item.CustomItemUtil;
 import me.taur.arenagames.lfl.LflDeathListener;
@@ -17,13 +19,17 @@ import me.taur.arenagames.lfl.LflPlayerListener;
 import me.taur.arenagames.lfl.LflRoomListener;
 import me.taur.arenagames.lfl.LflSignListener;
 import me.taur.arenagames.lfl.LflUtil;
+import me.taur.arenagames.perk.Perk;
+import me.taur.arenagames.perk.PerkSelectorListener;
 import me.taur.arenagames.player.PlayerCommand;
 import me.taur.arenagames.player.PlayerDataListener;
+import me.taur.arenagames.player.PlayerLoginListener;
 import me.taur.arenagames.player.PlayerProfileListener;
-import me.taur.arenagames.room.PlayerLoginListener;
 import me.taur.arenagames.room.RoomCommand;
 import me.taur.arenagames.room.SignCreateListener;
 import me.taur.arenagames.room.SignDestroyListener;
+import me.taur.arenagames.shop.Shop;
+import me.taur.arenagames.shop.ShopSignListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -50,14 +56,23 @@ public class Arenagames extends JavaPlugin {
 		regEvent(new PlayerLoginListener());
 		regEvent(new SignCreateListener());
 		regEvent(new SignDestroyListener());
+		
 		regEvent(new PlayerDataListener());
 		regEvent(new PlayerProfileListener());
-		Scheduler.start();
+		
+		regEvent(new ShopSignListener());
+		Shop.enable();
+		
+		regEvent(new PerkSelectorListener());
+		Perk.enable();
 		
 		regEvent(new CustomItemListener());
-		
 		CustomItemUtil.enable();
 		
+		regEvent(new ArrowFix());
+		regEvent(new TeleportFix());
+		
+		Scheduler.start();
 	}
 
 	@Override

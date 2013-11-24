@@ -1,10 +1,11 @@
 package me.taur.arenagames.player;
 
 import me.taur.arenagames.Arenagames;
-import me.taur.arenagames.util.InvUtil;
+import me.taur.arenagames.item.InvUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -56,8 +57,8 @@ public class PlayerProfileListener implements Listener {
 			}, 120L);
 			
 		} else {
+			p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1.0F, 0.3F); // Play sound only on successful opening.
 			PlayerProfile.READ.remove(p); // If they are already reading, remove the player so the next time they read, it has to be reset again.
 		}
-		
 	}
 }

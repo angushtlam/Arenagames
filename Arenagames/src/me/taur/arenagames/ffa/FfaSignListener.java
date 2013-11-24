@@ -1,9 +1,9 @@
 package me.taur.arenagames.ffa;
 
 import me.taur.arenagames.Config;
+import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.player.Premium;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.InvUtil;
 import me.taur.arenagames.util.ParticleEffect;
 import me.taur.arenagames.util.RoomType;
 

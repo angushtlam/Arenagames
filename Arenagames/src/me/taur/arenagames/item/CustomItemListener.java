@@ -7,6 +7,7 @@ import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -66,7 +67,7 @@ public class CustomItemListener implements Listener {
 			}
 			
 			p.setFoodLevel(p.getFoodLevel() - 8);
-			SpellUtil.forceKnockbackZone(p, 10, -7.0F, 5.0F, 3.0F, 7.0F);
+			SpellUtil.forceKnockbackZone(p, Sound.CLICK, 8, -6.0F, 4.0F, 2.0F, 1.0F);
 			p.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.ITALIC + "You used Command: Vacuum. (22s cooldown)");
 			CustomItem.COMMAND_VACUUM_TIMER.put(p, 22);
 			return;

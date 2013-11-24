@@ -50,7 +50,7 @@ public class CustomItem {
 		
 	}
 	
-	public static void startTimer() {
+	public static void run() {
 		if (!COMMAND_VACUUM_TIMER.isEmpty()) {
 			for (Player p : COMMAND_VACUUM_TIMER.keySet()) {
 				if (p == null) { // Null check.

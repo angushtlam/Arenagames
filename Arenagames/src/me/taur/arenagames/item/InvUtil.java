@@ -1,8 +1,7 @@
-package me.taur.arenagames.util;
+package me.taur.arenagames.item;
 
 import java.util.Arrays;
 
-import me.taur.arenagames.item.CustomItemUtil;
 import me.taur.arenagames.player.PlayerProfile;
 
 import org.bukkit.ChatColor;
@@ -147,8 +146,18 @@ public class InvUtil {
 	public static ItemStack getProfileBook() {
 		ItemStack i = new ItemStack(Material.WRITTEN_BOOK, 1);
 		ItemMeta im = i.getItemMeta();
-		im.setDisplayName(ChatColor.GOLD + "Profile Book");
+		im.setDisplayName(ChatColor.GOLD + "Profile");
 		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to check your profile."));
+		i.setItemMeta(im);
+		return i;
+		
+	}
+	
+	public static ItemStack getPerkItem() {
+		ItemStack i = new ItemStack(Material.ENCHANTED_BOOK, 1);
+		ItemMeta im = i.getItemMeta();
+		im.setDisplayName(ChatColor.BLUE + "Perks");
+		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to check your perks."));
 		i.setItemMeta(im);
 		return i;
 		
@@ -160,12 +169,15 @@ public class InvUtil {
 		inv.setArmorContents(null);
 		inv.clear();
 		
-		ItemStack i = InvUtil.getProfileBook();
-		BookMeta bm = (BookMeta) i.getItemMeta();
-		bm.setPages(PlayerProfile.bookInformation(p));
-		i.setItemMeta(bm);
+		ItemStack i0 = InvUtil.getProfileBook();
+		BookMeta bm0 = (BookMeta) i0.getItemMeta();
+		bm0.setPages(PlayerProfile.bookInformation(p));
+		i0.setItemMeta(bm0);
 		
-		inv.setItem(0, i);
+		inv.setItem(0, i0);
+		
+		ItemStack i1 = InvUtil.getPerkItem();
+		inv.setItem(1, i1);
 		updatePlayerInv(p);
 		
 	}
