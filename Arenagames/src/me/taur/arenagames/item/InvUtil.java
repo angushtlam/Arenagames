@@ -143,7 +143,7 @@ public class InvUtil {
 		
 	}
 
-	public static ItemStack getProfileBook() {
+	public static ItemStack getProfileItem() {
 		ItemStack i = new ItemStack(Material.WRITTEN_BOOK, 1);
 		ItemMeta im = i.getItemMeta();
 		im.setDisplayName(ChatColor.GOLD + "Profile");
@@ -169,7 +169,7 @@ public class InvUtil {
 		inv.setArmorContents(null);
 		inv.clear();
 		
-		ItemStack i0 = InvUtil.getProfileBook();
+		ItemStack i0 = InvUtil.getProfileItem();
 		BookMeta bm0 = (BookMeta) i0.getItemMeta();
 		bm0.setPages(PlayerProfile.bookInformation(p));
 		i0.setItemMeta(bm0);

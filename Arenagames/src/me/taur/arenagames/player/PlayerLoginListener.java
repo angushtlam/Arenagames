@@ -3,12 +3,14 @@ package me.taur.arenagames.player;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.perk.PerkEffect;
+import me.taur.arenagames.room.Room;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
@@ -39,6 +41,26 @@ public class PlayerLoginListener implements Listener {
 		// Remove stored player.
 		PerkEffect.MENU_STORE.remove(p);
 		PerkEffect.ACTIVE_EFFECT_PERK.remove(p);
+		
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void playerDropItemInSpawn(PlayerDropItemEvent evt) {
+		Player p = evt.getPlayer();
+		
+		if (Room.PLAYERS.containsKey(p)) {
+			return;
+		}
+		
+		String name = evt.getItemDrop().getItemStack().getItemMeta().getDisplayName();
+		
+		if (name.equalsIgnoreCase(InvUtil.getProfileItem().getItemMeta().getDisplayName())) {
+			evt.setCancelled(true);
+		}
+		
+		if (name.equalsIgnoreCase(InvUtil.getPerkItem().getItemMeta().getDisplayName())) {
+			evt.setCancelled(true);
+		}
 		
 	}
 }

@@ -27,7 +27,7 @@ public class PlayerProfileListener implements Listener {
 		}
 		
 		String im = i.getItemMeta().getDisplayName();
-		String prof = InvUtil.getProfileBook().getItemMeta().getDisplayName();
+		String prof = InvUtil.getProfileItem().getItemMeta().getDisplayName();
 		
 		if (im == null || prof == null) {
 			return;
@@ -39,7 +39,7 @@ public class PlayerProfileListener implements Listener {
 		
 		final Player p = evt.getPlayer();
 		
-		ItemStack book = InvUtil.getProfileBook();
+		ItemStack book = InvUtil.getProfileItem();
 		BookMeta b = (BookMeta) book.getItemMeta();
 		b.setPages(PlayerProfile.bookInformation(p));
 		book.setItemMeta(b);
