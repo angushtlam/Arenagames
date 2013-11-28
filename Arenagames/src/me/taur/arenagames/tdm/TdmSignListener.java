@@ -32,7 +32,7 @@ public class TdmSignListener implements Listener {
 		}
 
 		Sign sign = (Sign) b.getState();
-		if (sign.getLine(0).contains("[TDM]")) {
+		if (sign.getLine(0).contains("[" + RoomType.TDM.getSign() + "]")) {
 			Player p = evt.getPlayer();
 
 			if (!p.hasPermission("arenagames.join")) {

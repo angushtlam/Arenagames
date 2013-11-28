@@ -450,7 +450,7 @@ public class FfaRoom extends Room {
 				}
 				
 				Sign sign = (Sign) b.getState();
-				sign.setLine(0, ChatColor.DARK_RED + "" + ChatColor.BOLD + "[FFA]");
+				sign.setLine(0, RoomType.FFA.getColor() + "" + ChatColor.BOLD + "[FFA]");
 				sign.setLine(1, (this.isPremium() ? ChatColor.GOLD + "" : "") + this.getRoomId());
 				sign.setLine(2, ChatColor.ITALIC + "" + this.getPlayersInRoom() + "/" + Config.getPlayerLimit(RoomType.FFA));
 				

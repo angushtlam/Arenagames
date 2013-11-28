@@ -1,7 +1,8 @@
 package me.taur.arenagames.room;
 
+import me.taur.arenagames.crk.CrkRoom;
 import me.taur.arenagames.ffa.FfaRoom;
-import me.taur.arenagames.lfl.LflRoom;
+import me.taur.arenagames.tdm.TdmRoom;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
@@ -48,7 +49,7 @@ public class SignDestroyListener implements Listener {
 			}
 		}
 		
-		if (l0.equals("[Lifeline]")) {
+		if (l0.equals("[TDM]")) {
 			if (!p.hasPermission("arenagames.admin")) {
 				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
 				evt.setCancelled(true);
@@ -62,8 +63,30 @@ public class SignDestroyListener implements Listener {
 			}
 			
 			Room r = Room.ROOMS.get(l1);
-			if (r.getRoomType() == RoomType.LFL) {
-				LflRoom room = (LflRoom) r;
+			if (r.getRoomType() == RoomType.TDM) {
+				TdmRoom room = (TdmRoom) r;
+				room.updateSigns();
+				
+				p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have removed a queue sign for " + r.getRoomId() + ".");
+			}
+		}
+		
+		if (l0.equals("[Cranked]")) {
+			if (!p.hasPermission("arenagames.admin")) {
+				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
+				evt.setCancelled(true);
+				return;
+				
+			}
+			
+			String l1 = ChatColor.stripColor(sign.getLine(1).toLowerCase());
+			if (!Room.ROOMS.containsKey(l1)) {
+				return;
+			}
+			
+			Room r = Room.ROOMS.get(l1);
+			if (r.getRoomType() == RoomType.CRK) {
+				CrkRoom room = (CrkRoom) r;
 				room.updateSigns();
 				
 				p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have removed a queue sign for " + r.getRoomId() + ".");

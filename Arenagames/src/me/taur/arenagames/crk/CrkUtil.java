@@ -1,4 +1,4 @@
-package me.taur.arenagames.lfl;
+package me.taur.arenagames.crk;
 
 import java.util.HashMap;
 
@@ -13,28 +13,28 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class LflUtil {
-	public static IconMenu lflKitMenu = null;
+public class CrkUtil {
+	public static IconMenu kitMenu = null;
 	
 	public static void enable() {
-		for (int i = 0; i < Config.getNormalRooms(RoomType.LFL); i++) {
-			String roomId = "lfl-n" + i;
-			Room.ROOMS.put(roomId, new LflRoom(roomId));
+		for (int i = 1; i < Config.getNormalRooms(RoomType.CRK) + 1; i++) {
+			String roomId = "crk-n" + i;
+			Room.ROOMS.put(roomId, new CrkRoom(roomId));
 			
 		}
 		
-		for (int i = 0; i < Config.getPremiumRooms(RoomType.LFL); i++) {
-			String roomId = "lfl-p" + i;
-			Room.ROOMS.put(roomId, new LflRoom(roomId));
+		for (int i = 1; i < Config.getPremiumRooms(RoomType.CRK) + 1; i++) {
+			String roomId = "crk-p" + i;
+			Room.ROOMS.put(roomId, new CrkRoom(roomId));
 			Room room = Room.ROOMS.get(roomId);
 			room.setPremium(true);
 			
 		}
 		
-		final int kitamt = LflConfig.getKits().getKeys(false).size();
+		final int kitamt = CrkConfig.getKits().getKeys(false).size();
 		int lines = ((kitamt / 9) + 1) * 9; // Gets how many lines the plugin needs.
 		
-		lflKitMenu = new IconMenu("Select A Kit", lines, new IconMenu.OptionClickEventHandler() {
+		kitMenu = new IconMenu("Select A Kit", lines, new IconMenu.OptionClickEventHandler() {
             @Override
             public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
                 Player p = menuevt.getPlayer();
@@ -53,17 +53,17 @@ public class LflUtil {
                 	
                 }
                 
-                if (r.getRoomType() != RoomType.LFL) {
+                if (r.getRoomType() != RoomType.CRK) {
                 	menuevt.setWillClose(true);
                 	return;
                 	
                 }
                 
-                LflRoom room = (LflRoom) r;
+                CrkRoom room = (CrkRoom) r;
                 String kitname = ChatColor.stripColor(menuevt.getName()); // Clear colors because we add colors in the menu name.
                 int id = menuevt.getPosition();
                 
-                if (LflConfig.isKitPremium(id)) {
+                if (CrkConfig.isKitPremium(id)) {
         			if (!Premium.isPremium(p)) {
         				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You don't have permission to use this kit.");
         				menuevt.setWillClose(true);
@@ -72,7 +72,7 @@ public class LflUtil {
         			}
         		}
                 
-                if (LflConfig.getKitName(id).equals(kitname)) {
+                if (CrkConfig.getKitName(id).equals(kitname)) {
                 	p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have selected the " + kitname + " kit for this queue round.");
         			
         			HashMap<Player, Integer> kit = room.getKit();
@@ -91,18 +91,18 @@ public class LflUtil {
         }, Arenagames.plugin);
 		
 		for (int i = 0; i < kitamt; i++) {
-			if (LflConfig.getKitName(i) != null) { // Make sure the kit exists. It'll leave spaces for the kits that are nameless.
-				String info = LflConfig.getKitDescription(i);
+			if (CrkConfig.getKitName(i) != null) { // Make sure the kit exists. It'll leave spaces for the kits that are nameless.
+				String info = CrkConfig.getKitDescription(i);
 				String premium = ChatColor.GREEN + "Normal Kit";
 				
-				if (LflConfig.isKitPremium(i)) {
+				if (CrkConfig.isKitPremium(i)) {
 					premium = ChatColor.GOLD + "Premium Kit";
 					
 				}
 				
-				String name = ChatColor.RESET + "" + ChatColor.BOLD + LflConfig.getKitName(i);
+				String name = ChatColor.RESET + "" + ChatColor.BOLD + CrkConfig.getKitName(i);
 				String lore = ChatColor.GRAY + "" + ChatColor.ITALIC + info;
-				lflKitMenu.setOption(i, new ItemStack(LflConfig.getKitMenuIcon(i), 1), name, premium, lore);
+				kitMenu.setOption(i, new ItemStack(CrkConfig.getKitMenuIcon(i), 1), name, premium, lore);
 				
 			}
 		}

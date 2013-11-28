@@ -3,6 +3,12 @@ package me.taur.arenagames;
 import me.taur.arenagames.admin.CashCommand;
 import me.taur.arenagames.admin.CurrencyCommand;
 import me.taur.arenagames.admin.PremiumCommand;
+import me.taur.arenagames.crk.CrkDeathListener;
+import me.taur.arenagames.crk.CrkKitSelectorListener;
+import me.taur.arenagames.crk.CrkPlayerListener;
+import me.taur.arenagames.crk.CrkRoomListener;
+import me.taur.arenagames.crk.CrkSignListener;
+import me.taur.arenagames.crk.CrkUtil;
 import me.taur.arenagames.ffa.FfaDeathListener;
 import me.taur.arenagames.ffa.FfaKitSelectorListener;
 import me.taur.arenagames.ffa.FfaPlayerListener;
@@ -13,12 +19,6 @@ import me.taur.arenagames.fix.ArrowFix;
 import me.taur.arenagames.fix.TeleportFix;
 import me.taur.arenagames.item.CustomItemListener;
 import me.taur.arenagames.item.CustomItemUtil;
-import me.taur.arenagames.lfl.LflDeathListener;
-import me.taur.arenagames.lfl.LflKitSelectorListener;
-import me.taur.arenagames.lfl.LflPlayerListener;
-import me.taur.arenagames.lfl.LflRoomListener;
-import me.taur.arenagames.lfl.LflSignListener;
-import me.taur.arenagames.lfl.LflUtil;
 import me.taur.arenagames.perk.Perk;
 import me.taur.arenagames.perk.PerkSelectorListener;
 import me.taur.arenagames.player.PlayerCommand;
@@ -97,9 +97,9 @@ public class Arenagames extends JavaPlugin {
 				
 			}
 			
-			if (gm[i].contains("lfl")) {
-				LflUtil.enable();
-				regLfl();
+			if (gm[i].contains("crk")) {
+				CrkUtil.enable();
+				regCrk();
 				continue;
 				
 			}
@@ -131,15 +131,14 @@ public class Arenagames extends JavaPlugin {
 		
 	}
 	
-	private static void regLfl() {
-		regEvent(new LflDeathListener());
-		regEvent(new LflKitSelectorListener());
-		regEvent(new LflPlayerListener());
-		regEvent(new LflSignListener());
-		regEvent(new LflRoomListener());
+	private static void regCrk() {
+		regEvent(new CrkDeathListener());
+		regEvent(new CrkKitSelectorListener());
+		regEvent(new CrkPlayerListener());
+		regEvent(new CrkSignListener());
+		regEvent(new CrkRoomListener());
 		
 	}
-	
 
 	private static void regTdm() {
 		regEvent(new TdmDeathListener());

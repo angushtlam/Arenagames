@@ -17,13 +17,13 @@ public class FfaUtil {
 	public static IconMenu kitMenu = null;
 	
 	public static void enable() {
-		for (int i = 0; i < Config.getNormalRooms(RoomType.FFA); i++) {
+		for (int i = 1; i < Config.getNormalRooms(RoomType.FFA) + 1; i++) {
 			String roomId = "ffa-n" + i;
 			Room.ROOMS.put(roomId, new FfaRoom(roomId));
 			
 		}
 		
-		for (int i = 0; i < Config.getPremiumRooms(RoomType.FFA); i++) {
+		for (int i = 1; i < Config.getPremiumRooms(RoomType.FFA) + 1; i++) {
 			String roomId = "ffa-p" + i;
 			Room.ROOMS.put(roomId, new FfaRoom(roomId));
 			Room room = Room.ROOMS.get(roomId);

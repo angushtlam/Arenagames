@@ -1,4 +1,4 @@
-package me.taur.arenagames.lfl;
+package me.taur.arenagames.crk;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -16,14 +16,14 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-public class LflActive {
+public class CrkActive {
 	public static void run() {
 		// Get each room in stored Rooms.
 		for (String s : Room.ROOMS.keySet()) {
 			Room r = Room.ROOMS.get(s);
 
-			if (r.getRoomType() == RoomType.LFL) {
-				LflRoom room = (LflRoom) r;
+			if (r.getRoomType() == RoomType.CRK) {
+				CrkRoom room = (CrkRoom) r;
 				
 				room.updateScoreboard();
 
@@ -117,7 +117,7 @@ public class LflActive {
 						}
 						
 						if (waitcount == 0) { // Game start
-							ConfigurationSection cs = LflConfig.get().getConfigurationSection("lfl.maps");
+							ConfigurationSection cs = CrkConfig.getData().getConfigurationSection("lfl.maps");
 							if (cs != null) {
 								Set<String> maps = cs.getKeys(false);
 
@@ -139,16 +139,16 @@ public class LflActive {
 
 										// Restart the wait timer.
 										int needed = room.getPlayersInRoom();
-										if (needed > Config.getMinPlayersInWait(RoomType.LFL)) {
+										if (needed > Config.getMinPlayersInWait(RoomType.CRK)) {
 											if (!room.isGameInWaiting()) {
-												room.waitStartMessage(RoomType.LFL);
+												room.waitStartMessage(RoomType.CRK);
 												room.setGameInWaiting(true);
-												room.setWaitTimer(Config.getWaitTimer(RoomType.LFL));
+												room.setWaitTimer(Config.getWaitTimer(RoomType.CRK));
 												room.updateSigns();
 
 											}
 										} else {
-											r.waitCancelledMessage(RoomType.LFL);
+											r.waitCancelledMessage(RoomType.CRK);
 										}
 
 										breakloop = true;
@@ -167,14 +167,14 @@ public class LflActive {
 											String mapname = ((String) maps.toArray()[map]);
 
 											if (premium) { // If the queue is premium
-												if (!LflConfig.canPremiumPlayMap(mapname)) { // If the premium room cannot play the map
+												if (!CrkConfig.canPremiumPlayMap(mapname)) { // If the premium room cannot play the map
 													alreadyused.add(map);
 													tries++;
 													continue;
 
 												}
 											} else {
-												if (!LflConfig.canNormalPlayMap(mapname)) { // If the normal room cannot play the map
+												if (!CrkConfig.canNormalPlayMap(mapname)) { // If the normal room cannot play the map
 													alreadyused.add(map);
 													tries++;
 													continue;
@@ -184,8 +184,8 @@ public class LflActive {
 
 											boolean match = false; // Make sure arenas are not used by more than 1 queue
 											for (Room tryroom : Room.ROOMS.values()) {
-												if (tryroom.getRoomType() == RoomType.LFL) {
-													LflRoom troom = (LflRoom) tryroom;
+												if (tryroom.getRoomType() == RoomType.CRK) {
+													CrkRoom troom = (CrkRoom) tryroom;
 													if (troom.getMapName() == maps.toArray()[map]) {
 														match = true;
 

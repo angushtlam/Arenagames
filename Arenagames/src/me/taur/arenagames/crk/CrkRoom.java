@@ -1,4 +1,4 @@
-package me.taur.arenagames.lfl;
+package me.taur.arenagames.crk;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,7 +29,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class LflRoom extends Room {
+public class CrkRoom extends Room {
 	private String mapname;
 	private HashMap<String, Integer> pointboard;
 	private HashMap<Player, Integer> playertimer;
@@ -37,13 +37,13 @@ public class LflRoom extends Room {
 	
 	private int playerAlive;
 	
-	public LflRoom(String roomId) {
+	public CrkRoom(String roomId) {
 		this.pointboard = new HashMap<String, Integer>();
 		this.kit = new HashMap<Player, Integer>();
 		this.playertimer = new HashMap<Player, Integer>();
 		
 		this.setRoomId(roomId);
-		this.setRoomType(RoomType.LFL);
+		this.setRoomType(RoomType.CRK);
 		this.createScoreboard();
 		
 	}
@@ -130,13 +130,13 @@ public class LflRoom extends Room {
 	}
 	
 	public void giveKit(Player p) {
-		String kitname = LflConfig.getKitName(this.kit.get(p));
+		String kitname = CrkConfig.getKitName(this.kit.get(p));
 		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been given a " + kitname + " kit.");
 		
 		PlayerInventory inv = p.getInventory();
 		int playerkit = this.kit.get(p); // Get what kit the player has.
 		
-		for (String item : LflConfig.getKitItems(playerkit)) {
+		for (String item : CrkConfig.getKitItems(playerkit)) {
 			ItemStack i = InvUtil.convertToItemStack(item); 
 
 			// Automatically set the player's armor if the item is an armor, and they don't have the armor on.
@@ -190,7 +190,7 @@ public class LflRoom extends Room {
 		PlayerInventory inv = p.getInventory();
 		int playerkit = this.kit.get(p); // Get what kit the player has.
 		
-		for (String item : LflConfig.getKitRefill(playerkit)) {
+		for (String item : CrkConfig.getKitRefill(playerkit)) {
 			ItemStack i = InvUtil.convertToItemStack(item); 
 
 			// Automatically set the player's armor if the item is an armor, and they don't have the armor on.
@@ -284,7 +284,7 @@ public class LflRoom extends Room {
 				if (p != null) {
 					if (PlayerData.isLoaded(p)) {
 						PlayerData data = PlayerData.get(p);
-						total = total + data.getLflRanking();
+						total = total + data.getCrkRanking();
 					}
 				}
 			}
@@ -301,7 +301,7 @@ public class LflRoom extends Room {
 	}
 	
 	public void crankPlayer(Player p) {
-		int reset = LflConfig.getCrankedTimer();
+		int reset = CrkConfig.getCrankedTimer();
 		int kill = 0;
 		
 		if (this.pointboard.get(p.getName()) != null) {
@@ -315,8 +315,8 @@ public class LflRoom extends Room {
 		
 		int potionstr = (kill / 3); // Perks increases every 3 kills
 		if (potionstr > 0) {
-			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, LflConfig.getCrankedTimer() * 20, potionstr));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, LflConfig.getCrankedTimer() * 20, potionstr));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, CrkConfig.getCrankedTimer() * 20, potionstr));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, CrkConfig.getCrankedTimer() * 20, potionstr));
 			
 		}
 		
@@ -332,7 +332,7 @@ public class LflRoom extends Room {
 		this.getTimer().put(p, -1);
 		this.setPlayerAlive(this.getPlayerAlive() - 1);
 		
-		LflSpawnManager.kill(p);
+		CrkSpawnManager.kill(p);
 		InvUtil.clearPlayerInv(p);
 		
 	}
@@ -362,7 +362,7 @@ public class LflRoom extends Room {
 			data = new PlayerData(p);
 		}
 		
-		data.setLflTotalDeaths(data.getLflTotalDeaths() + 1); // Increase death count
+		data.setCrkTotalDeaths(data.getCrkTotalDeaths() + 1); // Increase death count
 		
 		int kills = this.pointboard.get(p.getName());
 		
@@ -388,7 +388,7 @@ public class LflRoom extends Room {
 			data = new PlayerData(killer);
 		}
 		
-		data.setLflTotalKills(data.getLflTotalKills() + 1); // Increase kill count
+		data.setCrkTotalKills(data.getCrkTotalKills() + 1); // Increase kill count
 		
 		int kill = this.pointboard.get(killer.getName()) + 1;
 		killer.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You are on a " + kill + " kill kill-streak.");
@@ -452,10 +452,10 @@ public class LflRoom extends Room {
 				p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- THE GAME HAS STARTED! ---");
 				p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "Map: " + this.getMapNameFancy() + " by " + this.getMapAuthor() + ".");
 				p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- -------------------- ---");
-				p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get a kill within " + LflConfig.getCrankedTimer() + " seconds or you'll die!");
+				p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get a kill within " + CrkConfig.getCrankedTimer() + " seconds or you'll die!");
 				
 				if (!this.kit.containsKey(p)) { // If the player didn't pick a kit, give them a random one.
-					ConfigurationSection cs = LflConfig.getKits();
+					ConfigurationSection cs = CrkConfig.getKits();
 					int kits = cs.getKeys(false).size();
 					
 					Random rand = new Random();
@@ -480,23 +480,23 @@ public class LflRoom extends Room {
 				
 				InvUtil.clearPlayerInv(p);
 				
-				LflSpawnManager.spawn(p, LflConfig.getPossibleSpawnLocation(this));
+				CrkSpawnManager.spawn(p, CrkConfig.getPossibleSpawnLocation(this));
 				this.giveKit(p);
 				
 				this.pointboard.put(p.getName(), 0);
-				this.playertimer.put(p, LflConfig.getCrankedTimer());
+				this.playertimer.put(p, CrkConfig.getCrankedTimer());
 				this.setPlayerAlive(this.getPlayersInRoom());
 				
 			}
 		}
 		
 		this.updateSigns();
-		this.setCountdownTimer(Config.getCountdown(RoomType.LFL));
+		this.setCountdownTimer(Config.getCountdown(RoomType.CRK));
 		
 	}
 	
 	public void updateSigns() {
-		Location[] locs = LflConfig.getSignsStored(this.getRoomId());
+		Location[] locs = CrkConfig.getSignsStored(this.getRoomId());
 		Set<Location> signloc = new HashSet<Location>(); // Make a hashmap for convienence.
 		
 		if (locs != null) { // Make the Array a Set for now cuz it's convenient.
@@ -532,9 +532,9 @@ public class LflRoom extends Room {
 				}
 				
 				Sign sign = (Sign) b.getState();
-				sign.setLine(0, ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "[Lifeline]");
+				sign.setLine(0, RoomType.CRK.getColor() + "" + ChatColor.BOLD + "[" + RoomType.CRK.getSign() + "]");
 				sign.setLine(1, (this.isPremium() ? ChatColor.GOLD + "" : "") + this.getRoomId());
-				sign.setLine(2, ChatColor.ITALIC + "" + this.getPlayersInRoom() + "/" + Config.getPlayerLimit(RoomType.LFL));
+				sign.setLine(2, ChatColor.ITALIC + "" + this.getPlayersInRoom() + "/" + Config.getPlayerLimit(RoomType.CRK));
 				
 				String setl3 = ChatColor.GREEN + "Queue Open";
 				if (this.isGameInProgress()) {
@@ -555,7 +555,7 @@ public class LflRoom extends Room {
 					
 				}
 				
-				LflConfig.clearSignLocations(this.getRoomId());
+				CrkConfig.clearSignLocations(this.getRoomId());
 				
 				int i = 0;
 				if (locs != null) {
@@ -574,7 +574,7 @@ public class LflRoom extends Room {
 							continue;
 						}
 							
-						LflConfig.setSignLocation(this.getRoomId(), i, l);
+						CrkConfig.setSignLocation(this.getRoomId(), i, l);
 						i++;
 							
 					}
@@ -609,11 +609,11 @@ public class LflRoom extends Room {
 	}
 	
 	public String getMapNameFancy() {
-		return LflConfig.get().getString("lfl.maps." + this.getMapName() + ".info.map-name");
+		return CrkConfig.getData().getString("crk.maps." + this.getMapName() + ".info.map-name");
 	}
 	
 	public String getMapAuthor() {
-		return LflConfig.get().getString("lfl.maps." + this.getMapName() + ".info.author");
+		return CrkConfig.getData().getString("crk.maps." + this.getMapName() + ".info.author");
 	}
 	
 	public String getMapName() {

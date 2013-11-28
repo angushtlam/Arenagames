@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import me.taur.arenagames.util.GameMathUtil;
+import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -62,7 +63,7 @@ public class PlayerProfile {
 			}	
 			
 			page.add(FANCY_HEADING +
-					 ChatColor.DARK_RED + "" + ChatColor.BOLD + "   Free-For-All" + ChatColor.RESET + ChatColor.RESET + "\n" +
+					 RoomType.FFA.getColor() + "" + ChatColor.BOLD + "   Free-For-All" + ChatColor.RESET + ChatColor.RESET + "\n" +
 					 FANCY_HEADING +
 					 "\u258b " + "1st Place: " + data.getFfaGamesWon() + ChatColor.RESET + "\n" +
 					 "\u258f  " + "Games: " + data.getFfaGamesPlayed() + ChatColor.RESET + "\n" +
@@ -73,7 +74,7 @@ public class PlayerProfile {
 					 "\u258b " + "Ngts Obt'd.: " + data.getFfaCurrencyEarned());
 			
 			page.add(FANCY_HEADING +
-					 ChatColor.DARK_BLUE + "" + ChatColor.BOLD + " Team Deathmatch\n" + ChatColor.RESET + "" +
+					 RoomType.TDM.getColor() + "" + ChatColor.BOLD + " Team Deathmatch\n" + ChatColor.RESET + "" +
 					 FANCY_HEADING +
 					 "\u258b " + "1st Place: " + data.getTdmGamesWon() + ChatColor.RESET + "\n" +
 					 "\u258f  " + "Games: " + data.getTdmGamesPlayed() + ChatColor.RESET + "\n" +
@@ -84,15 +85,15 @@ public class PlayerProfile {
 					 "\u258b " + "Ngts Obt'd.: " + data.getTdmCurrencyEarned());
 			
 			page.add(FANCY_HEADING +
-					 ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "      Cranked\n" + ChatColor.RESET + "" +
+					 RoomType.CRK.getColor() + "" + ChatColor.BOLD + "      Cranked\n" + ChatColor.RESET + "" +
 					 FANCY_HEADING +
-					 "\u258b " + "1st Place: " + data.getLflGamesWon() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "Games: " + data.getLflGamesPlayed() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "Elo: " + data.getLflRanking() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "Record: " + data.getLflRecord() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "KDR: " + GameMathUtil.kdrCalculator(data.getLflTotalKills(), data.getLflTotalDeaths()) + ChatColor.RESET + "\n" +
+					 "\u258b " + "1st Place: " + data.getCrkGamesWon() + ChatColor.RESET + "\n" +
+					 "\u258f  " + "Games: " + data.getCrkGamesPlayed() + ChatColor.RESET + "\n" +
+					 "\u258f  " + "Elo: " + data.getCrkRanking() + ChatColor.RESET + "\n" +
+					 "\u258f  " + "Record: " + data.getCrkRecord() + ChatColor.RESET + "\n" +
+					 "\u258f  " + "KDR: " + GameMathUtil.kdrCalculator(data.getCrkTotalKills(), data.getCrkTotalDeaths()) + ChatColor.RESET + "\n" +
 					 "\n" +
-					 "\u258b " + "Ngts Obt'd.: " + data.getLflCurrencyEarned());
+					 "\u258b " + "Ngts Obt'd.: " + data.getCrkCurrencyEarned());
 			
 		} else {
 			page.add("\n\n\n\n" + ChatColor.ITALIC + " Loading PlayerData...");

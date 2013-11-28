@@ -17,13 +17,13 @@ public class TdmUtil {
 	public static IconMenu kitMenu = null;
 	
 	public static void enable() {
-		for (int i = 0; i < Config.getNormalRooms(RoomType.TDM); i++) {
+		for (int i = 1; i < Config.getNormalRooms(RoomType.TDM) + 1; i++) {
 			String roomId = "tdm-n" + i;
 			Room.ROOMS.put(roomId, new TdmRoom(roomId));
 			
 		}
 		
-		for (int i = 0; i < Config.getPremiumRooms(RoomType.TDM); i++) {
+		for (int i = 1; i < Config.getPremiumRooms(RoomType.TDM) + 1; i++) {
 			String roomId = "tdm-p" + i;
 			Room.ROOMS.put(roomId, new TdmRoom(roomId));
 			Room room = Room.ROOMS.get(roomId);

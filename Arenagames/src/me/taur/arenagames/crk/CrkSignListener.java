@@ -1,4 +1,4 @@
-package me.taur.arenagames.lfl;
+package me.taur.arenagames.crk;
 
 import me.taur.arenagames.Config;
 import me.taur.arenagames.ffa.FfaConfig;
@@ -19,7 +19,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.PlayerInventory;
 
-public class LflSignListener implements Listener {	
+public class CrkSignListener implements Listener {	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void joinRoomSign(PlayerInteractEvent evt) {
 		if (evt.getAction() != Action.RIGHT_CLICK_BLOCK) {
@@ -32,7 +32,7 @@ public class LflSignListener implements Listener {
 		}
 		
 		Sign sign = (Sign) b.getState();
-		if (sign.getLine(0).contains("[Lifeline]")) {		
+		if (sign.getLine(0).contains("[" + RoomType.CRK.getSign() + "]")) {		
 			Player p = evt.getPlayer();
 			
 			if (!p.hasPermission("arenagames.join")) {
@@ -45,7 +45,7 @@ public class LflSignListener implements Listener {
 			Room r = Room.ROOMS.get(l1.toLowerCase());
 			
 			if (r == null) {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "This sign points to a Lifeline queue that doesn\'t exist.");
+				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "This sign points to a Cranked queue that doesn\'t exist.");
 				return;
 				
 			}
@@ -60,8 +60,8 @@ public class LflSignListener implements Listener {
 				}
 			}
 			
-			if (r.getRoomType() != RoomType.LFL) {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "This sign points to an invalid Lifeline queue.");
+			if (r.getRoomType() != RoomType.CRK) {
+				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "This sign points to an invalid Cranked queue.");
 				return;
 				
 			}
@@ -92,7 +92,7 @@ public class LflSignListener implements Listener {
 				
 			}
 			
-			LflRoom room = (LflRoom) r;
+			CrkRoom room = (CrkRoom) r;
 			String roomId = room.getRoomId();
 			
 			Player[] other = room.getPlayers(); // Get players that are in the room before the player is added.
@@ -103,7 +103,7 @@ public class LflSignListener implements Listener {
 			room.updateScoreboard();
 			room.setPlayerScoreboard(p); // Add scoreboards to players
 			
-			p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You joined Lifeline queue " + roomId + ". ");
+			p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You joined Cranked queue " + roomId + ". ");
 			
 			if (other != null) { // Make sure it wasn't empty before the player joined.
 				for (Player pl : other) {
@@ -114,17 +114,17 @@ public class LflSignListener implements Listener {
 			}
 			
 			int needed = room.getPlayersInRoom();
-			if (needed > Config.getMinPlayersInWait(RoomType.LFL) - 1) {
+			if (needed > Config.getMinPlayersInWait(RoomType.CRK) - 1) {
 				if (!room.isGameInWaiting()) {
-					room.waitStartMessage(RoomType.LFL);
+					room.waitStartMessage(RoomType.CRK);
 					room.setGameInWaiting(true);
-					room.setWaitTimer(Config.getWaitTimer(RoomType.LFL));
+					room.setWaitTimer(Config.getWaitTimer(RoomType.CRK));
 				
 				} else {
-					room.waitStartMessage(p, RoomType.LFL);
+					room.waitStartMessage(p, RoomType.CRK);
 				}
 			} else {
-				room.waitCancelledMessage(RoomType.LFL);
+				room.waitCancelledMessage(RoomType.CRK);
 				room.setGameInWaiting(false);
 				
 			}

@@ -51,6 +51,7 @@ public class TdmSpawnManager {
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 3, 1));
 
 		p.teleport(tp); // Teleport player
+		p.setFallDistance(0);
 		purgeEffects(p);
 		
 	}

@@ -51,7 +51,7 @@ public class FfaSpawnManager {
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 3, 1));
 
 		p.teleport(tp); // Teleport player
-		p.setFallDistance(0F); // Prevent people from dying twice
+		p.setFallDistance(0); // Prevent people from dying twice
 		purgeEffects(p);
 		
 	}

@@ -1,6 +1,6 @@
 package me.taur.arenagames.item;
 
-import me.taur.arenagames.lfl.LflRoom;
+import me.taur.arenagames.crk.CrkRoom;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.ParticleEffect;
 import me.taur.arenagames.util.RoomType;
@@ -41,8 +41,8 @@ public class CustomItemListener implements Listener {
 			return;
 		}
 		
-		if (Room.ROOMS.get(Room.PLAYERS.get(p)).getRoomType() == RoomType.LFL) { // Only apply check when gamemode is Lifeline.
-			LflRoom room = (LflRoom) Room.ROOMS.get(Room.PLAYERS.get(p));
+		if (Room.ROOMS.get(Room.PLAYERS.get(p)).getRoomType() == RoomType.CRK) { // Only apply check when gamemode is Lifeline.
+			CrkRoom room = (CrkRoom) Room.ROOMS.get(Room.PLAYERS.get(p));
 			if (room.isGameInProgress()) {
 				if (room.isPlayerDead(p)) { // Make sure the player cannot cast spells if they are dead.
 					p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You cannot use skills while dead.");

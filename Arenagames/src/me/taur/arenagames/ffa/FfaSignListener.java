@@ -32,7 +32,7 @@ public class FfaSignListener implements Listener {
 		}
 
 		Sign sign = (Sign) b.getState();
-		if (sign.getLine(0).contains("[FFA]")) {
+		if (sign.getLine(0).contains("[" + RoomType.FFA.getSign() + "]")) {
 			Player p = evt.getPlayer();
 
 			if (!p.hasPermission("arenagames.join")) {

@@ -1,4 +1,4 @@
-package me.taur.arenagames.lfl;
+package me.taur.arenagames.crk;
 
 import me.taur.arenagames.Config;
 import me.taur.arenagames.room.Room;
@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class LflPlayerListener implements Listener {
+public class CrkPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void playerLoggedOff(PlayerQuitEvent evt) {
 		Player p = evt.getPlayer();
@@ -23,11 +23,11 @@ public class LflPlayerListener implements Listener {
 		if (Room.PLAYERS.containsKey(p)) {
 			Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
 
-			if (room.getRoomType() == RoomType.LFL) {
+			if (room.getRoomType() == RoomType.CRK) {
 				room.removePlayer(p); // Only remove the gamemode's own players
 				Room.PLAYERS.remove(p);
 				
-				LflRoom r = (LflRoom) room;
+				CrkRoom r = (CrkRoom) room;
 				if (room.isGameInProgress()) {
 					if (room.getPlayers()[0] != null) {
 						for (Player other : room.getPlayers()) {
@@ -54,18 +54,18 @@ public class LflPlayerListener implements Listener {
 
 					// Check if there are enough people in the room.
 					int needed = room.getPlayersInRoom();
-					if (needed > Config.getMinPlayersInWait(RoomType.LFL) - 1) {
+					if (needed > Config.getMinPlayersInWait(RoomType.CRK) - 1) {
 						if (!room.isGameInWaiting()) {
-							room.waitStartMessage(RoomType.LFL);
+							room.waitStartMessage(RoomType.CRK);
 							room.setGameInWaiting(true);
-							room.setWaitTimer(Config.getWaitTimer(RoomType.LFL));
+							room.setWaitTimer(Config.getWaitTimer(RoomType.CRK));
 
 						} else {
-							room.waitStartMessage(p, RoomType.LFL);
+							room.waitStartMessage(p, RoomType.CRK);
 						}
 						
 					} else {
-						room.waitCancelledMessage(RoomType.LFL);
+						room.waitCancelledMessage(RoomType.CRK);
 						room.setGameInWaiting(false);
 
 					}
@@ -88,7 +88,7 @@ public class LflPlayerListener implements Listener {
 		
 		Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
 		if (room != null) {
-			if (room.getRoomType() == RoomType.LFL) {
+			if (room.getRoomType() == RoomType.CRK) {
 				evt.setCancelled(true);
 			}
 		}
@@ -104,8 +104,8 @@ public class LflPlayerListener implements Listener {
 		
 		Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
 		if (room != null) {
-			if (room.getRoomType() == RoomType.LFL) {
-				LflRoom r = (LflRoom) room;
+			if (room.getRoomType() == RoomType.CRK) {
+				CrkRoom r = (CrkRoom) room;
 				if (r != null) {
 					if (!r.getTimer().containsKey(p)) {
 						evt.setCancelled(true);
@@ -134,8 +134,8 @@ public class LflPlayerListener implements Listener {
 		
 		Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
 		if (room != null) {
-			if (room.getRoomType() == RoomType.LFL) {
-				LflRoom r = (LflRoom) room;
+			if (room.getRoomType() == RoomType.CRK) {
+				CrkRoom r = (CrkRoom) room;
 				if (r != null) {
 					if (!r.getTimer().containsKey(p)) {
 						evt.setCancelled(true);

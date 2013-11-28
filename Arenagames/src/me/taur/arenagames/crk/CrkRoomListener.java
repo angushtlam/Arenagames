@@ -1,4 +1,4 @@
-package me.taur.arenagames.lfl;
+package me.taur.arenagames.crk;
 
 import me.taur.arenagames.Config;
 import me.taur.arenagames.event.RoomEndEvent;
@@ -16,7 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-public class LflRoomListener implements Listener {
+public class CrkRoomListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void roomEnd(RoomEndEvent evt) {
 		if (evt.getRoom() == null) { // Make sure the room exists.
@@ -26,20 +26,20 @@ public class LflRoomListener implements Listener {
 		Room r = evt.getRoom();
 		RoomEndResult result = evt.getResult();
 		
-		if (r.getRoomType() == RoomType.LFL) {
-			LflRoom room = (LflRoom) r;
+		if (r.getRoomType() == RoomType.CRK) {
+			CrkRoom room = (CrkRoom) r;
 			
 			if (result == RoomEndResult.TIMER_OVER) { // If the game ended by timer:
 				if (room.getWinningPlayer() != null) {
 					room.gameOverMessage(room.getWinningPlayer()); // Broadcast who won.
 				}
 
-				if (Config.isRankedEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
+				if (Config.isRankedEnabled(RoomType.CRK)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
-							int oldelo = data.getLflRanking();
-							int newelo = data.getLflRanking();
+							int oldelo = data.getCrkRanking();
+							int newelo = data.getCrkRanking();
 							
 							if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
 								try {
@@ -56,16 +56,16 @@ public class LflRoomListener implements Listener {
 							}
 							
 							int diff = newelo - oldelo;
-							data.setLflRanking(newelo);
+							data.setCrkRanking(newelo);
 							data.save(p);
 							
-							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Lifeline Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
+							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Cranked Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
 							
 						}
 					}
 				}
 				
-				if (Config.isEconomyEnabled(RoomType.LFL)) {
+				if (Config.isEconomyEnabled(RoomType.CRK)) {
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
@@ -74,16 +74,16 @@ public class LflRoomListener implements Listener {
 							int add = 0;
 							
 							if (room.getWinningPlayer() == p.getName()) { // If the player won
-								add = LflConfig.getCurrencyFirst();
+								add = CrkConfig.getCurrencyFirst();
 							} else if (room.getPointboard().get(p.getName()) > room.getPointMedian()) {
-								add = LflConfig.getCurrencyWinner();
+								add = CrkConfig.getCurrencyWinner();
 							} else {
-								add = LflConfig.getCurrencyEveryone();
+								add = CrkConfig.getCurrencyEveryone();
 							}
 							
 							data.setCurrency(currency + add);
 							data.setCurrencyLifetime(lifetime + add);
-							data.setLflCurrencyEarned(data.getLflCurrencyEarned() + add);
+							data.setCrkCurrencyEarned(data.getCrkCurrencyEarned() + add);
 							
 							data.save(p);
 							
@@ -95,16 +95,16 @@ public class LflRoomListener implements Listener {
 				
 				for (Player p : room.getPlayers()) {
 					if (p != null) {
-						p.teleport(LflConfig.getLobby());
+						p.teleport(CrkConfig.getLobby());
 						InvUtil.setLobbyInventory(p);
 						
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
-							data.setLflGamesPlayed(data.getLflGamesPlayed() + 1); // Increase their play count.
+							data.setCrkGamesPlayed(data.getCrkGamesPlayed() + 1); // Increase their play count.
 
 							int points = room.getPointboard().get(p.getName());
-							if (points > data.getLflRecord()) { // If the player has set a new record:
-								data.setLflRecord(points);
+							if (points > data.getCrkRecord()) { // If the player has set a new record:
+								data.setCrkRecord(points);
 								p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have set a new personal record: " + points + "!");
 								
 							}
@@ -122,11 +122,11 @@ public class LflRoomListener implements Listener {
 					if (p != null) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
-							data.setLflGamesPlayed(data.getLflGamesPlayed() + 1); // Increase their play count.
+							data.setCrkGamesPlayed(data.getCrkGamesPlayed() + 1); // Increase their play count.
 
 							int points = room.getPointboard().get(p.getName());
-							if (points > data.getLflRecord()) { // If the player has set a new record:
-								data.setLflRecord(points);
+							if (points > data.getCrkRecord()) { // If the player has set a new record:
+								data.setCrkRecord(points);
 								p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have set a new personal record: " + points + "!");
 								
 							}
@@ -138,13 +138,13 @@ public class LflRoomListener implements Listener {
 						Room.PLAYERS.remove(p);
 						
 						// Teleport the player to lobby.
-						p.teleport(LflConfig.getLobby());
+						p.teleport(CrkConfig.getLobby());
 						InvUtil.setLobbyInventory(p);
 						
 					}
 				}
 
-				Bukkit.broadcastMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Lifeline match " + room.getRoomId() + " has ended.");
+				Bukkit.broadcastMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Cranked match " + room.getRoomId() + " has ended.");
 				room.resetRoom(true);
 				
 			} else if (result == RoomEndResult.NOT_ENOUGH_PLAYERS) {
@@ -152,12 +152,12 @@ public class LflRoomListener implements Listener {
 					room.gameOverMessage(room.getWinningPlayer()); // Broadcast who won.
 				}
 
-				if (Config.isRankedEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
+				if (Config.isRankedEnabled(RoomType.CRK)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
-							int oldelo = data.getLflRanking();
-							int newelo = data.getLflRanking();
+							int oldelo = data.getCrkRanking();
+							int newelo = data.getCrkRanking();
 							
 							if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
 								try {
@@ -174,10 +174,10 @@ public class LflRoomListener implements Listener {
 							}
 							
 							int diff = newelo - oldelo;
-							data.setLflRanking(newelo);
+							data.setCrkRanking(newelo);
 							data.save(p);
 							
-							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Lifeline Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
+							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Cranked Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
 							
 						}
 					}
@@ -187,11 +187,11 @@ public class LflRoomListener implements Listener {
 					if (p != null) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
-							data.setLflGamesPlayed(data.getLflGamesPlayed() + 1); // Increase their play count.
+							data.setCrkGamesPlayed(data.getCrkGamesPlayed() + 1); // Increase their play count.
 
 							int points = room.getPointboard().get(p.getName());
-							if (points > data.getLflRecord()) { // If the player has set a new record:
-								data.setLflRecord(points);
+							if (points > data.getCrkRecord()) { // If the player has set a new record:
+								data.setCrkRecord(points);
 								p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have set a new personal record: " + points + "!");
 								
 							}
@@ -203,16 +203,16 @@ public class LflRoomListener implements Listener {
 						Room.PLAYERS.remove(p);
 						
 						// Teleport the player to the lobby.
-						p.teleport(LflConfig.getLobby());
+						p.teleport(CrkConfig.getLobby());
 						p.setLevel(0); // Change their levels because the countdown is not 0 yet.
 
-						LflSpawnManager.purgeEffects(p);
+						CrkSpawnManager.purgeEffects(p);
 						InvUtil.setLobbyInventory(p);
 						
 					}
 				}
 
-				Bukkit.broadcastMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Lifeline match " + room.getRoomId() + " has ended.");
+				Bukkit.broadcastMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Cranked match " + room.getRoomId() + " has ended.");
 				room.resetRoom(true);
 				
 			} else if (result == RoomEndResult.LAST_PERSON_STANDING) {
@@ -220,12 +220,12 @@ public class LflRoomListener implements Listener {
 					room.gameOverMessage(room.getWinningPlayer()); // Broadcast who won.
 				}
 
-				if (Config.isRankedEnabled(RoomType.LFL)) { // Only change the player's Elo if it is enabled.
+				if (Config.isRankedEnabled(RoomType.CRK)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
-							int oldelo = data.getLflRanking();
-							int newelo = data.getLflRanking();
+							int oldelo = data.getCrkRanking();
+							int newelo = data.getCrkRanking();
 							
 							if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
 								try {
@@ -242,16 +242,16 @@ public class LflRoomListener implements Listener {
 							}
 							
 							int diff = newelo - oldelo;
-							data.setLflRanking(newelo);
+							data.setCrkRanking(newelo);
 							data.save(p);
 							
-							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Lifeline Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
+							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Cranked Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
 							
 						}
 					}
 				}
 				
-				if (Config.isEconomyEnabled(RoomType.LFL)) {
+				if (Config.isEconomyEnabled(RoomType.CRK)) {
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
@@ -260,16 +260,16 @@ public class LflRoomListener implements Listener {
 							int add = 0;
 							
 							if (room.getWinningPlayer() == p.getName()) { // If the player won
-								add = LflConfig.getCurrencyFirst();
+								add = CrkConfig.getCurrencyFirst();
 							} else if (room.getPointboard().get(p.getName()) > room.getPointMedian()) {
-								add = LflConfig.getCurrencyWinner();
+								add = CrkConfig.getCurrencyWinner();
 							} else {
-								add = LflConfig.getCurrencyEveryone();
+								add = CrkConfig.getCurrencyEveryone();
 							}
 							
 							data.setCurrency(currency + add);
 							data.setCurrencyLifetime(lifetime + add);
-							data.setLflCurrencyEarned(data.getLflCurrencyEarned() + add);
+							data.setCrkCurrencyEarned(data.getCrkCurrencyEarned() + add);
 							
 							data.save(p);
 							
@@ -283,11 +283,11 @@ public class LflRoomListener implements Listener {
 					if (p != null) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
-							data.setLflGamesPlayed(data.getLflGamesPlayed() + 1); // Increase their play count.
+							data.setCrkGamesPlayed(data.getCrkGamesPlayed() + 1); // Increase their play count.
 
 							int points = room.getPointboard().get(p.getName());
-							if (points > data.getLflRecord()) { // If the player has set a new record:
-								data.setLflRecord(points);
+							if (points > data.getCrkRecord()) { // If the player has set a new record:
+								data.setCrkRecord(points);
 								p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have set a new personal record: " + points + "!");
 								
 							}
@@ -298,16 +298,16 @@ public class LflRoomListener implements Listener {
 						Room.PLAYERS.remove(p);
 						
 						// Teleport the player to the lobby.
-						p.teleport(LflConfig.getLobby());
+						p.teleport(CrkConfig.getLobby());
 						p.setLevel(0); // Change their levels because the countdown is not 0 yet.
 
-						LflSpawnManager.purgeEffects(p);
+						CrkSpawnManager.purgeEffects(p);
 						InvUtil.setLobbyInventory(p);
 						
 					}
 				}
 
-				Bukkit.broadcastMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Lifeline match " + room.getRoomId() + " has ended.");
+				Bukkit.broadcastMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Cranked match " + room.getRoomId() + " has ended.");
 				room.resetRoom(true);
 				
 			} else {

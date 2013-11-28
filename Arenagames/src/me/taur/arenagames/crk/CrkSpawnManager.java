@@ -1,4 +1,4 @@
-package me.taur.arenagames.lfl;
+package me.taur.arenagames.crk;
 
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class LflSpawnManager {
+public class CrkSpawnManager {
 	public static void kill(Player p) {
 		Location loc = p.getLocation();
 		ParticleEffect.RED_DUST.display(loc, 1.5F, 1.0F, 1.5F, 0, 80);
@@ -54,6 +54,7 @@ public class LflSpawnManager {
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 3, 1));
 
 		p.teleport(tp); // Teleport player
+		p.setFallDistance(0);
 		purgeEffects(p);
 		
 	}
@@ -73,7 +74,7 @@ public class LflSpawnManager {
 		    	if (Room.PLAYERS.get(p) != null) {
 		    		purgeEffects(p);
 		    		
-		    		int time = Config.getCountdown(RoomType.LFL);
+		    		int time = Config.getCountdown(RoomType.CRK);
 		    		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * time, 1)); // Entire duration of the game. Cleared later.
 		    		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * time, 5));
 		    		p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20 * time, 5));

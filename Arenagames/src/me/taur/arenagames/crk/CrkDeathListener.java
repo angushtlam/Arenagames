@@ -1,4 +1,4 @@
-package me.taur.arenagames.lfl;
+package me.taur.arenagames.crk;
 
 import me.taur.arenagames.Config;
 import me.taur.arenagames.room.Room;
@@ -17,7 +17,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-public class LflDeathListener implements Listener {
+public class CrkDeathListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void playerDiedInArena(EntityDamageEvent evt) {
 		if (!(evt.getEntity() instanceof Player)) { // Players are only affected by this listener.
@@ -35,11 +35,11 @@ public class LflDeathListener implements Listener {
 		
 		Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
 		if (room != null) {
-			if (room.getRoomType() == RoomType.LFL) {
+			if (room.getRoomType() == RoomType.CRK) {
 				// Make sure the event is cancelled and the player won't really die.
 				evt.setCancelled(true);
 				
-				LflRoom r = (LflRoom) room;
+				CrkRoom r = (CrkRoom) room;
 
 				if (room.isGameInProgress()) { // Check if the game is in progress.
 					DamageCause c = evt.getCause();

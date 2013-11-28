@@ -538,7 +538,7 @@ public class TdmRoom extends Room {
 				}
 				
 				Sign sign = (Sign) b.getState();
-				sign.setLine(0, ChatColor.DARK_BLUE + "" + ChatColor.BOLD + "[TDM]");
+				sign.setLine(0, RoomType.TDM.getColor() + "" + ChatColor.BOLD + "[TDM]");
 				sign.setLine(1, (this.isPremium() ? ChatColor.GOLD + "" : "") + this.getRoomId());
 				sign.setLine(2, ChatColor.ITALIC + "" + this.getPlayersInRoom() + "/" + Config.getPlayerLimit(RoomType.TDM));
 				

@@ -1,4 +1,4 @@
-package me.taur.arenagames.lfl;
+package me.taur.arenagames.crk;
 
 import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.room.Room;
@@ -13,7 +13,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class LflKitSelectorListener implements Listener {
+public class CrkKitSelectorListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void kitSelector(PlayerInteractEvent evt) {
 		Action a = evt.getAction();
@@ -56,8 +56,8 @@ public class LflKitSelectorListener implements Listener {
 			
 		}
 		
-		if (r.getRoomType() == RoomType.LFL) { // If the player is in a FFA room.
-			LflUtil.lflKitMenu.open(p);
+		if (r.getRoomType() == RoomType.CRK) { // If the player is in a FFA room.
+			CrkUtil.kitMenu.open(p);
 			return;
 			
 		}

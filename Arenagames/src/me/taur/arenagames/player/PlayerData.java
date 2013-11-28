@@ -30,9 +30,9 @@ public class PlayerData {
 	private int tdmTotalKills, tdmTotalDeaths;
 	private int tdmCurrencyEarned;
 	
-	private int lflGamesWon, lflGamesPlayed, lflRanking, lflRecord;
-	private int lflTotalKills, lflTotalDeaths;
-	private int lflCurrencyEarned;
+	private int crkGamesWon, crkGamesPlayed, crkRanking, crkRecord;
+	private int crkTotalKills, crkTotalDeaths;
+	private int crkCurrencyEarned;
 	
 	private int perkFxStorm, perkFxBloom, perkFxMusic, perkFxCloud, perkFxSoil, perkFxEnder, perkFxFireScarf, perkFxFireTrail,
 				perkFxHeartScarf, perkFxHeartTrail, perkFxKnowledge, perkFxSuperchicken, perkFxBlood;
@@ -125,13 +125,13 @@ public class PlayerData {
 					conf.addDefault("user.tdm.deaths", 0);
 					conf.addDefault("user.tdm.currency-earned", 0);
 					
-					conf.addDefault("user.lfl.games-won", 0);
-					conf.addDefault("user.lfl.games-played", 0);
-					conf.addDefault("user.lfl.ranking", 1000);
-					conf.addDefault("user.lfl.record", 0);
-					conf.addDefault("user.lfl.kills", 0);
-					conf.addDefault("user.lfl.deaths", 0);
-					conf.addDefault("user.lfl.currency-earned", 0);
+					conf.addDefault("user.crk.games-won", 0);
+					conf.addDefault("user.crk.games-played", 0);
+					conf.addDefault("user.crk.ranking", 1000);
+					conf.addDefault("user.crk.record", 0);
+					conf.addDefault("user.crk.kills", 0);
+					conf.addDefault("user.crk.deaths", 0);
+					conf.addDefault("user.crk.currency-earned", 0);
 					
 					conf.addDefault("user.perk.fx.storm", 0);
 					conf.addDefault("user.perk.fx.bloom", 0);
@@ -213,13 +213,13 @@ public class PlayerData {
 				data.setTdmTotalDeaths(conf.getInt("user.tdm.deaths"));
 				data.setTdmCurrencyEarned(conf.getInt("user.tdm.currency-earned"));
 				
-				data.setLflGamesWon(conf.getInt("user.lfl.games-won"));
-				data.setLflGamesPlayed(conf.getInt("user.lfl.games-played"));
-				data.setLflRanking(conf.getInt("user.lfl.ranking"));
-				data.setLflRecord(conf.getInt("user.lfl.record"));
-				data.setLflTotalKills(conf.getInt("user.lfl.kills"));
-				data.setLflTotalDeaths(conf.getInt("user.lfl.deaths"));
-				data.setLflCurrencyEarned(conf.getInt("user.lfl.currency-earned"));
+				data.setCrkGamesWon(conf.getInt("user.crk.games-won"));
+				data.setCrkGamesPlayed(conf.getInt("user.crk.games-played"));
+				data.setCrkRanking(conf.getInt("user.crk.ranking"));
+				data.setCrkRecord(conf.getInt("user.crk.record"));
+				data.setCrkTotalKills(conf.getInt("user.crk.kills"));
+				data.setCrkTotalDeaths(conf.getInt("user.crk.deaths"));
+				data.setCrkCurrencyEarned(conf.getInt("user.crk.currency-earned"));
 				
 				data.setPerkFxStorm(conf.getInt("user.perk.fx.storm"));
 				data.setPerkFxBloom(conf.getInt("user.perk.fx.bloom"));
@@ -293,13 +293,13 @@ public class PlayerData {
 				conf.set("user.tdm.deaths", data.getTdmTotalDeaths());
 				conf.set("user.tdm.currency-earned", data.getTdmCurrencyEarned());
 				
-				conf.set("user.lfl.games-won", data.getLflGamesWon());
-				conf.set("user.lfl.games-played", data.getLflGamesPlayed());
-				conf.set("user.lfl.ranking", data.getLflRanking());
-				conf.set("user.lfl.record", data.getLflRecord());
-				conf.set("user.lfl.kills", data.getLflTotalKills());
-				conf.set("user.lfl.deaths", data.getLflTotalDeaths());
-				conf.set("user.lfl.currency-earned", data.getLflCurrencyEarned());
+				conf.set("user.crk.games-won", data.getCrkGamesWon());
+				conf.set("user.crk.games-played", data.getCrkGamesPlayed());
+				conf.set("user.crk.ranking", data.getCrkRanking());
+				conf.set("user.crk.record", data.getCrkRecord());
+				conf.set("user.crk.kills", data.getCrkTotalKills());
+				conf.set("user.crk.deaths", data.getCrkTotalDeaths());
+				conf.set("user.crk.currency-earned", data.getCrkCurrencyEarned());
 				
 				conf.set("user.perk.fx.storm", data.getPerkFxStorm());
 				conf.set("user.perk.fx.bloom", data.getPerkFxBlood());
@@ -495,60 +495,60 @@ public class PlayerData {
 		this.ffaCurrencyEarned = ffaCurrencyEarned;
 	}
 
-	public int getLflGamesWon() {
-		return lflGamesWon;
+	public int getCrkGamesWon() {
+		return crkGamesWon;
 	}
 
-	public void setLflGamesWon(int lflGamesWon) {
-		this.lflGamesWon = lflGamesWon;
+	public void setCrkGamesWon(int crkGamesWon) {
+		this.crkGamesWon = crkGamesWon;
 	}
 
-	public int getLflGamesPlayed() {
-		return lflGamesPlayed;
+	public int getCrkGamesPlayed() {
+		return crkGamesPlayed;
 	}
 
-	public void setLflGamesPlayed(int lflGamesPlayed) {
-		this.lflGamesPlayed = lflGamesPlayed;
+	public void setCrkGamesPlayed(int crkGamesPlayed) {
+		this.crkGamesPlayed = crkGamesPlayed;
 	}
 
-	public int getLflRanking() {
-		return lflRanking;
+	public int getCrkRanking() {
+		return crkRanking;
 	}
 
-	public void setLflRanking(int lflRanking) {
-		this.lflRanking = lflRanking;
+	public void setCrkRanking(int crkRanking) {
+		this.crkRanking = crkRanking;
 	}
 
-	public int getLflRecord() {
-		return lflRecord;
+	public int getCrkRecord() {
+		return crkRecord;
 	}
 
-	public void setLflRecord(int lflRecord) {
-		this.lflRecord = lflRecord;
+	public void setCrkRecord(int crkRecord) {
+		this.crkRecord = crkRecord;
 	}
 
-	public int getLflTotalKills() {
-		return lflTotalKills;
+	public int getCrkTotalKills() {
+		return crkTotalKills;
 	}
 
-	public void setLflTotalKills(int lflTotalKills) {
-		this.lflTotalKills = lflTotalKills;
+	public void setCrkTotalKills(int crkTotalKills) {
+		this.crkTotalKills = crkTotalKills;
 	}
 
-	public int getLflTotalDeaths() {
-		return lflTotalDeaths;
+	public int getCrkTotalDeaths() {
+		return crkTotalDeaths;
 	}
 
-	public void setLflTotalDeaths(int lflTotalDeaths) {
-		this.lflTotalDeaths = lflTotalDeaths;
+	public void setCrkTotalDeaths(int crkTotalDeaths) {
+		this.crkTotalDeaths = crkTotalDeaths;
 	}
 
-	public int getLflCurrencyEarned() {
-		return lflCurrencyEarned;
+	public int getCrkCurrencyEarned() {
+		return crkCurrencyEarned;
 	}
 
-	public void setLflCurrencyEarned(int lflCurrencyEarned) {
-		this.lflCurrencyEarned = lflCurrencyEarned;
+	public void setCrkCurrencyEarned(int crkCurrencyEarned) {
+		this.crkCurrencyEarned = crkCurrencyEarned;
 	}
 
 	public int getTdmGamesWon() {

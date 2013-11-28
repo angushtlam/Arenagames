@@ -1,7 +1,7 @@
 package me.taur.arenagames;
 
+import me.taur.arenagames.crk.CrkConfig;
 import me.taur.arenagames.ffa.FfaConfig;
-import me.taur.arenagames.lfl.LflConfig;
 import me.taur.arenagames.tdm.TdmConfig;
 import me.taur.arenagames.util.RoomType;
 
@@ -11,7 +11,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class Config {
 
-	public static String[] gamemode = {"ffa", "tdm"};
+	public static String[] gamemode = {"ffa", "tdm", "crk"};
 	
 	public static void startCheck() {
 		FileConfiguration config = Arenagames.plugin.getConfig();
@@ -47,7 +47,7 @@ public class Config {
 		}
 		
 		FfaConfig.defaultConf();
-		LflConfig.defaultConf();
+		CrkConfig.defaultConf();
 		TdmConfig.defaultConf();
 	    
 	}

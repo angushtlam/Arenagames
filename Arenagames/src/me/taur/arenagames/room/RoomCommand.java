@@ -1,11 +1,11 @@
 package me.taur.arenagames.room;
 
 import me.taur.arenagames.Config;
+import me.taur.arenagames.crk.CrkConfig;
+import me.taur.arenagames.crk.CrkRoom;
 import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.ffa.FfaRoom;
 import me.taur.arenagames.item.InvUtil;
-import me.taur.arenagames.lfl.LflConfig;
-import me.taur.arenagames.lfl.LflRoom;
 import me.taur.arenagames.tdm.TdmConfig;
 import me.taur.arenagames.tdm.TdmRoom;
 import me.taur.arenagames.tdm.TdmTeams;
@@ -132,15 +132,15 @@ public class RoomCommand implements CommandExecutor {
 						}
 						
 						// Only applies if the room is an LFL room.
-						if (room.getRoomType() == RoomType.LFL) {
+						if (room.getRoomType() == RoomType.CRK) {
 							if (!room.isGameInProgress()) {
 								// Check if there are enough people in the room.
 								int needed = room.getPlayersInRoom();
-								if (needed > Config.getMinPlayersInWait(RoomType.LFL) - 1) {
+								if (needed > Config.getMinPlayersInWait(RoomType.CRK) - 1) {
 									if (!room.isGameInWaiting()) {
-										room.waitStartMessage(RoomType.LFL);
+										room.waitStartMessage(RoomType.CRK);
 										room.setGameInWaiting(true);
-										room.setWaitTimer(Config.getWaitTimer(RoomType.LFL));
+										room.setWaitTimer(Config.getWaitTimer(RoomType.CRK));
 										
 										for (Player pl : room.getPlayers()) {
 											pl.setLevel(0);
@@ -149,22 +149,22 @@ public class RoomCommand implements CommandExecutor {
 										}
 									
 									} else {
-										room.waitStartMessage(p, RoomType.LFL);
+										room.waitStartMessage(p, RoomType.CRK);
 									}
 									
 								} else {
-									room.waitCancelledMessage(RoomType.LFL);
+									room.waitCancelledMessage(RoomType.CRK);
 									room.setGameInWaiting(false);
 									
 								}
 							}
 							
-							LflRoom r = (LflRoom) room;
+							CrkRoom r = (CrkRoom) room;
 							r.updateSigns(); // Update signs.
 							r.updateScoreboard(); // Update scoreboard
 							r.removePlayerScoreboard(p);
 							
-							Location[] blocs = LflConfig.getSignsStored(room.getRoomId());
+							Location[] blocs = CrkConfig.getSignsStored(room.getRoomId());
 							for (Location bloc : blocs) {
 								ParticleEffect.ANGRY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 1);
 							}
@@ -256,8 +256,8 @@ public class RoomCommand implements CommandExecutor {
 						p.sendMessage(ChatColor.YELLOW + "Game In Progress?: " + ChatColor.ITALIC + "Yes");
 						if (room.getRoomType() == RoomType.FFA) {
 							p.sendMessage(ChatColor.YELLOW + "Map: " + ChatColor.ITALIC + ((FfaRoom) room).getMapName());
-						} else if (room.getRoomType() == RoomType.LFL) {
-							p.sendMessage(ChatColor.YELLOW + "Map: " + ChatColor.ITALIC + ((LflRoom) room).getMapName());
+						} else if (room.getRoomType() == RoomType.CRK) {
+							p.sendMessage(ChatColor.YELLOW + "Map: " + ChatColor.ITALIC + ((CrkRoom) room).getMapName());
 						}
 						
 					} else {

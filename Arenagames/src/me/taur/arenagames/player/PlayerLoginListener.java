@@ -6,6 +6,7 @@ import me.taur.arenagames.perk.PerkEffect;
 import me.taur.arenagames.room.Room;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,6 +30,7 @@ public class PlayerLoginListener implements Listener {
 		
 		p.setLevel(0);
 		p.setExp((float) 0.0);
+		p.setGameMode(GameMode.SURVIVAL);
 		p.teleport(Config.getGlobalLobby()); // Teleport people to lobby when they join
 		
 	}
