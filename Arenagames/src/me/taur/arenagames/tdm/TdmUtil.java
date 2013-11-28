@@ -1,4 +1,4 @@
-package me.taur.arenagames.ffa;
+package me.taur.arenagames.tdm;
 
 import java.util.HashMap;
 
@@ -13,28 +13,28 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class FfaUtil {
+public class TdmUtil {
 	public static IconMenu kitMenu = null;
 	
 	public static void enable() {
-		for (int i = 0; i < Config.getNormalRooms(RoomType.FFA); i++) {
-			String roomId = "ffa-n" + i;
-			Room.ROOMS.put(roomId, new FfaRoom(roomId));
+		for (int i = 0; i < Config.getNormalRooms(RoomType.TDM); i++) {
+			String roomId = "tdm-n" + i;
+			Room.ROOMS.put(roomId, new TdmRoom(roomId));
 			
 		}
 		
-		for (int i = 0; i < Config.getPremiumRooms(RoomType.FFA); i++) {
-			String roomId = "ffa-p" + i;
-			Room.ROOMS.put(roomId, new FfaRoom(roomId));
+		for (int i = 0; i < Config.getPremiumRooms(RoomType.TDM); i++) {
+			String roomId = "tdm-p" + i;
+			Room.ROOMS.put(roomId, new TdmRoom(roomId));
 			Room room = Room.ROOMS.get(roomId);
 			room.setPremium(true);
 			
 		}
 		
-		final int kitamt = FfaConfig.getKits().getKeys(false).size();
+		final int kitamt = TdmConfig.getKits().getKeys(false).size();
 		int box = ((kitamt / 9) + 1) * 9; // Gets how many box the plugin needs.
 		
-		kitMenu = new IconMenu("FFA: Kit Selection", box, new IconMenu.OptionClickEventHandler() {
+		kitMenu = new IconMenu("TDM: Kit Selection", box, new IconMenu.OptionClickEventHandler() {
             @Override
             public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
                 Player p = menuevt.getPlayer();
@@ -53,17 +53,17 @@ public class FfaUtil {
                 	
                 }
                 
-                if (r.getRoomType() != RoomType.FFA) {
+                if (r.getRoomType() != RoomType.TDM) {
                 	menuevt.setWillClose(true);
                 	return;
                 	
                 }
                 
-                FfaRoom room = (FfaRoom) r;
+                TdmRoom room = (TdmRoom) r;
                 String kitname = ChatColor.stripColor(menuevt.getName()); // Clear colors because we add colors in the menu name.
                 int id = menuevt.getPosition();
                 
-                if (FfaConfig.isKitPremium(id)) {
+                if (TdmConfig.isKitPremium(id)) {
         			if (!Premium.isPremium(p)) {
         				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "This kit requires a Premium subscription.");
         				menuevt.setWillClose(true);
@@ -71,7 +71,7 @@ public class FfaUtil {
         			}
         		}
                 
-                if (FfaConfig.getKitName(id).equals(kitname)) {
+                if (TdmConfig.getKitName(id).equals(kitname)) {
                 	p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have selected the " + kitname + " kit for this queue round.");
         			
         			HashMap<Player, Integer> kit = room.getKit();
@@ -90,17 +90,17 @@ public class FfaUtil {
         }, Arenagames.plugin);
 		
 		for (int i = 0; i < kitamt; i++) {
-			if (FfaConfig.getKitName(i) != null) { // Make sure the kit exists. It'll leave spaces for the kits that are nameless.
-				String info = FfaConfig.getKitDescription(i);
+			if (TdmConfig.getKitName(i) != null) { // Make sure the kit exists. It'll leave spaces for the kits that are nameless.
+				String info = TdmConfig.getKitDescription(i);
 				String premium = ChatColor.GREEN + "Normal Kit";
 				
-				if (FfaConfig.isKitPremium(i)) {
+				if (TdmConfig.isKitPremium(i)) {
 					premium = ChatColor.GOLD + "Premium Kit";
 				}
 				
-				String name = ChatColor.RESET + "" + ChatColor.BOLD + FfaConfig.getKitName(i);
+				String name = ChatColor.RESET + "" + ChatColor.BOLD + TdmConfig.getKitName(i);
 				String lore = ChatColor.GRAY + "" + ChatColor.ITALIC + info;
-				kitMenu.setOption(i, new ItemStack(FfaConfig.getKitMenuIcon(i), 1), name, premium, lore);
+				kitMenu.setOption(i, new ItemStack(TdmConfig.getKitMenuIcon(i), 1), name, premium, lore);
 				
 			}
 		}

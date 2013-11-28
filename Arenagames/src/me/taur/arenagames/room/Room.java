@@ -146,9 +146,9 @@ public class Room {
 	public void createScoreboard() {
 		if (this.roomId != null) {
 			Scoreboard board = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
-			Objective o = board.registerNewObjective(this.roomId, "dummy");
-			o.setDisplayName(ChatColor.AQUA + "Queue " + this.roomId);
-			o.setDisplaySlot(DisplaySlot.SIDEBAR);
+			Objective side = board.registerNewObjective("side-" + this.roomId, "dummy");
+			side.setDisplayName(ChatColor.AQUA + "Queue " + this.roomId);
+			side.setDisplaySlot(DisplaySlot.SIDEBAR);
 			
 			SCOREBOARDS.put(roomId, board);
 			
@@ -173,7 +173,7 @@ public class Room {
 		
 	}
 	
-	public void setScoreboardField(OfflinePlayer op, int value) {		
+	public void setScoreboardSideField(OfflinePlayer op, int value) {		
 		if (Room.SCOREBOARDS.get(roomId) != null) {
 			Score score = Room.SCOREBOARDS.get(roomId).getObjective(DisplaySlot.SIDEBAR).getScore(op);
 			score.setScore(value);
@@ -181,17 +181,17 @@ public class Room {
 		}
 	}
 	
-	public void setScoreboardField(String str, int value) {
+	public void setScoreboardSideField(String str, int value) {
 		if (str.length() > 15) {
 			str.substring(0, 16);
 		}
 		
 		OfflinePlayer op = Bukkit.getOfflinePlayer(str);
-		setScoreboardField(op, value);
+		setScoreboardSideField(op, value);
 		
 	}
 	
-	public int getScoreboardField(OfflinePlayer op) {
+	public int getScoreboardSideField(OfflinePlayer op) {
 		if (Room.SCOREBOARDS.get(roomId) != null) {
 			return Room.SCOREBOARDS.get(roomId).getObjective(DisplaySlot.SIDEBAR).getScore(op).getScore();
 		}
@@ -237,7 +237,7 @@ public class Room {
 		for (Player p : this.getPlayers()) {
 			if (p != null) {
 				p.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " --- GAME OVER! ---");
-				p.sendMessage(ChatColor.YELLOW + winner + ChatColor.ITALIC + " is the winner of this round!");
+				p.sendMessage(ChatColor.GOLD + winner + ChatColor.YELLOW + ChatColor.ITALIC + " won this round!");
 				p.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + " -----------------");
 			}
 		}

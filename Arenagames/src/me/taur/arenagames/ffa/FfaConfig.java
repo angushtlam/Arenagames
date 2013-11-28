@@ -19,66 +19,105 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FfaConfig {
-	private static FileConfiguration config = null;
-	private static File file = null;
+	private static FileConfiguration dataConfig = null;
+	private static File dataFile = null;
 	
-	private static String filename = "ffa.yml";
+	private static String dataFilename = "ffa-data.yml";
 
-	public static void reload() {
-		if (file == null) {
-			file = new File(Arenagames.plugin.getDataFolder(), filename);
+	public static void reloadData() {
+		if (dataFile == null) {
+			dataFile = new File(Arenagames.plugin.getDataFolder(), dataFilename);
 		}
 		
-		config = YamlConfiguration.loadConfiguration(file);
+		dataConfig = YamlConfiguration.loadConfiguration(dataFile);
 
-		InputStream defConfigStream = Arenagames.plugin.getResource(filename);
+		InputStream defConfigStream = Arenagames.plugin.getResource(dataFilename);
 		if (defConfigStream != null) {
 			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-			config.setDefaults(defConfig);
+			dataConfig.setDefaults(defConfig);
 		}
 	}
 
-	public static FileConfiguration get() {
-		if (config == null) {
-			reload();
+	public static FileConfiguration getData() {
+		if (dataConfig == null) {
+			reloadData();
 		}
 		
-		return config;
+		return dataConfig;
 	}
 
-	public static void save() {
-		if ((config == null) || (file == null)) {
+	public static void saveData() {
+		if ((dataConfig == null) || (dataFile == null)) {
 			return;
 		}
 		
 		try {
-			config.save(file);
+			dataConfig.save(dataFile);
 		} catch (IOException ex) {
-			Logger.getLogger(JavaPlugin.class.getName()).log(java.util.logging.Level.SEVERE, "Could not save config to " + file, ex);
+			Logger.getLogger(JavaPlugin.class.getName()).log(java.util.logging.Level.SEVERE, "Could not save config to " + dataFile, ex);
+		}
+	}
+	
+	private static FileConfiguration kitConfig = null;
+	private static File kitFile = null;
+	
+	private static String kitFilename = "ffa-kit.yml";
+
+	public static void reloadKit() {
+		if (kitFile == null) {
+			kitFile = new File(Arenagames.plugin.getDataFolder(), kitFilename);
+		}
+		
+		kitConfig = YamlConfiguration.loadConfiguration(kitFile);
+
+		InputStream defConfigStream = Arenagames.plugin.getResource(kitFilename);
+		if (defConfigStream != null) {
+			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+			kitConfig.setDefaults(defConfig);
+		}
+	}
+
+	public static FileConfiguration getKit() {
+		if (kitConfig == null) {
+			reloadKit();
+		}
+		
+		return kitConfig;
+	}
+
+	public static void saveKit() {
+		if ((kitConfig == null) || (kitFile == null)) {
+			return;
+		}
+		
+		try {
+			kitConfig.save(kitFile);
+		} catch (IOException ex) {
+			Logger.getLogger(JavaPlugin.class.getName()).log(java.util.logging.Level.SEVERE, "Could not save config to " + kitFile, ex);
 		}
 	}
 	
 	public static Location getPossibleSpawnLocation(FfaRoom room) {
 		String map = room.getMapName();
-		int spawns = get().getConfigurationSection("ffa.maps." + map + ".spawns").getKeys(false).size();
+		int spawns = getData().getConfigurationSection("ffa.maps." + map + ".spawns").getKeys(false).size();
 		
 		String w;
 		double x, y, z;
 		
 		if (spawns == 1) {
-			w = get().getString("ffa.maps." + map + ".spawns.loc-0.spawn.world");
-			x = get().getInt("ffa.maps." + map + ".spawns.loc-0.spawn.x");
-			y = get().getInt("ffa.maps." + map + ".spawns.loc-0.spawn.y");
-			z = get().getInt("ffa.maps." + map + ".spawns.loc-0.spawn.z");
+			w = getData().getString("ffa.maps." + map + ".spawns.loc-0.spawn.world");
+			x = getData().getInt("ffa.maps." + map + ".spawns.loc-0.spawn.x");
+			y = getData().getInt("ffa.maps." + map + ".spawns.loc-0.spawn.y");
+			z = getData().getInt("ffa.maps." + map + ".spawns.loc-0.spawn.z");
 			
 		} else {
 			Random rand = new Random();
 			int r = rand.nextInt(spawns);
 			
-			w = get().getString("ffa.maps." + map + ".spawns.loc-" + r + ".spawn.world");
-			x = get().getInt("ffa.maps." + map + ".spawns.loc-" + r + ".spawn.x");
-			y = get().getInt("ffa.maps." + map + ".spawns.loc-" + r + ".spawn.y");
-			z = get().getInt("ffa.maps." + map + ".spawns.loc-" + r + ".spawn.z");
+			w = getData().getString("ffa.maps." + map + ".spawns.loc-" + r + ".spawn.world");
+			x = getData().getInt("ffa.maps." + map + ".spawns.loc-" + r + ".spawn.x");
+			y = getData().getInt("ffa.maps." + map + ".spawns.loc-" + r + ".spawn.y");
+			z = getData().getInt("ffa.maps." + map + ".spawns.loc-" + r + ".spawn.z");
 			
 		}
 		
@@ -86,19 +125,19 @@ public class FfaConfig {
 	}
 	
 	public static boolean canPremiumPlayMap(String map) {
-		return get().getBoolean("ffa.maps." + map + ".info.premium-mode-pool", false);
+		return getData().getBoolean("ffa.maps." + map + ".info.premium-mode-pool", false);
 	}
 	
 	public static boolean canNormalPlayMap(String map) {
-		return get().getBoolean("ffa.maps." + map + ".info.normal-mode-pool", false);
+		return getData().getBoolean("ffa.maps." + map + ".info.normal-mode-pool", false);
 	}
 	
 	public static ConfigurationSection getSigns(String queue) {
-		return get().getConfigurationSection("ffa.queue." + queue + ".signs");
+		return getData().getConfigurationSection("ffa.queue." + queue + ".signs");
 	}
 	
 	public static Location[] getSignsStored(String queue) {
-		ConfigurationSection sign = get().getConfigurationSection("ffa.queue." + queue + ".signs");
+		ConfigurationSection sign = getData().getConfigurationSection("ffa.queue." + queue + ".signs");
 		if (sign != null) {
 			int size = sign.getKeys(false).size();
 			Location[] locs = new Location[size];
@@ -122,38 +161,38 @@ public class FfaConfig {
 	}
 	
 	public static void setSignLocation(String queue, int signnum, Location loc) {
-		get().set("ffa.queue." + queue + ".signs.sign-" + signnum + ".world", loc.getWorld().getName());
-		get().set("ffa.queue." + queue + ".signs.sign-" + signnum + ".x", loc.getBlockX());
-		get().set("ffa.queue." + queue + ".signs.sign-" + signnum + ".y", loc.getBlockY());
-		get().set("ffa.queue." + queue + ".signs.sign-" + signnum + ".z", loc.getBlockZ());
-		save();
+		getData().set("ffa.queue." + queue + ".signs.sign-" + signnum + ".world", loc.getWorld().getName());
+		getData().set("ffa.queue." + queue + ".signs.sign-" + signnum + ".x", loc.getBlockX());
+		getData().set("ffa.queue." + queue + ".signs.sign-" + signnum + ".y", loc.getBlockY());
+		getData().set("ffa.queue." + queue + ".signs.sign-" + signnum + ".z", loc.getBlockZ());
+		saveData();
 		
 	}
 	
 	public static void clearSignLocations(String queue) {
-		get().set("ffa.queue." + queue + ".signs", null);
-		save();
+		getData().set("ffa.queue." + queue + ".signs", null);
+		saveData();
 		
 	}
 	
 	public static ConfigurationSection getKits() {
-		return get().getConfigurationSection("ffa.items");
+		return getKit().getConfigurationSection("ffa.items");
 	}
 	
 	public static List<String> getKitItems(int kit) {
-		return get().getStringList("ffa.items.kit-" + kit + ".items");
+		return getKit().getStringList("ffa.items.kit-" + kit + ".items");
 	}
 	
 	public static String getKitName(int kit) {
-		return get().getString("ffa.items.kit-" + kit + ".kit-name");
+		return getKit().getString("ffa.items.kit-" + kit + ".kit-name");
 	}
 	
 	public static String getKitDescription(int kit) {
-		return get().getString("ffa.items.kit-" + kit + ".kit-description");
+		return getKit().getString("ffa.items.kit-" + kit + ".kit-description");
 	}
 	
 	public static Material getKitMenuIcon(int kit) {
-		String mat = get().getString("ffa.items.kit-" + kit + ".kit-menu-icon");
+		String mat = getKit().getString("ffa.items.kit-" + kit + ".kit-menu-icon");
 		Material material = Material.getMaterial(mat);
 		
 		if (material != null) { // Make sure the material is a valid material.
@@ -165,88 +204,94 @@ public class FfaConfig {
 	}
 	
 	public static boolean isKitPremium(int kit) {
-		return get().getBoolean("ffa.items.kit-" + kit + ".premium-only");
+		return getKit().getBoolean("ffa.items.kit-" + kit + ".premium-only");
 	}
 	
 	public static Location getLobby() {
-		String w = get().getString("ffa.lobby.world");
-		double x = get().getInt("ffa.lobby.x");
-		double y = get().getInt("ffa.lobby.y");
-		double z = get().getInt("ffa.lobby.z");
+		String w = getData().getString("ffa.lobby.world");
+		double x = getData().getInt("ffa.lobby.x");
+		double y = getData().getInt("ffa.lobby.y");
+		double z = getData().getInt("ffa.lobby.z");
 		
 		return new Location(Bukkit.getWorld(w), x + 0.5, y, z + 0.5);
 		
 	}
 	
 	public static int getCurrencyFirst() {
-		return get().getInt("ffa.currency.first");
+		return getData().getInt("ffa.currency.first");
 	}
 	
 	public static int getCurrencyWinner() {
-		return get().getInt("ffa.currency.winner");
+		return getData().getInt("ffa.currency.winner");
 	}
 	
 	public static int getCurrencyEveryone() {
-		return get().getInt("ffa.currency.everyone");
+		return getData().getInt("ffa.currency.everyone");
 	}
 	
 	public static void defaultConf() {
-		if (get().getBoolean("generate-default-config")) {
-
-			get().addDefault("ffa.maps.edit.info.map-name", "Llamarena");
-			get().addDefault("ffa.maps.edit.info.author", "Taur and the Animals");
+		if (getData().getBoolean("generate-default-config")) {
+			getData().addDefault("ffa.lobby.world", "world");
+			getData().addDefault("ffa.lobby.x", 5.0);
+			getData().addDefault("ffa.lobby.y", 70.0);
+			getData().addDefault("ffa.lobby.z", 0.0);
 			
-			get().addDefault("ffa.maps.edit.info.premium-mode-pool", false);
-			get().addDefault("ffa.maps.edit.info.normal-mode-pool", true);
+			getData().addDefault("ffa.currency.first", 40);
+			getData().addDefault("ffa.currency.winner", 30);
+			getData().addDefault("ffa.currency.everyone", 15);
 			
-			get().addDefault("ffa.maps.edit.spawns.loc-0.spawn.world", "world");
-			get().addDefault("ffa.maps.edit.spawns.loc-0.spawn.x", -50.0);
-			get().addDefault("ffa.maps.edit.spawns.loc-0.spawn.y", 70.0);
-			get().addDefault("ffa.maps.edit.spawns.loc-0.spawn.z", -50.0);
+			getData().addDefault("ffa.maps.edit.info.map-name", "Llamarena");
+			getData().addDefault("ffa.maps.edit.info.author", "Taur and the Animals");
 			
-			get().addDefault("ffa.maps.edit.spawns.loc-1.spawn.world", "world");
-			get().addDefault("ffa.maps.edit.spawns.loc-1.spawn.x", -50.0);
-			get().addDefault("ffa.maps.edit.spawns.loc-1.spawn.y", 70.0);
-			get().addDefault("ffa.maps.edit.spawns.loc-1.spawn.z", 50.0);
+			getData().addDefault("ffa.maps.edit.info.premium-mode-pool", false);
+			getData().addDefault("ffa.maps.edit.info.normal-mode-pool", true);
 			
-			get().addDefault("ffa.maps.edit.spawns.loc-2.spawn.world", "world");
-			get().addDefault("ffa.maps.edit.spawns.loc-2.spawn.x", 50.0);
-			get().addDefault("ffa.maps.edit.spawns.loc-2.spawn.y", 70.0);
-			get().addDefault("ffa.maps.edit.spawns.loc-2.spawn.z", 50.0);
+			getData().addDefault("ffa.maps.edit.spawns.loc-0.spawn.world", "world");
+			getData().addDefault("ffa.maps.edit.spawns.loc-0.spawn.x", -50.0);
+			getData().addDefault("ffa.maps.edit.spawns.loc-0.spawn.y", 70.0);
+			getData().addDefault("ffa.maps.edit.spawns.loc-0.spawn.z", -50.0);
 			
-			get().addDefault("ffa.maps.edit.spawns.loc-3.spawn.world", "world");
-			get().addDefault("ffa.maps.edit.spawns.loc-3.spawn.x", 50.0);
-			get().addDefault("ffa.maps.edit.spawns.loc-3.spawn.y", 70.0);
-			get().addDefault("ffa.maps.edit.spawns.loc-3.spawn.z", -50.0);
+			getData().addDefault("ffa.maps.edit.spawns.loc-1.spawn.world", "world");
+			getData().addDefault("ffa.maps.edit.spawns.loc-1.spawn.x", -50.0);
+			getData().addDefault("ffa.maps.edit.spawns.loc-1.spawn.y", 70.0);
+			getData().addDefault("ffa.maps.edit.spawns.loc-1.spawn.z", 50.0);
 			
-			get().addDefault("ffa.items.kit-0.kit-name", "Fighter");
-			get().addDefault("ffa.items.kit-0.kit-description", "Fight enemies toe to toe!");
-			get().addDefault("ffa.items.kit-0.kit-menu-icon", "IRON_SWORD");
-			get().addDefault("ffa.items.kit-0.premium-only", false);
-			List<String> fighterItems = Arrays.asList("IRON_SWORD|KNOCKBACK:1,DAMAGE_ALL:1#1", "STONE_SWORD|FIRE_ASPECT:1#1", "IRON_CHESTPLATE:-1|DURABILITY:10#1", "COOKIE#32", "GOLDEN_APPLE:1#1");
-			get().addDefault("ffa.items.kit-0.items", fighterItems);
+			getData().addDefault("ffa.maps.edit.spawns.loc-2.spawn.world", "world");
+			getData().addDefault("ffa.maps.edit.spawns.loc-2.spawn.x", 50.0);
+			getData().addDefault("ffa.maps.edit.spawns.loc-2.spawn.y", 70.0);
+			getData().addDefault("ffa.maps.edit.spawns.loc-2.spawn.z", 50.0);
 			
-			get().addDefault("ffa.items.kit-1.kit-name", "Archer");
-			get().addDefault("ffa.items.kit-1.kit-description", "Kill enemies from afar!");
-			get().addDefault("ffa.items.kit-1.kit-menu-icon", "BOW");
-			get().addDefault("ffa.items.kit-1.premium-only", true);
-			List<String> archerItems = Arrays.asList("BOW|ARROW_INFINITE:1#1", "BOW:40|ARROW_KNOCKBACK:5#1", "CHAINMAIL_CHESTPLATE|DURABILITY:10#1", "COOKIE#32", "GOLDEN_APPLE:1#1");
-			get().addDefault("ffa.items.kit-1.items", archerItems);
-			
-			get().addDefault("ffa.lobby.world", "world");
-			get().addDefault("ffa.lobby.x", 5.0);
-			get().addDefault("ffa.lobby.y", 70.0);
-			get().addDefault("ffa.lobby.z", 0.0);
-			
-			get().addDefault("ffa.currency.first", 40);
-			get().addDefault("ffa.currency.winner", 30);
-			get().addDefault("ffa.currency.everyone", 15);
+			getData().addDefault("ffa.maps.edit.spawns.loc-3.spawn.world", "world");
+			getData().addDefault("ffa.maps.edit.spawns.loc-3.spawn.x", 50.0);
+			getData().addDefault("ffa.maps.edit.spawns.loc-3.spawn.y", 70.0);
+			getData().addDefault("ffa.maps.edit.spawns.loc-3.spawn.z", -50.0);
 			
 		}
 		
-		get().options().copyDefaults(true);
-		get().set("generate-default-config", false);
-		save();
+		getData().options().copyDefaults(true);
+		getData().set("generate-default-config", false);
+		saveData();
+		
+		if (getKit().getBoolean("generate-default-config")) {
+			getKit().addDefault("ffa.items.kit-0.kit-name", "Fighter");
+			getKit().addDefault("ffa.items.kit-0.kit-description", "Fight enemies toe to toe!");
+			getKit().addDefault("ffa.items.kit-0.kit-menu-icon", "IRON_SWORD");
+			getKit().addDefault("ffa.items.kit-0.premium-only", false);
+			List<String> fighterItems = Arrays.asList("IRON_SWORD|KNOCKBACK:1,DAMAGE_ALL:1#1", "STONE_SWORD|FIRE_ASPECT:1#1", "IRON_CHESTPLATE:-1|DURABILITY:10#1", "COOKIE#32", "GOLDEN_APPLE:1#1");
+			getKit().addDefault("ffa.items.kit-0.items", fighterItems);
+			
+			getKit().addDefault("ffa.items.kit-1.kit-name", "Archer");
+			getKit().addDefault("ffa.items.kit-1.kit-description", "Kill enemies from afar!");
+			getKit().addDefault("ffa.items.kit-1.kit-menu-icon", "BOW");
+			getKit().addDefault("ffa.items.kit-1.premium-only", true);
+			List<String> archerItems = Arrays.asList("BOW|ARROW_INFINITE:1#1", "BOW:40|ARROW_KNOCKBACK:5#1", "CHAINMAIL_CHESTPLATE|DURABILITY:10#1", "COOKIE#32", "GOLDEN_APPLE:1#1");
+			getKit().addDefault("ffa.items.kit-1.items", archerItems);
+			
+		}
+		
+		getKit().options().copyDefaults(true);
+		getKit().set("generate-default-config", false);
+		saveKit();
 		
 	}
 }

@@ -73,7 +73,18 @@ public class PlayerProfile {
 					 "\u258b " + "Ngts Obt'd.: " + data.getFfaCurrencyEarned());
 			
 			page.add(FANCY_HEADING +
-					 ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "       Lifeline\n" + ChatColor.RESET + "" +
+					 ChatColor.DARK_BLUE + "" + ChatColor.BOLD + " Team Deathmatch\n" + ChatColor.RESET + "" +
+					 FANCY_HEADING +
+					 "\u258b " + "1st Place: " + data.getTdmGamesWon() + ChatColor.RESET + "\n" +
+					 "\u258f  " + "Games: " + data.getTdmGamesPlayed() + ChatColor.RESET + "\n" +
+					 "\u258f  " + "Elo: " + data.getTdmRanking() + ChatColor.RESET + "\n" +
+					 "\u258f \n" +
+					 "\u258f  " + "KDR: " + GameMathUtil.kdrCalculator(data.getTdmTotalKills(), data.getTdmTotalDeaths()) + ChatColor.RESET + "\n" +
+					 "\n" +
+					 "\u258b " + "Ngts Obt'd.: " + data.getTdmCurrencyEarned());
+			
+			page.add(FANCY_HEADING +
+					 ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "      Cranked\n" + ChatColor.RESET + "" +
 					 FANCY_HEADING +
 					 "\u258b " + "1st Place: " + data.getLflGamesWon() + ChatColor.RESET + "\n" +
 					 "\u258f  " + "Games: " + data.getLflGamesPlayed() + ChatColor.RESET + "\n" +

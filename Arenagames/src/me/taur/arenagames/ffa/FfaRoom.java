@@ -50,14 +50,14 @@ public class FfaRoom extends Room {
 			
 			if (this.isGameInProgress()) {
 				String winner = this.getWinningPlayer();
-				this.setScoreboardField("Highest Score", this.getPointboard().get(winner).intValue());
+				this.setScoreboardSideField("Highest Score", this.getPointboard().get(winner).intValue());
 				
 			} else {
-				this.setScoreboardField("Highest Score", 0);
+				this.setScoreboardSideField("Highest Score", 0);
 			}
 			
-			this.setScoreboardField("Elo Average", this.getAvgElo());
-			this.setScoreboardField("Players", this.getPlayersInRoom());
+			this.setScoreboardSideField("Elo Average", this.getAvgElo());
+			this.setScoreboardSideField("Players", this.getPlayersInRoom());
 			
 		}
 	}
@@ -231,12 +231,10 @@ public class FfaRoom extends Room {
 		
 		if (this.getPlayers() != null) {
 			for (Player p : this.getPlayers()) {
-				if (p != null) {
-					if (PlayerData.isLoaded(p)) {
-						PlayerData data = PlayerData.get(p);
-						total = total + data.getFfaRanking();
-						
-					}
+				if (p != null && PlayerData.isLoaded(p)) {
+					PlayerData data = PlayerData.get(p);
+					total = total + data.getFfaRanking();
+					
 				}
 			}
 		}
@@ -252,6 +250,15 @@ public class FfaRoom extends Room {
 	}
 	
 	public void playerDied(Player p, int subtract, String msg) {
+		PlayerData data = null;
+		if (PlayerData.isLoaded(p)) {
+			data = PlayerData.get(p);
+		} else {
+			data = new PlayerData(p);
+		}
+		
+		data.setFfaTotalDeaths(data.getFfaTotalDeaths() + 1); // Increase death count
+		
 		int died = this.pointboard.get(p.getName());
 		
 		if (this.getPlayers() != null) {
@@ -288,9 +295,19 @@ public class FfaRoom extends Room {
 		    	}
 		    }
 		}, 60L);
+		
 	}
 	
 	public void playerDied(Player p, Player killer) { // Player loses 1 point for being executed by another player.
+		PlayerData data = null;
+		if (PlayerData.isLoaded(killer)) {
+			data = PlayerData.get(killer);
+		} else {
+			data = new PlayerData(killer);
+		}
+		
+		data.setFfaTotalKills(data.getFfaTotalKills() + 1); // Increase kill count
+		
 		int kill = this.pointboard.get(killer.getName());
 		killer.setLevel(kill + 3);
 		this.pointboard.put(killer.getName(), kill + 3);
@@ -486,10 +503,7 @@ public class FfaRoom extends Room {
 	
 	public void resetRoom(boolean areYouSure) {
 		if (areYouSure) {
-			this.pointboard = null;
 			this.pointboard = new HashMap<String, Integer>();
-			
-			this.kit = null;
 			this.kit = new HashMap<Player, Integer>();
 			
 			this.removeAllPlayerScoreboard();
@@ -536,10 +550,10 @@ public class FfaRoom extends Room {
 	}
 	
 	public String getMapNameFancy() {
-		return FfaConfig.get().getString("ffa.maps." + this.getMapName() + ".info.map-name");
+		return FfaConfig.getData().getString("ffa.maps." + this.getMapName() + ".info.map-name");
 	}
 	
 	public String getMapAuthor() {
-		return FfaConfig.get().getString("ffa.maps." + this.getMapName() + ".info.author");
+		return FfaConfig.getData().getString("ffa.maps." + this.getMapName() + ".info.author");
 	}
 }

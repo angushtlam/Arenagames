@@ -26,6 +26,10 @@ public class PlayerData {
 	private int ffaTotalKills, ffaTotalDeaths;
 	private int ffaCurrencyEarned;
 	
+	private int tdmGamesWon, tdmGamesPlayed, tdmRanking;
+	private int tdmTotalKills, tdmTotalDeaths;
+	private int tdmCurrencyEarned;
+	
 	private int lflGamesWon, lflGamesPlayed, lflRanking, lflRecord;
 	private int lflTotalKills, lflTotalDeaths;
 	private int lflCurrencyEarned;
@@ -114,6 +118,13 @@ public class PlayerData {
 					conf.addDefault("user.ffa.deaths", 0);
 					conf.addDefault("user.ffa.currency-earned", 0);
 					
+					conf.addDefault("user.tdm.games-won", 0);
+					conf.addDefault("user.tdm.games-played", 0);
+					conf.addDefault("user.tdm.ranking", 1000);
+					conf.addDefault("user.tdm.kills", 0);
+					conf.addDefault("user.tdm.deaths", 0);
+					conf.addDefault("user.tdm.currency-earned", 0);
+					
 					conf.addDefault("user.lfl.games-won", 0);
 					conf.addDefault("user.lfl.games-played", 0);
 					conf.addDefault("user.lfl.ranking", 1000);
@@ -195,6 +206,13 @@ public class PlayerData {
 				data.setFfaTotalDeaths(conf.getInt("user.ffa.deaths"));
 				data.setFfaCurrencyEarned(conf.getInt("user.ffa.currency-earned"));
 				
+				data.setTdmGamesWon(conf.getInt("user.tdm.games-won"));
+				data.setTdmGamesPlayed(conf.getInt("user.tdm.games-played"));
+				data.setTdmRanking(conf.getInt("user.tdm.ranking"));
+				data.setTdmTotalKills(conf.getInt("user.tdm.kills"));
+				data.setTdmTotalDeaths(conf.getInt("user.tdm.deaths"));
+				data.setTdmCurrencyEarned(conf.getInt("user.tdm.currency-earned"));
+				
 				data.setLflGamesWon(conf.getInt("user.lfl.games-won"));
 				data.setLflGamesPlayed(conf.getInt("user.lfl.games-played"));
 				data.setLflRanking(conf.getInt("user.lfl.ranking"));
@@ -267,6 +285,13 @@ public class PlayerData {
 				conf.set("user.ffa.kills", data.getFfaTotalKills());
 				conf.set("user.ffa.deaths", data.getFfaTotalDeaths());
 				conf.set("user.ffa.currency-earned", data.getFfaCurrencyEarned());
+				
+				conf.set("user.tdm.games-won", data.getTdmGamesWon());
+				conf.set("user.tdm.games-played", data.getTdmGamesPlayed());
+				conf.set("user.tdm.ranking", data.getTdmRanking());
+				conf.set("user.tdm.kills", data.getTdmTotalKills());
+				conf.set("user.tdm.deaths", data.getTdmTotalDeaths());
+				conf.set("user.tdm.currency-earned", data.getTdmCurrencyEarned());
 				
 				conf.set("user.lfl.games-won", data.getLflGamesWon());
 				conf.set("user.lfl.games-played", data.getLflGamesPlayed());
@@ -524,6 +549,54 @@ public class PlayerData {
 
 	public void setLflCurrencyEarned(int lflCurrencyEarned) {
 		this.lflCurrencyEarned = lflCurrencyEarned;
+	}
+
+	public int getTdmGamesWon() {
+		return tdmGamesWon;
+	}
+
+	public void setTdmGamesWon(int tdmGamesWon) {
+		this.tdmGamesWon = tdmGamesWon;
+	}
+
+	public int getTdmGamesPlayed() {
+		return tdmGamesPlayed;
+	}
+
+	public void setTdmGamesPlayed(int tdmGamesPlayed) {
+		this.tdmGamesPlayed = tdmGamesPlayed;
+	}
+
+	public int getTdmRanking() {
+		return tdmRanking;
+	}
+
+	public void setTdmRanking(int tdmRanking) {
+		this.tdmRanking = tdmRanking;
+	}
+
+	public int getTdmTotalKills() {
+		return tdmTotalKills;
+	}
+
+	public void setTdmTotalKills(int tdmTotalKills) {
+		this.tdmTotalKills = tdmTotalKills;
+	}
+
+	public int getTdmTotalDeaths() {
+		return tdmTotalDeaths;
+	}
+
+	public void setTdmTotalDeaths(int tdmTotalDeaths) {
+		this.tdmTotalDeaths = tdmTotalDeaths;
+	}
+
+	public int getTdmCurrencyEarned() {
+		return tdmCurrencyEarned;
+	}
+
+	public void setTdmCurrencyEarned(int tdmCurrencyEarned) {
+		this.tdmCurrencyEarned = tdmCurrencyEarned;
 	}
 
 	public int getPerkFxStorm() {

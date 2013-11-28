@@ -4,6 +4,10 @@ import org.bukkit.entity.Player;
 
 public class PlayerEconomy {
 	public static boolean hasEnoughCurrency(Player p, int amt) {
+		if (amt < 1) {
+			return true;
+		}
+		
 		PlayerData data = null;
 		if (PlayerData.isLoaded(p)) {
 			data = PlayerData.get(p);
@@ -20,6 +24,10 @@ public class PlayerEconomy {
 	}
 	
 	public static boolean hasEnoughCash(Player p, int amt) {
+		if (amt < 1) {
+			return true;
+		}
+		
 		PlayerData data = null;
 		if (PlayerData.isLoaded(p)) {
 			data = PlayerData.get(p);

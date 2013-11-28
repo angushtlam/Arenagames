@@ -6,6 +6,9 @@ import me.taur.arenagames.ffa.FfaRoom;
 import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.lfl.LflConfig;
 import me.taur.arenagames.lfl.LflRoom;
+import me.taur.arenagames.tdm.TdmConfig;
+import me.taur.arenagames.tdm.TdmRoom;
+import me.taur.arenagames.tdm.TdmTeams;
 import me.taur.arenagames.util.ParticleEffect;
 import me.taur.arenagames.util.RoomType;
 
@@ -162,6 +165,51 @@ public class RoomCommand implements CommandExecutor {
 							r.removePlayerScoreboard(p);
 							
 							Location[] blocs = LflConfig.getSignsStored(room.getRoomId());
+							for (Location bloc : blocs) {
+								ParticleEffect.ANGRY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 1);
+							}
+						}
+						
+						// Only applies if the room is a TDM room.
+						if (room.getRoomType() == RoomType.TDM) {
+							TdmRoom r = (TdmRoom) room;
+							
+							if (!room.isGameInProgress()) { // Check if there are enough people in the room.
+								int needed = room.getPlayersInRoom();
+								if (needed > Config.getMinPlayersInWait(RoomType.TDM) - 1) {
+									if (!room.isGameInWaiting()) {
+										room.waitStartMessage(RoomType.TDM);
+										room.setGameInWaiting(true);
+										room.setWaitTimer(Config.getWaitTimer(RoomType.TDM));
+										
+										for (Player pl : room.getPlayers()) {
+											pl.setLevel(0);
+											pl.setExp((float) 0.0);
+											
+										}
+									
+									} else {
+										room.waitStartMessage(p, RoomType.TDM);
+									}
+								} else {
+									room.waitCancelledMessage(RoomType.TDM);
+									room.setGameInWaiting(false);
+									
+								}
+							} else {
+								if (r.getPointboard().get(p.getName()).intValue() == TdmTeams.RED.getId()) {
+									r.removePlayerFromRed(p);
+								} else if (r.getPointboard().get(p.getName()).intValue() == TdmTeams.BLUE.getId()) {
+									r.removePlayerFromBlue(p);
+								}
+								
+							}
+							
+							r.updateSigns(); // Update signs.
+							r.updateScoreboard(); // Update scoreboard
+							r.removePlayerScoreboard(p);
+							
+							Location[] blocs = TdmConfig.getSignsStored(room.getRoomId());
 							for (Location bloc : blocs) {
 								ParticleEffect.ANGRY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 1);
 							}

@@ -2,6 +2,7 @@ package me.taur.arenagames;
 
 import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.lfl.LflConfig;
+import me.taur.arenagames.tdm.TdmConfig;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
@@ -10,7 +11,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class Config {
 
-	public static String[] gamemode = {"ffa", "lfl"};
+	public static String[] gamemode = {"ffa", "tdm"};
 	
 	public static void startCheck() {
 		FileConfiguration config = Arenagames.plugin.getConfig();
@@ -20,6 +21,11 @@ public class Config {
 		
 		if (config.getInt("do-not-change.current-version") != latestVer) {
 			config.addDefault("do-not-change.current-version", latestVer);
+			
+			config.addDefault("global.lobby.world", "world");
+			config.addDefault("global.lobby.x", 0.0);
+			config.addDefault("global.lobby.y", 70.0);
+			config.addDefault("global.lobby.z", 0.0);
 			
 			for (int i = 0; i < gamemode.length; i++) {
 				String gm = gamemode[i];
@@ -35,11 +41,6 @@ public class Config {
 				
 			}
 			
-			config.addDefault("global.lobby.world", "world");
-			config.addDefault("global.lobby.x", 0.0);
-			config.addDefault("global.lobby.y", 70.0);
-			config.addDefault("global.lobby.z", 0.0);
-			
 			config.options().copyDefaults(true);
 		    Arenagames.plugin.saveConfig();
 		    
@@ -47,6 +48,7 @@ public class Config {
 		
 		FfaConfig.defaultConf();
 		LflConfig.defaultConf();
+		TdmConfig.defaultConf();
 	    
 	}
 	

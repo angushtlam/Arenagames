@@ -1,4 +1,4 @@
-package me.taur.arenagames.ffa;
+package me.taur.arenagames.tdm;
 
 import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.room.Room;
@@ -14,7 +14,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class FfaKitSelectorListener implements Listener {
+public class TdmKitSelectorListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void kitSelector(PlayerInteractEvent evt) {
 		Action a = evt.getAction();
@@ -55,8 +55,8 @@ public class FfaKitSelectorListener implements Listener {
 			return;
 		}
 		
-		if (r.getRoomType() == RoomType.FFA) { // If the player is in a FFA room.
-			FfaUtil.kitMenu.open(p);
+		if (r.getRoomType() == RoomType.TDM) { // If the player is in a TDM room.
+			TdmUtil.kitMenu.open(p);
 			p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1.0F, 0.3F);
 			return;
 		}

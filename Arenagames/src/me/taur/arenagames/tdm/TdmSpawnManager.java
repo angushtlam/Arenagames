@@ -1,4 +1,4 @@
-package me.taur.arenagames.ffa;
+package me.taur.arenagames.tdm;
 
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.item.InvUtil;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class FfaSpawnManager {
+public class TdmSpawnManager {
 	public static void kill(Player p) {
 		Location loc = p.getLocation();
 		ParticleEffect.RED_DUST.display(loc, 1.5F, 1.0F, 1.5F, 0, 80);
@@ -51,7 +51,6 @@ public class FfaSpawnManager {
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 3, 1));
 
 		p.teleport(tp); // Teleport player
-		p.setFallDistance(0F); // Prevent people from dying twice
 		purgeEffects(p);
 		
 	}

@@ -1,5 +1,5 @@
 package me.taur.arenagames.util;
 
 public enum RoomType {
-	FFA, LFL
+	FFA, LFL, TDM
 }

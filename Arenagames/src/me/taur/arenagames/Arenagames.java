@@ -30,6 +30,12 @@ import me.taur.arenagames.room.SignCreateListener;
 import me.taur.arenagames.room.SignDestroyListener;
 import me.taur.arenagames.shop.Shop;
 import me.taur.arenagames.shop.ShopSignListener;
+import me.taur.arenagames.tdm.TdmDeathListener;
+import me.taur.arenagames.tdm.TdmKitSelectorListener;
+import me.taur.arenagames.tdm.TdmPlayerListener;
+import me.taur.arenagames.tdm.TdmRoomListener;
+import me.taur.arenagames.tdm.TdmSignListener;
+import me.taur.arenagames.tdm.TdmUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -51,7 +57,6 @@ public class Arenagames extends JavaPlugin {
 		regCmd("premium", new PremiumCommand());
 		regCmd("curr", new CurrencyCommand());
 		regCmd("cash", new CashCommand());
-		loadGamemodes();
 		
 		regEvent(new PlayerLoginListener());
 		regEvent(new SignCreateListener());
@@ -72,6 +77,7 @@ public class Arenagames extends JavaPlugin {
 		regEvent(new ArrowFix());
 		regEvent(new TeleportFix());
 		
+		loadGamemodes();
 		Scheduler.start();
 	}
 
@@ -87,14 +93,24 @@ public class Arenagames extends JavaPlugin {
 			if (gm[i].contains("ffa")) {
 				FfaUtil.enable();
 				regFfa();
+				continue;
 				
 			}
 			
 			if (gm[i].contains("lfl")) {
 				LflUtil.enable();
 				regLfl();
+				continue;
 				
 			}
+			
+			if (gm[i].contains("tdm")) {
+				TdmUtil.enable();
+				regTdm();
+				continue;
+				
+			}
+			
 		}
 	}
 	
@@ -121,6 +137,16 @@ public class Arenagames extends JavaPlugin {
 		regEvent(new LflPlayerListener());
 		regEvent(new LflSignListener());
 		regEvent(new LflRoomListener());
+		
+	}
+	
+
+	private static void regTdm() {
+		regEvent(new TdmDeathListener());
+		regEvent(new TdmKitSelectorListener());
+		regEvent(new TdmPlayerListener());
+		regEvent(new TdmSignListener());
+		regEvent(new TdmRoomListener());
 		
 	}
 }

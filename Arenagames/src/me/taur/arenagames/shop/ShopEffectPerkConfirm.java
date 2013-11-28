@@ -59,7 +59,7 @@ public class ShopEffectPerkConfirm {
 
 							PlayerPerk.grantPerk(p, fx);
 							
-							p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have purchased the " + fx.getName() + "perk.");
+							p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have purchased the " + fx.getName() + " perk.");
 
 						} else {
 							p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You don\'t have enough to purchase this perk.");

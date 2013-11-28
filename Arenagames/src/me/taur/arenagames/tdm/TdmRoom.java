@@ -1,19 +1,20 @@
-package me.taur.arenagames.lfl;
+package me.taur.arenagames.tdm;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.TreeSet;
 
+import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
-import me.taur.arenagames.ffa.FfaConfig;
+import me.taur.arenagames.item.CustomItem;
 import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.player.PlayerData;
 import me.taur.arenagames.player.Premium;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.RoomType;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,25 +27,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
-public class LflRoom extends Room {
+public class TdmRoom extends Room {
 	private String mapname;
 	private HashMap<String, Integer> pointboard;
-	private HashMap<Player, Integer> playertimer;
 	private HashMap<Player, Integer> kit;
 	
-	private int playerAlive;
-	
-	public LflRoom(String roomId) {
+	public TdmRoom(String roomId) {
 		this.pointboard = new HashMap<String, Integer>();
 		this.kit = new HashMap<Player, Integer>();
-		this.playertimer = new HashMap<Player, Integer>();
 		
 		this.setRoomId(roomId);
-		this.setRoomType(RoomType.LFL);
+		this.setRoomType(RoomType.TDM);
 		this.createScoreboard();
+		this.createTeamboard();
 		
 	}
 	
@@ -52,12 +50,15 @@ public class LflRoom extends Room {
 		if (Room.SCOREBOARDS.get(this.getRoomId()) != null) {
 			this.setScoreboardTitle(this.scoreboardTimer());
 			
-			if (this.isGameInProgress() && this.getWinningPlayer() != null) {
-				String winner = this.getWinningPlayer();
-				this.setScoreboardSideField("Most Kills", this.getPointboard().get(winner).intValue());
+			if (this.isGameInProgress()) {
+				int redscore = this.getRedScore();
+				int bluescore = this.getBlueScore();
+				this.setScoreboardSideField(ChatColor.RED + "Redd Score", redscore);
+				this.setScoreboardSideField(ChatColor.BLUE + "Blue Score", bluescore);
 				
 			} else {
-				this.setScoreboardSideField("Most Kills", 0);
+				this.setScoreboardSideField(ChatColor.RED + "Redd Score", 0);
+				this.setScoreboardSideField(ChatColor.BLUE + "Blue Score", 0);
 			}
 			
 			this.setScoreboardSideField("Elo Average", this.getAvgElo());
@@ -71,8 +72,8 @@ public class LflRoom extends Room {
 		
 		if (this.isGameInProgress()) {
 			str = ChatColor.GOLD + "" + ChatColor.BOLD + "Game: " + ChatColor.YELLOW;
-			
 			int timer = this.getCountdownTimer();
+			
 			int minute = timer / 60;
 			int seconds = timer % 60;
 				
@@ -103,10 +104,8 @@ public class LflRoom extends Room {
 				
 			if (minute == 0) {
 				str = str + "0";
-					
 			} else {
 				str = str + minute;
-					
 			}
 			
 			if (seconds % 2 != 0) {
@@ -126,17 +125,72 @@ public class LflRoom extends Room {
 		}
 		
 		return str;
+	}
+	
+	public void createTeamboard() {
+		Scoreboard board = Room.SCOREBOARDS.get(this.getRoomId());
+		Team red = board.registerNewTeam(this.getRoomId() + "-red");
+		red.setDisplayName("Redd");
+		red.setPrefix(ChatColor.RED + "");
+		red.setSuffix(ChatColor.RESET + "");
+		red.setCanSeeFriendlyInvisibles(true);
+		red.setAllowFriendlyFire(false);
+		
+		Team blue = board.registerNewTeam(this.getRoomId() + "-blue");
+		blue.setDisplayName("Blue");
+		blue.setPrefix(ChatColor.BLUE + "");
+		blue.setSuffix(ChatColor.RESET + "");
+		blue.setCanSeeFriendlyInvisibles(true);
+		blue.setAllowFriendlyFire(false);
 		
 	}
 	
-	public void giveKit(Player p) {
-		String kitname = LflConfig.getKitName(this.kit.get(p));
+	public void addPlayerToRed(Player p) {
+		Scoreboard board = Room.SCOREBOARDS.get(this.getRoomId());
+		if (board.getTeam(this.getRoomId() + "-red") != null) {
+			Team t = board.getTeam(this.getRoomId() + "-red");
+			t.addPlayer(p);
+			
+		}
+	}
+	
+	public void removePlayerFromRed(Player p) {
+		Scoreboard board = Room.SCOREBOARDS.get(this.getRoomId());
+		if (board.getTeam(this.getRoomId() + "-red") != null) {
+			Team t = board.getTeam(this.getRoomId() + "-red");
+			t.removePlayer(p);
+			
+		}
+	}
+	
+	public void addPlayerToBlue(Player p) {
+		Scoreboard board = Room.SCOREBOARDS.get(this.getRoomId());
+		if (board.getTeam(this.getRoomId() + "-blue") != null) {
+			Team t = board.getTeam(this.getRoomId() + "-blue");
+			t.addPlayer(p);
+			
+		}
+	}
+	
+	public void removePlayerFromBlue(Player p) {
+		Scoreboard board = Room.SCOREBOARDS.get(this.getRoomId());
+		if (board.getTeam(this.getRoomId() + "-blue") != null) {
+			Team t = board.getTeam(this.getRoomId() + "-blue");
+			t.removePlayer(p);
+			
+		}
+	}
+	
+	public void giveKit(Player p, int kitnum) {
+		String kitname = TdmConfig.getKitName(this.kit.get(p));
 		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been given a " + kitname + " kit.");
 		
 		PlayerInventory inv = p.getInventory();
+		inv.setItem(8, InvUtil.getKitSelector()); // Give the player a kit selector first
+		
 		int playerkit = this.kit.get(p); // Get what kit the player has.
 		
-		for (String item : LflConfig.getKitItems(playerkit)) {
+		for (String item : TdmConfig.getKitItems(playerkit)) {
 			ItemStack i = InvUtil.convertToItemStack(item); 
 
 			// Automatically set the player's armor if the item is an armor, and they don't have the armor on.
@@ -184,95 +238,69 @@ public class LflRoom extends Room {
 		
 	}
 	
-	public void addRefill(Player p) {
-		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have been given refills for the kill.");
-		
-		PlayerInventory inv = p.getInventory();
-		int playerkit = this.kit.get(p); // Get what kit the player has.
-		
-		for (String item : LflConfig.getKitRefill(playerkit)) {
-			ItemStack i = InvUtil.convertToItemStack(item); 
-
-			// Automatically set the player's armor if the item is an armor, and they don't have the armor on.
-			if (inv.getHelmet() == null && i.getType().name().contains("HELMET")) {
-				inv.setHelmet(i);
-				continue;
-				
-			}
-			
-			if (inv.getHelmet() == null && i.getType().name().equals(Material.PUMPKIN)) {
-				inv.setHelmet(i);
-				continue;
-				
-			}
-			
-			if (inv.getHelmet() == null && i.getType().name().equals(Material.JACK_O_LANTERN)) {
-				inv.setHelmet(i);
-				continue;
-				
-			}
-			
-			if (inv.getChestplate() == null && i.getType().name().contains("CHESTPLATE")) {
-				inv.setChestplate(i);
-				continue;
-				
-			}
-			
-			if (inv.getLeggings() == null && i.getType().name().contains("LEGGINGS")) {
-				inv.setLeggings(i);
-				continue;
-				
-			}
-			
-			if (inv.getBoots() == null && i.getType().name().contains("BOOTS")) {
-				inv.setBoots(i);
-				continue;
-				
-			}
-			
-			inv.addItem(i);
+	public void resetKit(Player p) {
+		if (this.isPlayerInRoom(p)) {
+			int kitnum = this.kit.get(p); // Get what kit the player has.
+			p.getInventory().setArmorContents(null);
+			p.getInventory().clear();
+			this.giveKit(p, kitnum);
 			
 		}
+	}
+	
+	public TdmTeams getWinningTeam() {
+		int red = this.getPointboard().get("&red").intValue();
+		int blue = this.getPointboard().get("&blue").intValue();
 		
-		InvUtil.updatePlayerInv(p);
+		if (red > blue) {
+			return TdmTeams.RED;
+		} else if (blue > red) {
+			return TdmTeams.BLUE;
+		} else {
+			return TdmTeams.TIED;
+		}
 		
 	}
 	
-	public String getWinningPlayer() {
-		String player = "";
-		boolean firstLoop = true;
-		int score = 0;
-		
-		for (String name : this.pointboard.keySet()) {
-			int amt = this.pointboard.get(name);
-			
-			if (firstLoop) {
-				firstLoop = false;
-				player = name;
-				score = amt;
-				
-			}
-			
-			if (score < amt) {
-				player = name;
-				score = amt;
-				
-			}
+	public int getRedScore() {
+		if (this.getPointboard().get("&red") == null) {
+			return 0;
 		}
 		
-		return player;
-
+		return this.getPointboard().get("&red").intValue();
 	}
 	
-	public int getPointMedian() {
-		TreeSet<Integer> set = new TreeSet<Integer>();
-		
-		for (int i : this.getPointboard().values()) {
-			set.add(i);
+	public int getBlueScore() {
+		if (this.getPointboard().get("&red") == null) {
+			return 0;
 		}
 		
-		int half = set.size() / 2;
-		return (int) set.toArray()[half];
+		return this.getPointboard().get("&blue").intValue();
+	}
+	
+	public int getPlayersOnBlue() {
+		int i = 0;
+		
+		for (String s : this.getPointboard().keySet()) {
+			if (this.getPointboard().get(s).intValue() == TdmTeams.BLUE.getId()) {
+				i++;
+			}
+		}
+		
+		return i;
+		
+	}
+	
+	public int getPlayersOnRed() {
+		int i = 0;
+		
+		for (String s : this.getPointboard().keySet()) {
+			if (this.getPointboard().get(s).intValue() == TdmTeams.RED.getId()) {
+				i++;
+			}
+		}
+		
+		return i;
 		
 	}
 	
@@ -281,11 +309,10 @@ public class LflRoom extends Room {
 		
 		if (this.getPlayers() != null) {
 			for (Player p : this.getPlayers()) {
-				if (p != null) {
-					if (PlayerData.isLoaded(p)) {
-						PlayerData data = PlayerData.get(p);
-						total = total + data.getLflRanking();
-					}
+				if (p != null && PlayerData.isLoaded(p)) {
+					PlayerData data = PlayerData.get(p);
+					total = total + data.getTdmRanking();
+					
 				}
 			}
 		}
@@ -300,60 +327,6 @@ public class LflRoom extends Room {
 		
 	}
 	
-	public void crankPlayer(Player p) {
-		int reset = LflConfig.getCrankedTimer();
-		int kill = 0;
-		
-		if (this.pointboard.get(p.getName()) != null) {
-			kill = this.pointboard.get(p.getName());
-		}
-		
-		this.pointboard.put(p.getName(), kill + 1);
-		
-		this.playertimer.put(p, reset); // Reset the player's timer.
-		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get another kill within " + reset + " seconds or you'll die!");
-		
-		int potionstr = (kill / 3); // Perks increases every 3 kills
-		if (potionstr > 0) {
-			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, LflConfig.getCrankedTimer() * 20, potionstr));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, LflConfig.getCrankedTimer() * 20, potionstr));
-			
-		}
-		
-		addRefill(p);
-		
-	}
-	
-	public void killPlayer(Player p) {
-		p.setLevel(0);
-		p.setHealth(10.0);
-		p.setFoodLevel(19);
-		
-		this.getTimer().put(p, -1);
-		this.setPlayerAlive(this.getPlayerAlive() - 1);
-		
-		LflSpawnManager.kill(p);
-		InvUtil.clearPlayerInv(p);
-		
-	}
-	
-	public boolean isPlayerDead(Player p) {
-		if (p == null) {
-			return true;
-		}
-
-		if (!this.getTimer().containsKey(p)) {
-			return true;
-		}
-		
-		if (this.getTimer().get(p) < 0) {
-			return true;
-		}
-		
-		return false;
-		
-	}
-	
 	public void playerDied(Player p, String msg) {
 		PlayerData data = null;
 		if (PlayerData.isLoaded(p)) {
@@ -362,22 +335,33 @@ public class LflRoom extends Room {
 			data = new PlayerData(p);
 		}
 		
-		data.setLflTotalDeaths(data.getLflTotalDeaths() + 1); // Increase death count
-		
-		int kills = this.pointboard.get(p.getName());
+		data.setTdmTotalDeaths(data.getTdmTotalDeaths() + 1); // Increase death count
 		
 		if (this.getPlayers() != null) {
 			for (Player pl : this.getPlayers()) {
 				if (pl != null) {
 					pl.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + msg);
 				}
-			}
+			}	
 		}
 		
-		p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You died with " + kills + (kills == 1 ? " kill" : " kills") + ".");
-		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have been removed from this arena.");
+		int team = this.getPointboard().get(p.getName());
 		
-		this.killPlayer(p);
+		if (team == TdmTeams.RED.getId()) {
+			TdmSpawnManager.respawn(p, TdmConfig.getPossibleRedSpawnLocation(this));
+		} else if (team == TdmTeams.BLUE.getId()) {
+			TdmSpawnManager.respawn(p, TdmConfig.getPossibleBlueSpawnLocation(this));
+		}
+		
+		final Player pl = p; // Reset the kit the same time the player's invulnerability ends.
+		Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
+		    public void run() {
+		    	if (pl != null) {
+		    		resetKit(pl);
+		    	}
+		    }
+		}, 60L);
+		
 	}
 	
 	public void playerDied(Player p, Player killer) { // Player loses 1 point for being executed by another player.
@@ -388,11 +372,15 @@ public class LflRoom extends Room {
 			data = new PlayerData(killer);
 		}
 		
-		data.setLflTotalKills(data.getLflTotalKills() + 1); // Increase kill count
+		data.setTdmTotalKills(data.getTdmTotalKills() + 1); // Increase kill count
 		
-		int kill = this.pointboard.get(killer.getName()) + 1;
-		killer.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You are on a " + kill + " kill kill-streak.");
-		this.crankPlayer(killer);
+		int pteam = this.getPointboard().get(p.getName());
+		if (pteam == TdmTeams.BLUE.getId()) { // Add points to the team who killed the player
+			this.pointboard.put("&red", this.pointboard.get("&red") + 1);
+		} else if (pteam == TdmTeams.RED.getId()) {
+			this.pointboard.put("&blue", this.pointboard.get("&blue") + 1);
+		}
+		
 		this.playerDied(p, p.getName() + " has been executed by " + killer.getName() + "!");
 		
 	}
@@ -434,12 +422,13 @@ public class LflRoom extends Room {
 			c = "died by parried damage";
 		} else if (cause.equals(DamageCause.WITHER)) {
 			c = "withered away";
+		} else if (cause.equals(DamageCause.VOID)) {
+			c = "fell into the void";
 		} else {
 			c = "died";
 		}
 		
 		this.playerDied(p, p.getName() + " " + c + ".");
-		
 	}
 
 	public void playerDied(Player p) {
@@ -452,10 +441,9 @@ public class LflRoom extends Room {
 				p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- THE GAME HAS STARTED! ---");
 				p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "Map: " + this.getMapNameFancy() + " by " + this.getMapAuthor() + ".");
 				p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + " --- -------------------- ---");
-				p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get a kill within " + LflConfig.getCrankedTimer() + " seconds or you'll die!");
 				
 				if (!this.kit.containsKey(p)) { // If the player didn't pick a kit, give them a random one.
-					ConfigurationSection cs = LflConfig.getKits();
+					ConfigurationSection cs = TdmConfig.getKits();
 					int kits = cs.getKeys(false).size();
 					
 					Random rand = new Random();
@@ -465,7 +453,7 @@ public class LflRoom extends Room {
 					while (kitloop) { // Make sure non-Premiums cannot random into Premium kits. 
 						r = rand.nextInt(kits);
 						
-						if (FfaConfig.isKitPremium(r) && !(Premium.isPremium(p))) {
+						if (TdmConfig.isKitPremium(r) && !(Premium.isPremium(p))) {
 							continue;
 						}
 						
@@ -479,24 +467,42 @@ public class LflRoom extends Room {
 				}
 				
 				InvUtil.clearPlayerInv(p);
-				
-				LflSpawnManager.spawn(p, LflConfig.getPossibleSpawnLocation(this));
-				this.giveKit(p);
-				
-				this.pointboard.put(p.getName(), 0);
-				this.playertimer.put(p, LflConfig.getCrankedTimer());
-				this.setPlayerAlive(this.getPlayersInRoom());
+				int playerkit = this.kit.get(p); 
+				this.giveKit(p, playerkit);
 				
 			}
 		}
 		
+		for (int i = 0; i < this.getPlayersInRoom(); i++) {
+			Player p = this.getPlayers()[i];
+			
+			TdmTeams team = (i % 2 == 0 ? TdmTeams.RED : TdmTeams.BLUE);
+			this.pointboard.put(p.getName(), team.getId());
+			
+			if (team == TdmTeams.RED) {
+				p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "You have been placed on the Redd team.");
+				TdmSpawnManager.spawn(p, TdmConfig.getPossibleRedSpawnLocation(this));
+				this.addPlayerToRed(p);
+				
+			} else if (team == TdmTeams.BLUE) {
+				p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "You have been placed on the Blue team.");
+				TdmSpawnManager.spawn(p, TdmConfig.getPossibleBlueSpawnLocation(this));
+				this.addPlayerToBlue(p);
+				
+			}
+			
+		}
+		
+		this.pointboard.put("&red", 0);
+		this.pointboard.put("&blue", 0);
+		
 		this.updateSigns();
-		this.setCountdownTimer(Config.getCountdown(RoomType.LFL));
+		this.setCountdownTimer(Config.getCountdown(RoomType.TDM));
 		
 	}
 	
 	public void updateSigns() {
-		Location[] locs = LflConfig.getSignsStored(this.getRoomId());
+		Location[] locs = TdmConfig.getSignsStored(this.getRoomId());
 		Set<Location> signloc = new HashSet<Location>(); // Make a hashmap for convienence.
 		
 		if (locs != null) { // Make the Array a Set for now cuz it's convenient.
@@ -532,9 +538,9 @@ public class LflRoom extends Room {
 				}
 				
 				Sign sign = (Sign) b.getState();
-				sign.setLine(0, ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "[Lifeline]");
+				sign.setLine(0, ChatColor.DARK_BLUE + "" + ChatColor.BOLD + "[TDM]");
 				sign.setLine(1, (this.isPremium() ? ChatColor.GOLD + "" : "") + this.getRoomId());
-				sign.setLine(2, ChatColor.ITALIC + "" + this.getPlayersInRoom() + "/" + Config.getPlayerLimit(RoomType.LFL));
+				sign.setLine(2, ChatColor.ITALIC + "" + this.getPlayersInRoom() + "/" + Config.getPlayerLimit(RoomType.TDM));
 				
 				String setl3 = ChatColor.GREEN + "Queue Open";
 				if (this.isGameInProgress()) {
@@ -545,6 +551,7 @@ public class LflRoom extends Room {
 				
 				sign.setLine(3, setl3);
 				sign.update();
+				
 			}
 			
 			if (fix) { // Fix signs.
@@ -552,10 +559,9 @@ public class LflRoom extends Room {
 				
 				for (Location l : locs) { // Copy the list first
 					signlocs.add(l);
-					
 				}
 				
-				LflConfig.clearSignLocations(this.getRoomId());
+				TdmConfig.clearSignLocations(this.getRoomId());
 				
 				int i = 0;
 				if (locs != null) {
@@ -574,7 +580,7 @@ public class LflRoom extends Room {
 							continue;
 						}
 							
-						LflConfig.setSignLocation(this.getRoomId(), i, l);
+						TdmConfig.setSignLocation(this.getRoomId(), i, l);
 						i++;
 							
 					}
@@ -585,35 +591,30 @@ public class LflRoom extends Room {
 	
 	public void resetRoom(boolean areYouSure) {
 		if (areYouSure) {
-			this.pointboard = null;
 			this.pointboard = new HashMap<String, Integer>();
-			
-			this.playertimer = null;
-			this.playertimer = new HashMap<Player, Integer>();
-			
-			this.kit = null;
 			this.kit = new HashMap<Player, Integer>();
 			
 			this.removeAllPlayerScoreboard();
 			
 			for (Player p : this.getPlayers()) {
+				CustomItem.clearPlayerTimers(p);
 				p.setLevel(0);
 			}
 			
-			this.setPlayerAlive(0);
 			this.setMapName(null);
 			this.resetRoomBasics(areYouSure);
 			this.updateSigns();
+			this.updateScoreboard(); // Update scoreboard
 			
 		}
 	}
-	
+
 	public String getMapNameFancy() {
-		return LflConfig.get().getString("lfl.maps." + this.getMapName() + ".info.map-name");
+		return TdmConfig.getData().getString("tdm.maps." + this.getMapName() + ".info.map-name");
 	}
 	
 	public String getMapAuthor() {
-		return LflConfig.get().getString("lfl.maps." + this.getMapName() + ".info.author");
+		return TdmConfig.getData().getString("tdm.maps." + this.getMapName() + ".info.author");
 	}
 	
 	public String getMapName() {
@@ -628,19 +629,11 @@ public class LflRoom extends Room {
 		return this.pointboard;
 	}
 
-	public void setPointboard(HashMap<String, Integer> pointboard) {
-		this.pointboard = pointboard;
+	public void setPointboard(HashMap<String, Integer> scoreboard) {
+		this.pointboard = scoreboard;
 	}
 	
-	public HashMap<Player, Integer> getTimer() {
-		return this.playertimer;
-	}
-
-	public void setTimer(HashMap<Player, Integer> timer) {
-		this.playertimer = timer;
-	}
-	
-	public void setPlayerScore(Player p, int amt) {
+	public void setPointboard(Player p, int amt) {
 		this.pointboard.put(p.getName(), amt);
 	}
 	
@@ -652,11 +645,4 @@ public class LflRoom extends Room {
 		this.kit = kit;
 	}
 
-	public int getPlayerAlive() {
-		return playerAlive;
-	}
-
-	public void setPlayerAlive(int playerAlive) {
-		this.playerAlive = playerAlive;
-	}
 }

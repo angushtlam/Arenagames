@@ -4,6 +4,7 @@ import me.taur.arenagames.ffa.FfaActive;
 import me.taur.arenagames.item.CustomItem;
 import me.taur.arenagames.lfl.LflActive;
 import me.taur.arenagames.perk.PerkEffectActive;
+import me.taur.arenagames.tdm.TdmActive;
 
 import org.bukkit.Bukkit;
 
@@ -26,6 +27,7 @@ public class Scheduler {
 		if (checkTick(20)) {
 			FfaActive.run();
 			LflActive.run();
+			TdmActive.run();
 
 			CustomItem.run();
 			PerkEffectActive.tick20();

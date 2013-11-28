@@ -1,4 +1,4 @@
-package me.taur.arenagames.ffa;
+package me.taur.arenagames.tdm;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -16,17 +16,17 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-public class FfaActive {
+public class TdmActive {
 	public static void run() {
 		for (String s : Room.ROOMS.keySet()) { // Get each room in stored Rooms.
 			Room r = Room.ROOMS.get(s);
 
-			if (r.getRoomType() == RoomType.FFA) {
-				FfaRoom room = (FfaRoom) r;
+			if (r.getRoomType() == RoomType.TDM) {
+				TdmRoom room = (TdmRoom) r;
 				room.updateScoreboard();
 				
 				if (room.isGameInProgress()) {
-					if (room.getPlayersInRoom() < 2) { // If there are not enough players in the room:
+					if (room.getPlayersOnBlue() < 1 || room.getPlayersOnRed() < 1 || room.getPlayersInRoom() < 2) { // If there are not enough players in the room:
 						RoomEndEvent event = new RoomEndEvent(room.getRoomId(), RoomEndResult.NOT_ENOUGH_PLAYERS);
 						Bukkit.getPluginManager().callEvent(event);
 						continue;
@@ -87,7 +87,7 @@ public class FfaActive {
 						}
 						
 						if (waitcount == 0) { // Game start
-							ConfigurationSection cs = FfaConfig.getData().getConfigurationSection("ffa.maps");
+							ConfigurationSection cs = TdmConfig.getData().getConfigurationSection("tdm.maps");
 							if (cs != null) {
 								Set<String> maps = cs.getKeys(false);
 
@@ -102,24 +102,24 @@ public class FfaActive {
 										room.setGameInProgress(false);
 
 										for (Player p : r.getPlayers()) {
-											p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Currently all of the Free For All arenas are in progress.");
+											p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Currently all of the Team Deathmatch arenas are in progress.");
 											p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Please wait until an arena frees up.");
 
 										}
 
 										// Restart the wait timer.
 										int needed = room.getPlayersInRoom();
-										if (needed > Config.getMinPlayersInWait(RoomType.FFA)) {
+										if (needed > Config.getMinPlayersInWait(RoomType.TDM)) {
 											if (!room.isGameInWaiting()) {
-												room.waitStartMessage(RoomType.FFA);
+												room.waitStartMessage(RoomType.TDM);
 												room.setGameInWaiting(true);
-												room.setWaitTimer(Config.getWaitTimer(RoomType.FFA));
+												room.setWaitTimer(Config.getWaitTimer(RoomType.TDM));
 												room.updateSigns();
 												room.updateScoreboard(); // Update scoreboard
 
 											}
 										} else {
-											room.waitCancelledMessage(RoomType.FFA);
+											room.waitCancelledMessage(RoomType.TDM);
 
 										}
 
@@ -139,14 +139,14 @@ public class FfaActive {
 											String mapname = ((String) maps.toArray()[map]);
 
 											if (premium) { // If the queue is premium
-												if (!FfaConfig.canPremiumPlayMap(mapname)) { // If the premium room cannot play the map
+												if (!TdmConfig.canPremiumPlayMap(mapname)) { // If the premium room cannot play the map
 													alreadyused.add(map);
 													tries++;
 													continue;
 
 												}
 											} else {
-												if (!FfaConfig.canNormalPlayMap(mapname)) { // If the normal room cannot play the map
+												if (!TdmConfig.canNormalPlayMap(mapname)) { // If the normal room cannot play the map
 													alreadyused.add(map);
 													tries++;
 													continue;
@@ -156,8 +156,8 @@ public class FfaActive {
 
 											boolean match = false; // Make sure arenas are not used by more than 1 queue
 											for (Room tryroom : Room.ROOMS.values()) {
-												if (tryroom.getRoomType() == RoomType.FFA) {
-													FfaRoom troom = (FfaRoom) tryroom;
+												if (tryroom.getRoomType() == RoomType.TDM) {
+													TdmRoom troom = (TdmRoom) tryroom;
 													if (troom.getMapName() == maps.toArray()[map]) {
 														match = true;
 
@@ -187,7 +187,7 @@ public class FfaActive {
 
 							} else {
 								Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "An error has occured in " + room.getRoomId() + ": Maps cannot be loaded.");
-								Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Free For All match " + room.getRoomId() + " has ended.");
+								Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Team Deathmatch match " + room.getRoomId() + " has ended.");
 
 								room.resetRoom(true);
 
