@@ -4,8 +4,8 @@ import org.bukkit.ChatColor;
 
 public enum RoomType {
 	FFA(ChatColor.DARK_RED, "Free For All", "FFA"),
-	TDM(ChatColor.DARK_PURPLE, "Team Deathmatch", "TDM"),
-	CRK(ChatColor.YELLOW, "Cranked", "Cranked");
+	TDM(ChatColor.DARK_BLUE, "Team Deathmatch", "TDM"),
+	CRK(ChatColor.GOLD, "Cranked", "Cranked");
 	
 	private ChatColor color;
 	private String name;

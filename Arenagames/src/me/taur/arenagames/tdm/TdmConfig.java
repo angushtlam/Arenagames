@@ -251,7 +251,7 @@ public class TdmConfig {
 	}
 	
 	public static int getCurrencyLoser() {
-		return getData().getInt("tdm.currency.everyone");
+		return getData().getInt("tdm.currency.loser");
 	}
 	
 	public static void defaultConf() {
