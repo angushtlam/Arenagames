@@ -5,7 +5,7 @@ import java.util.Random;
 import me.taur.arenagames.item.SpellUtil;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.EffectPerk;
-import me.taur.arenagames.util.ParticleEffect;
+import me.taur.arenagames.util.ParticleUtil;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -28,7 +28,7 @@ public class PerkEffectActive {
 				Random rand = new Random();
 				int r = rand.nextInt(4); 
 				if (r == 0) {
-					ParticleEffect.CRIT.display(p.getLocation().add(0.0, 3.0, 0.0), 0.4F, 0.2F, 0.4F, 0, 6); // Random thunder.
+					ParticleUtil.CRITICAL.sendToLocation(p.getLocation().add(0.0, 3.0, 0.0), 0.4F, 0.2F, 6);
 				}
 				
 			}
@@ -72,61 +72,60 @@ public class PerkEffectActive {
 			EffectPerk fx = PerkEffect.ACTIVE_EFFECT_PERK.get(p);
 			
 			if (fx.equals(EffectPerk.STORM)) {
-				ParticleEffect.DRIP_WATER.display(p.getLocation().add(0.0, 3.0, 0.0), 0.2F, 0.1F, 0.2F, 1, 8); // Constant rain
-				ParticleEffect.LARGE_SMOKE.display(p.getLocation().add(0.0, 3.0, 0.0), 0.2F, 0.1F, 0.2F, 0, 8); // Constant smoke
+				ParticleUtil.WATER_DRIP.sendToLocation(p.getLocation().add(0.0, 3.0, 0.0), 0.2F, 0.0F, 8);
+				ParticleUtil.SMOKE.sendToLocation(p.getLocation().add(0.0, 3.0, 0.0), 0.2F, 0.1F, 8);
 				
 			}
 			
 			if (fx.equals(EffectPerk.BLOOM)) {
-				ParticleEffect.MOB_SPELL.display(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.2F, 0.4F, 1, 12); // Bright potion particles
+				ParticleUtil.MOB_SPELL.sendToLocation(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.2F, 12);
 			}
 			
 			if (fx.equals(EffectPerk.MUSIC)) {
-				ParticleEffect.NOTE.display(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.2F, 0.4F, 1, 16); // Bright note particles
+				ParticleUtil.NOTE.sendToLocation(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.2F, 16);
 			}
 			
 			if (fx.equals(EffectPerk.CLOUD)) {
-				ParticleEffect.CLOUD.display(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.1F, 0.4F, 0, 16); // Constant cloud
-				ParticleEffect.SPELL.display(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.1F, 0.4F, 0, 8); // Constant white swirl
-				ParticleEffect.EXPLODE.display(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.1F, 0.4F, 0, 4); // Constant larger cloud
+				ParticleUtil.CLOUD.sendToLocation(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.1F, 22);
+				ParticleUtil.SPELL.sendToLocation(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.2F, 16);
 				
 			}
 			
 			if (fx.equals(EffectPerk.SOIL)) {
-				ParticleEffect.LARGE_SMOKE.display(p.getLocation().add(0.0, -0.5, 0.0), 1.0F, 0.0F, 1.0F, 0, 24); // Constant cloud
+				ParticleUtil.SMOKE.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 1.0F, 0.0F, 16);
 			}
 			
 			if (fx.equals(EffectPerk.ENDER)) {
-				ParticleEffect.PORTAL.display(p.getLocation().add(0.0, -0.5, 0.0), 0.5F, 0.0F, 0.5F, 0, 140); // Constant purple	
+				ParticleUtil.PORTAL.sendToLocation(p.getLocation().add(0.0, -0.8, 0.0), 0.25F, 0.5F, 130);
 			}
 			
 			if (fx.equals(EffectPerk.FIRESCARF)) {
-				ParticleEffect.FLAME.display(p.getLocation().add(0.0, 1.4, 0.0), 0.2F, 0.0F, 0.2F, 0, 8); // Constant fire around neck				
+				ParticleUtil.FIRE.sendToLocation(p.getLocation().add(0.0, 1.4, 0.0), 0.2F, 0.0F, 8);		
 			}
 			
 			if (fx.equals(EffectPerk.FIRETRAIL)) {
-				ParticleEffect.LAVA.display(p.getLocation().add(0.0, -0.5, 0.0), 0.5F, 0.0F, 0.5F, 0, 3); // Constant lava around legs				
+				ParticleUtil.LAVA_SPARK.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.5F, 0.0F, 2);	
 			}
 			
 			if (fx.equals(EffectPerk.HEARTSCARF)) {
-				ParticleEffect.HEART.display(p.getLocation().add(0.0, 0.7, 0.0), 0.12F, 0.0F, 0.12F, 0, 1); // Constant hearts around neck			
+				ParticleUtil.HEART.sendToLocation(p.getLocation().add(0.0, 0.7, 0.0), 0.12F, 0.0F, 1);
 			}
 			
 			if (fx.equals(EffectPerk.HEARTTRAIL)) {
-				ParticleEffect.HEART.display(p.getLocation().add(0.0, -0.5, 0.0), 0.5F, 0.0F, 0.5F, 0, 6); // Constant hearts around legs				
+				ParticleUtil.HEART.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.5F, 0.0F, 6);			
 			}
 			
 			if (fx.equals(EffectPerk.KNOWLEDGE)) {
-				ParticleEffect.ENCHANTMENT_TABLE.display(p.getLocation().add(0.0, 2.0, 0.0), 0.2F, 0.1F, 0.2F, 0, 12); // Constant text above head
+				ParticleUtil.MAGIC_RUNES.sendToLocation(p.getLocation().add(0.0, 2.0, 0.0), 0.3F, 0.2F, 12);
 			}
 			
 			if (fx.equals(EffectPerk.SUPERCHICKEN)) {
-				ParticleEffect.CLOUD.display(p.getLocation().add(0.0, 1.2, 0.0), 0.2F, 0.1F, 0.2F, 0, 1); // Constant cloud
+				ParticleUtil.CLOUD.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.3F, 0.5F, 3);
 			}
 			
 			if (fx.equals(EffectPerk.BLOOD)) {
-				ParticleEffect.RED_DUST.display(p.getLocation().add(0.0, 0.2, 0.0), 0.2F, 0.1F, 0.1F, 0, 8); // Constant red particles
-				ParticleEffect.DRIP_LAVA.display(p.getLocation().add(0.0, 0.2, 0.0), 0.2F, 0.0F, 0.2F, 0, 6); // Constant red particles
+				ParticleUtil.RED_SMOKE.sendToLocation(p.getLocation().add(0.0, 0.2, 0.0), 0.4F, 0.2F, 14);
+				ParticleUtil.LAVA_DRIP.sendToLocation(p.getLocation().add(0.0, 0.2, 0.0), 0.2F, 0.0F, 3);
 				
 			}
 			

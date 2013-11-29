@@ -229,6 +229,18 @@ public class FfaConfig {
 		return getData().getInt("ffa.currency.everyone");
 	}
 	
+	public static int getExpFirst() {
+		return getData().getInt("ffa.exp.first");
+	}
+	
+	public static int getExpWinner() {
+		return getData().getInt("ffa.exp.winner");
+	}
+	
+	public static int getExpEveryone() {
+		return getData().getInt("ffa.exp.everyone");
+	}
+	
 	public static void defaultConf() {
 		if (getData().getBoolean("generate-default-config")) {
 			getData().addDefault("ffa.lobby.world", "world");
@@ -239,6 +251,10 @@ public class FfaConfig {
 			getData().addDefault("ffa.currency.first", 40);
 			getData().addDefault("ffa.currency.winner", 30);
 			getData().addDefault("ffa.currency.everyone", 15);
+			
+			getData().addDefault("ffa.exp.first", 40);
+			getData().addDefault("ffa.exp.winner", 30);
+			getData().addDefault("ffa.exp.everyone", 15);
 			
 			getData().addDefault("ffa.maps.edit.info.map-name", "Llamarena");
 			getData().addDefault("ffa.maps.edit.info.author", "Taur and the Animals");

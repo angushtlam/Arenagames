@@ -1,6 +1,6 @@
 package me.taur.arenagames.fix;
 
-import me.taur.arenagames.util.ParticleEffect;
+import me.taur.arenagames.util.ParticleUtil;
 
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -15,7 +15,7 @@ public class ArrowFix implements Listener {
 		Entity ent = evt.getEntity();
 		
 		if (ent instanceof Arrow) {
-			ParticleEffect.SNOWBALL_POOF.display(ent.getLocation(), 0.2F, 0.2F, 0.2F, 1, 4);
+			ParticleUtil.CRITICAL.sendToLocation(ent.getLocation(), 0.0F, 0.0F, 3);
 			ent.remove();
 			
 		}

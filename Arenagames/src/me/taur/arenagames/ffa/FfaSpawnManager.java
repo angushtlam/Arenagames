@@ -3,7 +3,7 @@ package me.taur.arenagames.ffa;
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.ParticleEffect;
+import me.taur.arenagames.util.ParticleUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,11 +12,24 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class FfaSpawnManager {
-	public static void kill(Player p) {
+	public static void spawn(final Player p, Location tp) {
+		p.teleport(tp);
+		
+		purgeEffects(p);
+		p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10, 400));  // Prevent player from seeing the teleport.
+		p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20 * 3, 1)); // Stop spawncamping and prevent protected players from attacking.
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 3, 5));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 3, 5));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20 * 3, 5));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 3, 1));
+		
+	}
+	
+	public static void kill(Player p, Location tp) {
 		Location loc = p.getLocation();
-		ParticleEffect.RED_DUST.display(loc, 1.5F, 1.0F, 1.5F, 0, 80);
-		ParticleEffect.EXPLODE.display(loc, 2.0F, 4.0F, 2.0F, 0, 125);
-		ParticleEffect.DRIP_LAVA.display(loc, 0.6F, 1.0F, 0.6F, 0, 70);
+		ParticleUtil.RED_SMOKE.sendToLocation(loc, 1.5F, 1.5F, 80);
+		ParticleUtil.CLOUD.sendToLocation(loc, 2.0F, 4.0F, 125);
+		ParticleUtil.LAVA_DRIP.sendToLocation(loc.add(0.0, 1.0, 0.0), 0.6F, 1.0F, 70);
 		
 		p.setHealth(p.getMaxHealth());
 		p.setFoodLevel(19);
@@ -35,25 +48,27 @@ public class FfaSpawnManager {
 		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20 * 60, 128));
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 60, 128));
 		
-		p.getInventory().setArmorContents(null);
-		p.getInventory().clear();
-		InvUtil.updatePlayerInv(p);
+		InvUtil.clearPlayerInv(p);
+		
+		p.teleport(tp); // Teleport player
+		p.setFallDistance(0F);
 		
 	}
 	
-	public static void spawn(Player p, Location tp) {
-		p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10, 400));  // Prevent player from seeing the teleport.
-		
-		p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20 * 3, 1)); // Stop spawncamping and prevent protected players from attacking.
+	public static void endDeath(final Player p) {
+		purgeEffects(p);
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 3, 5));
 		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 3, 5));
 		p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20 * 3, 5));
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 3, 1));
-
-		p.teleport(tp); // Teleport player
-		p.setFallDistance(0); // Prevent people from dying twice
-		purgeEffects(p);
 		
+		Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
+		    public void run() {
+		    	if (Room.PLAYERS.get(p) != null) {
+		    		purgeEffects(p);
+		    	}
+		    }
+		}, 60L); // Remove effects in 3 seconds.
 	}
 	
 	public static void purgeEffects(Player p) {
@@ -66,12 +81,12 @@ public class FfaSpawnManager {
 	}
 	
 	public static void respawn(final Player p, final Location tp) {
-		kill(p);
+		kill(p, tp);
 		
 		Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
 		    public void run() {
 		    	if (Room.PLAYERS.get(p) != null) {
-		    		spawn(p, tp);
+		    		endDeath(p);
 		    	}
 		    }
 		}, 60L); // Spawn in 3 seconds.

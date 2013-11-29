@@ -9,7 +9,7 @@ import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.tdm.TdmConfig;
 import me.taur.arenagames.tdm.TdmRoom;
 import me.taur.arenagames.tdm.TdmTeams;
-import me.taur.arenagames.util.ParticleEffect;
+import me.taur.arenagames.util.ParticleUtil;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
@@ -127,7 +127,7 @@ public class RoomCommand implements CommandExecutor {
 							
 							Location[] blocs = FfaConfig.getSignsStored(room.getRoomId());
 							for (Location bloc : blocs) {
-								ParticleEffect.ANGRY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 1);
+								ParticleUtil.ANGRY_VILLAGER.sendToLocation(bloc.add(0.5, 1.0, 0.5), 0F, 0F, 1);
 							}
 						}
 						
@@ -166,7 +166,7 @@ public class RoomCommand implements CommandExecutor {
 							
 							Location[] blocs = CrkConfig.getSignsStored(room.getRoomId());
 							for (Location bloc : blocs) {
-								ParticleEffect.ANGRY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 1);
+								ParticleUtil.ANGRY_VILLAGER.sendToLocation(bloc.add(0.5, 1.0, 0.5), 0F, 0F, 1);
 							}
 						}
 						
@@ -211,7 +211,7 @@ public class RoomCommand implements CommandExecutor {
 							
 							Location[] blocs = TdmConfig.getSignsStored(room.getRoomId());
 							for (Location bloc : blocs) {
-								ParticleEffect.ANGRY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 1);
+								ParticleUtil.ANGRY_VILLAGER.sendToLocation(bloc.add(0.5, 1.0, 0.5), 0F, 0F, 1);
 							}
 						}
 						

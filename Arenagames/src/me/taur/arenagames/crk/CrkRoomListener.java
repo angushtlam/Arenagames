@@ -102,6 +102,21 @@ public class CrkRoomListener implements Listener {
 							PlayerData data = PlayerData.get(p);
 							data.setCrkGamesPlayed(data.getCrkGamesPlayed() + 1); // Increase their play count.
 
+							if (room.getWinningPlayer().equals(p.getName())) {
+								data.setCrkGamesWon(data.getCrkGamesWon() + 1); // If the player won the game.
+							}
+							
+							int add = 0;
+							if (room.getWinningPlayer() == p.getName()) { // Give the player EXP.
+								add = CrkConfig.getExpFirst();
+							} else if (room.getPointboard().get(p.getName()) > room.getPointMedian()) {
+								add = CrkConfig.getExpWinner();
+							} else {
+								add = CrkConfig.getExpEveryone();
+							}
+							
+							data.setExp(data.getExp() + add);
+							
 							int points = room.getPointboard().get(p.getName());
 							if (points > data.getCrkRecord()) { // If the player has set a new record:
 								data.setCrkRecord(points);
@@ -154,31 +169,16 @@ public class CrkRoomListener implements Listener {
 
 				if (Config.isRankedEnabled(RoomType.CRK)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
-						if (PlayerData.isLoaded(p)) {
-							PlayerData data = PlayerData.get(p);
-							int oldelo = data.getCrkRanking();
-							int newelo = data.getCrkRanking();
-							
-							if (room.getPointboard().get(p.getName()) > room.getPointMedian() - 1 || room.getWinningPlayer() == p.getName()) { // If the player won
-								try {
-									newelo = GameMathUtil.addElo(oldelo, room.getAvgElo());
-								} catch (Exception e) {
-									
-								}
-							} else {
-								try {
-									newelo = GameMathUtil.removeElo(oldelo, room.getAvgElo());
-								} catch (Exception e) {
-									
-								}
-							}
-							
-							int diff = newelo - oldelo;
-							data.setCrkRanking(newelo);
-							data.save(p);
-							
-							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Cranked Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
-							
+						if (p != null) {
+							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your Cranked Elo did not change due to a premature game ending.");
+						}
+					}
+				}
+				
+				if (Config.isEconomyEnabled(RoomType.CRK)) { // Only change the player's Elo if it is enabled.
+					for (Player p : room.getPlayers()) {
+						if (p != null) {
+							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You did not gain any nuggets due to a premature game ending.");
 						}
 					}
 				}
@@ -285,6 +285,21 @@ public class CrkRoomListener implements Listener {
 							PlayerData data = PlayerData.get(p);
 							data.setCrkGamesPlayed(data.getCrkGamesPlayed() + 1); // Increase their play count.
 
+							if (room.getWinningPlayer().equals(p.getName())) {
+								data.setCrkGamesWon(data.getCrkGamesWon() + 1); // If the player won the game.
+							}
+							
+							int add = 0;
+							if (room.getWinningPlayer() == p.getName()) { // Give the player EXP.
+								add = CrkConfig.getExpFirst();
+							} else if (room.getPointboard().get(p.getName()) > room.getPointMedian()) {
+								add = CrkConfig.getExpWinner();
+							} else {
+								add = CrkConfig.getExpEveryone();
+							}
+							
+							data.setExp(data.getExp() + add);
+							
 							int points = room.getPointboard().get(p.getName());
 							if (points > data.getCrkRecord()) { // If the player has set a new record:
 								data.setCrkRecord(points);

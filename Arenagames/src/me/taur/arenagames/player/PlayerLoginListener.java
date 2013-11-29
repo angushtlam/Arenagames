@@ -20,7 +20,24 @@ public class PlayerLoginListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void playerLoggedIn(PlayerJoinEvent evt) {
 		Player p = evt.getPlayer();
-		evt.setJoinMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + p.getName() + " has signed onto the server.");
+		
+		if (!p.hasPlayedBefore()) {
+			evt.setJoinMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + p.getName() + " has signed onto the server for the first time! Welcome!");
+			PlayerEconomy.changeCash(p, 9000); // Give the player 9000 cash.
+			
+		} else {
+			evt.setJoinMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + p.getName() + " has signed onto the server.");
+		}
+		
+		if (p.getGameMode() != GameMode.SURVIVAL) {
+			p.setGameMode(GameMode.SURVIVAL);
+		}
+		
+		p.sendMessage(ChatColor.YELLOW + " --- SERVER NOTICE ---");
+		p.sendMessage(ChatColor.YELLOW + "The server is conducting an Open Beta test. All player data will be deleted at the end of the test." +
+				" You may find many incomplete and broken features on the server. We are trying to fix and adjust these issues before the official" +
+				" launch of the server. Sorry for the inconvienence.");
+		p.sendMessage(ChatColor.YELLOW + " --- ------------- ---");
 		
 		InvUtil.setLobbyInventory(p);
 		
@@ -30,7 +47,6 @@ public class PlayerLoginListener implements Listener {
 		
 		p.setLevel(0);
 		p.setExp((float) 0.0);
-		p.setGameMode(GameMode.SURVIVAL);
 		p.teleport(Config.getGlobalLobby()); // Teleport people to lobby when they join
 		
 	}

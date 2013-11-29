@@ -239,6 +239,18 @@ public class CrkConfig {
 		return getData().getInt("crk.currency.everyone");
 	}
 	
+	public static int getExpFirst() {
+		return getData().getInt("crk.exp.first");
+	}
+	
+	public static int getExpWinner() {
+		return getData().getInt("crk.exp.winner");
+	}
+	
+	public static int getExpEveryone() {
+		return getData().getInt("crk.exp.everyone");
+	}
+	
 	public static void defaultConf() {
 		if (getData().getBoolean("generate-default-config")) {
 			getData().addDefault("crk.settings.cranked-timer", 30);
@@ -251,6 +263,10 @@ public class CrkConfig {
 			getData().addDefault("crk.currency.first", 30);
 			getData().addDefault("crk.currency.winner", 15);
 			getData().addDefault("crk.currency.everyone", 10);
+			
+			getData().addDefault("crk.exp.first", 30);
+			getData().addDefault("crk.exp.winner", 15);
+			getData().addDefault("crk.exp.everyone", 10);
 			
 			getData().addDefault("crk.maps.edit.info.map-name", "Llamarena");
 			getData().addDefault("crk.maps.edit.info.author", "Taur and the Animals");

@@ -332,7 +332,7 @@ public class CrkRoom extends Room {
 		this.getTimer().put(p, -1);
 		this.setPlayerAlive(this.getPlayerAlive() - 1);
 		
-		CrkSpawnManager.kill(p);
+		CrkSpawnManager.kill(p, CrkConfig.getPossibleSpawnLocation(this));
 		InvUtil.clearPlayerInv(p);
 		
 	}

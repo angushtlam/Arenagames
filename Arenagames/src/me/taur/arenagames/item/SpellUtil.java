@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import me.taur.arenagames.Arenagames;
-import me.taur.arenagames.util.ParticleEffect;
+import me.taur.arenagames.util.ParticleUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -44,17 +44,14 @@ public class SpellUtil {
 				}
 
 				ent.setVelocity(v);
-				ParticleEffect.ANGRY_VILLAGER.display(p.getLocation().add(0.0, 2.5, 0.0), 0.0F, 0.0F, 0.0F, 0, 1);
-				drawLine(ParticleEffect.EXPLODE, p.getLocation(), ent.getLocation(), 0.0, 0.5F, 0.5F, 0, 4);
+				ParticleUtil.ANGRY_VILLAGER.sendToLocation(ent.getLocation().add(0.0, 2.5, 0.0), 0.0F, 0.0F, 1);
+				drawLine(ParticleUtil.MAGIC_CRITIAL, p.getLocation(), ent.getLocation(), 0.0, 0.0F, 0.0F, 1);
 
 			}
 		}
-
-		ParticleEffect.WITCH_MAGIC.display(p.getLocation(), force, 1.0F, force, 5, range * 3);
-
 	}
 
-	public static void drawLine(ParticleEffect fx, Location location1, Location location2, double yOffset, float horizSpread, float vertSpread, int speed, int count) {
+	public static void drawLine(ParticleUtil fx, Location location1, Location location2, double moveVert, float offset, float offsetVert, int amt) {
 		double distanceBetween = 1;
 
 		int c = (int)Math.ceil(location1.distance(location2) / distanceBetween) - 1;
@@ -64,8 +61,8 @@ public class SpellUtil {
 
 		for (int i = 0; i < c; i++) {
 			l.add(v);
-			fx.display(l.add(0.0, yOffset, 0.0), horizSpread, vertSpread, horizSpread, speed, count);
-
+			fx.sendToLocation(l.add(0.0, moveVert, 0.0), offset, offsetVert, amt);
+			
 		}
 		
 	}
@@ -80,6 +77,7 @@ public class SpellUtil {
 				items[i] = loc.getWorld().dropItem(loc, item);
 				items[i].setVelocity(new Vector((rand.nextDouble()-.5) * force, (rand.nextDouble()-.5) * force, (rand.nextDouble()-.5) * force)); // Add some randomness
 				items[i].setPickupDelay(duration * 3); // Prevent it from being picked up.
+				
 			}
 			
 			Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {

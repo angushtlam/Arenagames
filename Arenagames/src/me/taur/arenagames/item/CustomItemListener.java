@@ -2,7 +2,7 @@ package me.taur.arenagames.item;
 
 import me.taur.arenagames.crk.CrkRoom;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.ParticleEffect;
+import me.taur.arenagames.util.ParticleUtil;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
@@ -89,7 +89,7 @@ public class CustomItemListener implements Listener {
 			p.setFoodLevel(p.getFoodLevel() - 2);
 			
 			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 3, 1, true));
-			ParticleEffect.HAPPY_VILLAGER.display(p.getLocation(), 0.5F, 2.0F, 0.5F, 20, 20);
+			ParticleUtil.SPARKLE.sendToLocation(p.getLocation(), 0.3F, 2.0F, 20);
 			
 			p.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.ITALIC + "You used Command: Endure. (8s cooldown)");
 			CustomItem.COMMAND_ENDURE_TIMER.put(p, 8);

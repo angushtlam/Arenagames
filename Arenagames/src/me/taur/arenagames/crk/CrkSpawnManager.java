@@ -4,7 +4,7 @@ import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.ParticleEffect;
+import me.taur.arenagames.util.ParticleUtil;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
@@ -14,13 +14,24 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class CrkSpawnManager {
-	public static void kill(Player p) {
-		Location loc = p.getLocation();
-		ParticleEffect.RED_DUST.display(loc, 1.5F, 1.0F, 1.5F, 0, 80);
-		ParticleEffect.EXPLODE.display(loc, 2.0F, 4.0F, 2.0F, 0, 125);
-		ParticleEffect.DRIP_LAVA.display(loc, 0.6F, 1.0F, 0.6F, 0, 70);
+	public static void spawn(final Player p, Location tp) {
+		p.teleport(tp);
 		
-		p.getWorld().createExplosion(p.getLocation(), 0.0F, false);
+		purgeEffects(p);
+		p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10, 400));  // Prevent player from seeing the teleport.
+		p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20 * 3, 1)); // Stop spawncamping and prevent protected players from attacking.
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 3, 5));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 3, 5));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20 * 3, 5));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 3, 1));
+		
+	}
+	
+	public static void kill(Player p, Location tp) {
+		Location loc = p.getLocation();
+		ParticleUtil.RED_SMOKE.sendToLocation(loc, 1.5F, 1.5F, 80);
+		ParticleUtil.CLOUD.sendToLocation(loc, 2.0F, 4.0F, 125);
+		ParticleUtil.LAVA_DRIP.sendToLocation(loc.add(0.0, 1.0, 0.0), 0.6F, 1.0F, 70);
 		
 		p.setHealth(p.getMaxHealth());
 		p.setFoodLevel(19);
@@ -34,28 +45,17 @@ public class CrkSpawnManager {
 		
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 60, 5)); // Prevent the player from dealing damage
 		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 60, 5));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20 * 60, 5));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20 * 60, 100));
 		
 		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 20 * 60, 128));
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 60, 128));
 		
 		InvUtil.clearPlayerInv(p);
-		nowDeadPlayer(p);
 		
-	}
-	
-	public static void spawn(Player p, Location tp) {
-		p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10, 400));  // Prevent player from seeing the teleport.
-		
-		p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20 * 3, 1)); // Stop spawncamping and prevent protected players from attacking.
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * 3, 5));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 3, 5));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20 * 3, 5));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 3, 1));
-
 		p.teleport(tp); // Teleport player
-		p.setFallDistance(0);
-		purgeEffects(p);
+		p.setFallDistance(0F);
+		
+		nowDeadPlayer(p);
 		
 	}
 	
@@ -75,7 +75,7 @@ public class CrkSpawnManager {
 		    		purgeEffects(p);
 		    		
 		    		int time = Config.getCountdown(RoomType.CRK);
-		    		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * time, 1)); // Entire duration of the game. Cleared later.
+		    		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * time, 2)); // Entire duration of the game. Cleared later.
 		    		p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * time, 5));
 		    		p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20 * time, 5));
 		    		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20 * time, 5));

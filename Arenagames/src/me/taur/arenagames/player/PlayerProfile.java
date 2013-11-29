@@ -76,7 +76,7 @@ public class PlayerProfile {
 			page.add(FANCY_HEADING +
 					 RoomType.TDM.getColor() + "" + ChatColor.BOLD + " Team Deathmatch\n" + ChatColor.RESET + "" +
 					 FANCY_HEADING +
-					 "\u258b " + "1st Place: " + data.getTdmGamesWon() + ChatColor.RESET + "\n" +
+					 "\u258b " + "Wins: " + data.getTdmGamesWon() + ChatColor.RESET + "\n" +
 					 "\u258f  " + "Games: " + data.getTdmGamesPlayed() + ChatColor.RESET + "\n" +
 					 "\u258f  " + "Elo: " + data.getTdmRanking() + ChatColor.RESET + "\n" +
 					 "\u258f \n" +

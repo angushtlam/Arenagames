@@ -92,7 +92,26 @@ public class TdmRoomListener implements Listener {
 				}
 				
 				for (Player p : room.getPlayers()) {
-					if (p != null) {					
+					if (p != null) {
+						if (PlayerData.isLoaded(p)) {
+							PlayerData data = PlayerData.get(p);
+							data.setTdmGamesPlayed(data.getTdmGamesPlayed() + 1); // Increase their play count.
+							
+							if (room.getPointboard().get(p.getName()).intValue() == room.getWinningTeam().getId()) {
+								data.setTdmGamesWon(data.getTdmGamesWon() + 1); // If the player won the game.
+							}
+							
+							int add = 0;
+							if (room.getPointboard().get(p.getName()).intValue() == room.getWinningTeam().getId()) { // Give the player EXP.
+								add = TdmConfig.getExpWinner();
+							} else {
+								add = TdmConfig.getExpLoser();
+							}
+							
+							data.setExp(data.getExp() + add);
+							
+						}
+						
 						Room.PLAYERS.remove(p);
 						
 						// Teleport the player to lobby.
@@ -106,7 +125,7 @@ public class TdmRoomListener implements Listener {
 				room.resetRoom(true);
 				
 			} else if (result == RoomEndResult.NOT_ENOUGH_PLAYERS) {
-				if (Config.isRankedEnabled(RoomType.FFA)) { // Only change the player's Elo if it is enabled.
+				if (Config.isRankedEnabled(RoomType.TDM)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
 						if (p != null) {
 							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your TDM Elo did not change due to a premature game ending.");
@@ -114,7 +133,7 @@ public class TdmRoomListener implements Listener {
 					}
 				}
 				
-				if (Config.isEconomyEnabled(RoomType.FFA)) { // Only change the player's Elo if it is enabled.
+				if (Config.isEconomyEnabled(RoomType.TDM)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
 						if (p != null) {
 							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You did not gain any nuggets due to a premature game ending.");

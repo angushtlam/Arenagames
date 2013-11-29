@@ -98,6 +98,21 @@ public class FfaRoomListener implements Listener {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
 							data.setFfaGamesPlayed(data.getFfaGamesPlayed() + 1); // Increase their play count.
+							
+							if (room.getWinningPlayer().equals(p.getName())) {
+								data.setFfaGamesWon(data.getFfaGamesWon() + 1); // If the player won the game.
+							}
+							
+							int add = 0;
+							if (room.getWinningPlayer() == p.getName()) { // Give the player EXP.
+								add = FfaConfig.getExpFirst();
+							} else if (room.getPointboard().get(p.getName()) > room.getPointMedian()) {
+								add = FfaConfig.getExpWinner();
+							} else {
+								add = FfaConfig.getExpEveryone();
+							}
+							
+							data.setExp(data.getExp() + add);
 
 							int points = room.getPointboard().get(p.getName());
 							if (points > data.getFfaRecord()) { // If the player has set a new record:

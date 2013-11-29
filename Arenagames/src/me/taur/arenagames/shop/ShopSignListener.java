@@ -1,7 +1,5 @@
 package me.taur.arenagames.shop;
 
-import me.taur.arenagames.util.ParticleEffect;
-
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -30,7 +28,6 @@ public class ShopSignListener implements Listener {
 		if (sign.getLine(0).contains("[Perk Shop]")) {
 			Player p = evt.getPlayer();
 			Shop.shopMenu.open(p);
-			ParticleEffect.SNOW_SHOVEL.display(b.getLocation().add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 3);
 			
 		}
 	}

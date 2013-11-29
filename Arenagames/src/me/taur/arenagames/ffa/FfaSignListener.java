@@ -4,7 +4,7 @@ import me.taur.arenagames.Config;
 import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.player.Premium;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.ParticleEffect;
+import me.taur.arenagames.util.ParticleUtil;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
@@ -141,7 +141,7 @@ public class FfaSignListener implements Listener {
 			Location[] blocs = FfaConfig.getSignsStored(room.getRoomId());
 			if (blocs != null) {
 				for (Location bloc : blocs) {
-					ParticleEffect.HAPPY_VILLAGER.display(bloc.add(0.5, 1.0, 0.5), 0.1F, 0.1F, 0.1F, 10, 3);
+					ParticleUtil.SPARKLE.sendToPlayer(p, bloc.add(0.5, 1.0, 0.5));
 				}
 			}
 		}

@@ -254,6 +254,14 @@ public class TdmConfig {
 		return getData().getInt("tdm.currency.loser");
 	}
 	
+	public static int getExpWinner() {
+		return getData().getInt("tdm.exp.winner");
+	}
+	
+	public static int getExpLoser() {
+		return getData().getInt("tdm.exp.loser");
+	}
+	
 	public static void defaultConf() {
 		if (getData().getBoolean("generate-default-config")) {
 			getData().addDefault("tdm.lobby.world", "world");
@@ -263,6 +271,9 @@ public class TdmConfig {
 			
 			getData().addDefault("tdm.currency.winner", 50);
 			getData().addDefault("tdm.currency.loser", 25);
+			
+			getData().addDefault("tdm.exp.winner", 50);
+			getData().addDefault("tdm.exp.loser", 25);
 			
 			getData().addDefault("tdm.maps.edit.info.map-name", "Llamarena");
 			getData().addDefault("tdm.maps.edit.info.author", "Taur and the Animals");
