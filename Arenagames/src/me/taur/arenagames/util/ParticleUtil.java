@@ -2,11 +2,7 @@ package me.taur.arenagames.util;
 
 import java.util.Random;
 
-import net.minecraft.server.v1_6_R3.Packet;
-
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
-import org.bukkit.entity.Player;
 
 public enum ParticleUtil {
 	
@@ -60,40 +56,16 @@ public enum ParticleUtil {
     public void sendToLocation(Location loc, float offset, float offsetVert, int amt) {
     	try {
         	Object packet = Class.forName("net.minecraft.server." + ReflectionUtil.getVersionString() + ".Packet63WorldParticles").getConstructors()[0].newInstance();
-			ReflectionUtil.setValue(packet, "a", name);
-			ReflectionUtil.setValue(packet, "b", (float) loc.getX());
-	        ReflectionUtil.setValue(packet, "c", (float) loc.getY());
-	        ReflectionUtil.setValue(packet, "d", (float) loc.getZ());
-	        ReflectionUtil.setValue(packet, "e", offset);
-	        ReflectionUtil.setValue(packet, "f", offsetVert);
-	        ReflectionUtil.setValue(packet, "g", offset);
-	        ReflectionUtil.setValue(packet, "h", defaultSpeed);
-	        ReflectionUtil.setValue(packet, "i", amt);
+			ReflectionUtil.setValue(packet, "a", name); // Particle ID
+			ReflectionUtil.setValue(packet, "b", (float) loc.getX()); // X Coord
+	        ReflectionUtil.setValue(packet, "c", (float) loc.getY()); // Y Coord
+	        ReflectionUtil.setValue(packet, "d", (float) loc.getZ()); // Z Coord
+	        ReflectionUtil.setValue(packet, "e", offset); // X Offset
+	        ReflectionUtil.setValue(packet, "f", offsetVert); // Y Offset
+	        ReflectionUtil.setValue(packet, "g", offset); // Z Offset
+	        ReflectionUtil.setValue(packet, "h", defaultSpeed); // Speed (Data)
+	        ReflectionUtil.setValue(packet, "i", amt); // Amount of Particles Spawned
 	        ReflectionUtil.sendPacketToLocation(loc, packet);
-	        
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-        
-    }
-
-    public void sendToPlayer(Player p, Location loc) {
-    	sendToPlayer(p, loc, new Random().nextFloat(), new Random().nextFloat(), defaultAmount);
-    }
-    
-    public void sendToPlayer(Player p, Location loc, float offset, float offsetVert, int amt) {
-        try {
-        	Object packet = Class.forName("net.minecraft.server." + ReflectionUtil.getVersionString() + ".Packet63WorldParticles").getConstructors()[0].newInstance();
-			ReflectionUtil.setValue(packet, "a", name);
-			ReflectionUtil.setValue(packet, "b", (float) loc.getX());
-	        ReflectionUtil.setValue(packet, "c", (float) loc.getY());
-	        ReflectionUtil.setValue(packet, "d", (float) loc.getZ());
-	        ReflectionUtil.setValue(packet, "e", offset);
-	        ReflectionUtil.setValue(packet, "f", offsetVert);
-	        ReflectionUtil.setValue(packet, "g", offset);
-	        ReflectionUtil.setValue(packet, "h", defaultSpeed);
-	        ReflectionUtil.setValue(packet, "i", amt);
-	        ((CraftPlayer) p).getHandle().playerConnection.sendPacket((Packet) packet);
 	        
 		} catch (Exception e) {
 			e.printStackTrace();

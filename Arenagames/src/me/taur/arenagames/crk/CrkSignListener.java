@@ -141,7 +141,7 @@ public class CrkSignListener implements Listener {
 			Location[] blocs = FfaConfig.getSignsStored(room.getRoomId());
 			if (blocs != null) {
 				for (Location bloc : blocs) {
-					ParticleUtil.SPARKLE.sendToPlayer(p, bloc.add(0.5, 1.0, 0.5));
+					ParticleUtil.SPARKLE.sendToLocation(bloc.add(0.5, 1.0, 0.5), 0.2F, 0.2F, 5);
 				}
 			}
 		}
