@@ -26,7 +26,7 @@ public class PlayerData {
 	private int ffaTotalKills, ffaTotalDeaths;
 	private int ffaCurrencyEarned;
 	
-	private int tdmGamesWon, tdmGamesPlayed, tdmRanking;
+	private int tdmGamesWon, tdmGamesPlayed, tdmRanking, tdmRecord;
 	private int tdmTotalKills, tdmTotalDeaths;
 	private int tdmCurrencyEarned;
 	
@@ -121,6 +121,7 @@ public class PlayerData {
 					conf.addDefault("user.tdm.games-won", 0);
 					conf.addDefault("user.tdm.games-played", 0);
 					conf.addDefault("user.tdm.ranking", 1000);
+					conf.addDefault("user.tdm.record", 0);
 					conf.addDefault("user.tdm.kills", 0);
 					conf.addDefault("user.tdm.deaths", 0);
 					conf.addDefault("user.tdm.currency-earned", 0);
@@ -209,6 +210,7 @@ public class PlayerData {
 				data.setTdmGamesWon(conf.getInt("user.tdm.games-won"));
 				data.setTdmGamesPlayed(conf.getInt("user.tdm.games-played"));
 				data.setTdmRanking(conf.getInt("user.tdm.ranking"));
+				data.setTdmRecord(conf.getInt("user.tdm.record"));
 				data.setTdmTotalKills(conf.getInt("user.tdm.kills"));
 				data.setTdmTotalDeaths(conf.getInt("user.tdm.deaths"));
 				data.setTdmCurrencyEarned(conf.getInt("user.tdm.currency-earned"));
@@ -289,6 +291,7 @@ public class PlayerData {
 				conf.set("user.tdm.games-won", data.getTdmGamesWon());
 				conf.set("user.tdm.games-played", data.getTdmGamesPlayed());
 				conf.set("user.tdm.ranking", data.getTdmRanking());
+				conf.set("user.tdm.record", data.getTdmRecord());
 				conf.set("user.tdm.kills", data.getTdmTotalKills());
 				conf.set("user.tdm.deaths", data.getTdmTotalDeaths());
 				conf.set("user.tdm.currency-earned", data.getTdmCurrencyEarned());
@@ -573,6 +576,14 @@ public class PlayerData {
 
 	public void setTdmRanking(int tdmRanking) {
 		this.tdmRanking = tdmRanking;
+	}
+
+	public int getTdmRecord() {
+		return tdmRecord;
+	}
+
+	public void setTdmRecord(int tdmRecord) {
+		this.tdmRecord = tdmRecord;
 	}
 
 	public int getTdmTotalKills() {

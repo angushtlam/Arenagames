@@ -197,9 +197,9 @@ public class RoomCommand implements CommandExecutor {
 									
 								}
 							} else {
-								if (r.getPointboard().get(p.getName()).intValue() == TdmTeams.RED.getId()) {
+								if (r.getTeamtrackboard().get(p.getName()).intValue() == TdmTeams.RED.getId()) {
 									r.removePlayerFromRed(p);
-								} else if (r.getPointboard().get(p.getName()).intValue() == TdmTeams.BLUE.getId()) {
+								} else if (r.getTeamtrackboard().get(p.getName()).intValue() == TdmTeams.BLUE.getId()) {
 									r.removePlayerFromBlue(p);
 								}
 								

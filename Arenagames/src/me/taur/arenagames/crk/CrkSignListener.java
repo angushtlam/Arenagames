@@ -1,7 +1,6 @@
 package me.taur.arenagames.crk;
 
 import me.taur.arenagames.Config;
-import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.player.Premium;
 import me.taur.arenagames.room.Room;
@@ -133,7 +132,7 @@ public class CrkSignListener implements Listener {
 			inv.setItem(8, InvUtil.getKitSelector());
 			InvUtil.updatePlayerInv(p);
 			
-			Location[] blocs = FfaConfig.getSignsStored(room.getRoomId());
+			Location[] blocs = CrkConfig.getSignsStored(room.getRoomId());
 			if (blocs != null) {
 				for (Location bloc : blocs) {
 					ParticleUtil.SPARKLE.sendToLocation(bloc.add(0.5, 1.0, 0.5), 0.2F, 0.2F, 5);

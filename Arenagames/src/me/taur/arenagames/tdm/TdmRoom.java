@@ -32,11 +32,13 @@ import org.bukkit.scoreboard.Team;
 
 public class TdmRoom extends Room {
 	private String mapname;
+	private HashMap<String, Integer> teamtrackboard;
 	private HashMap<String, Integer> pointboard;
 	private HashMap<Player, Integer> kit;
 	
 	public TdmRoom(String roomId) {
-		this.pointboard = new HashMap<String, Integer>();
+		this.teamtrackboard = new HashMap<String, Integer>();
+		this.setPointboard(new HashMap<String, Integer>());
 		this.kit = new HashMap<Player, Integer>();
 		
 		this.setRoomId(roomId);
@@ -145,6 +147,28 @@ public class TdmRoom extends Room {
 		
 	}
 	
+	public void wipeTeamboard() {
+		for (String name : this.getTeamtrackboard().keySet()) {
+			if (name.startsWith("&")) { // Filter out team scores.
+				continue;
+			}
+			
+			for (int i = 0; i < this.getPlayers().length; i++) {
+				if (this.getPlayers()[i].getName().equalsIgnoreCase(name)) {
+					if (this.getTeamtrackboard().get(name).intValue() == TdmTeams.RED.getId()) {
+						removePlayerFromRed(this.getPlayers()[i]);
+					} else if (this.getTeamtrackboard().get(name).intValue() == TdmTeams.BLUE.getId()) {
+						removePlayerFromBlue(this.getPlayers()[i]);
+					}
+					
+					break;
+					
+				}
+			}
+		}
+		
+	}
+	
 	public void addPlayerToRed(Player p) {
 		Scoreboard board = Room.SCOREBOARDS.get(this.getRoomId());
 		if (board.getTeam(this.getRoomId() + "-red") != null) {
@@ -249,8 +273,8 @@ public class TdmRoom extends Room {
 	}
 	
 	public TdmTeams getWinningTeam() {
-		int red = this.getPointboard().get("&red").intValue();
-		int blue = this.getPointboard().get("&blue").intValue();
+		int red = this.getTeamtrackboard().get("&red").intValue();
+		int blue = this.getTeamtrackboard().get("&blue").intValue();
 		
 		if (red > blue) {
 			return TdmTeams.RED;
@@ -262,27 +286,53 @@ public class TdmRoom extends Room {
 		
 	}
 	
+	public String getMVP() {
+		String player = "";
+		boolean firstLoop = true;
+		int score = 0;
+		
+		for (String name : this.getPointboard().keySet()) {
+			int amt = this.getPointboard().get(name);
+			
+			if (firstLoop) {
+				firstLoop = false;
+				player = name;
+				score = amt;
+				
+			}
+			
+			if (score < amt) {
+				player = name;
+				score = amt;
+				
+			}
+		}
+		
+		return player;
+
+	}
+	
 	public int getRedScore() {
-		if (this.getPointboard().get("&red") == null) {
+		if (this.getTeamtrackboard().get("&red") == null) {
 			return 0;
 		}
 		
-		return this.getPointboard().get("&red").intValue();
+		return this.getTeamtrackboard().get("&red").intValue();
 	}
 	
 	public int getBlueScore() {
-		if (this.getPointboard().get("&red") == null) {
+		if (this.getTeamtrackboard().get("&red") == null) {
 			return 0;
 		}
 		
-		return this.getPointboard().get("&blue").intValue();
+		return this.getTeamtrackboard().get("&blue").intValue();
 	}
 	
 	public int getPlayersOnBlue() {
 		int i = 0;
 		
-		for (String s : this.getPointboard().keySet()) {
-			if (this.getPointboard().get(s).intValue() == TdmTeams.BLUE.getId()) {
+		for (String s : this.getTeamtrackboard().keySet()) {
+			if (this.getTeamtrackboard().get(s).intValue() == TdmTeams.BLUE.getId()) {
 				i++;
 			}
 		}
@@ -294,8 +344,8 @@ public class TdmRoom extends Room {
 	public int getPlayersOnRed() {
 		int i = 0;
 		
-		for (String s : this.getPointboard().keySet()) {
-			if (this.getPointboard().get(s).intValue() == TdmTeams.RED.getId()) {
+		for (String s : this.getTeamtrackboard().keySet()) {
+			if (this.getTeamtrackboard().get(s).intValue() == TdmTeams.RED.getId()) {
 				i++;
 			}
 		}
@@ -345,7 +395,7 @@ public class TdmRoom extends Room {
 			}	
 		}
 		
-		int team = this.getPointboard().get(p.getName());
+		int team = this.getTeamtrackboard().get(p.getName());
 		
 		if (team == TdmTeams.RED.getId()) {
 			TdmSpawnManager.respawn(p, TdmConfig.getPossibleRedSpawnLocation(this));
@@ -374,12 +424,14 @@ public class TdmRoom extends Room {
 		
 		data.setTdmTotalKills(data.getTdmTotalKills() + 1); // Increase kill count
 		
-		int pteam = this.getPointboard().get(p.getName());
+		int pteam = this.getTeamtrackboard().get(p.getName());
 		if (pteam == TdmTeams.BLUE.getId()) { // Add points to the team who killed the player
-			this.pointboard.put("&red", this.pointboard.get("&red") + 1);
+			this.teamtrackboard.put("&red", this.teamtrackboard.get("&red") + 1);
 		} else if (pteam == TdmTeams.RED.getId()) {
-			this.pointboard.put("&blue", this.pointboard.get("&blue") + 1);
+			this.teamtrackboard.put("&blue", this.teamtrackboard.get("&blue") + 1);
 		}
+		
+		this.pointboard.put(killer.getName(), this.pointboard.get(killer.getName()).intValue() + 1);
 		
 		this.playerDied(p, p.getName() + " has been executed by " + killer.getName() + "!");
 		
@@ -477,7 +529,8 @@ public class TdmRoom extends Room {
 			Player p = this.getPlayers()[i];
 			
 			TdmTeams team = (i % 2 == 0 ? TdmTeams.RED : TdmTeams.BLUE);
-			this.pointboard.put(p.getName(), team.getId());
+			this.teamtrackboard.put(p.getName(), team.getId());
+			this.pointboard.put(p.getName(), 0);
 			
 			if (team == TdmTeams.RED) {
 				p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "You have been placed on the Redd team.");
@@ -493,8 +546,8 @@ public class TdmRoom extends Room {
 			
 		}
 		
-		this.pointboard.put("&red", 0);
-		this.pointboard.put("&blue", 0);
+		this.teamtrackboard.put("&red", 0);
+		this.teamtrackboard.put("&blue", 0);
 		
 		this.updateSigns();
 		this.setCountdownTimer(Config.getCountdown(RoomType.TDM));
@@ -591,10 +644,11 @@ public class TdmRoom extends Room {
 	
 	public void resetRoom(boolean areYouSure) {
 		if (areYouSure) {
-			this.pointboard = new HashMap<String, Integer>();
+			this.teamtrackboard = new HashMap<String, Integer>();
 			this.kit = new HashMap<Player, Integer>();
 			
 			this.removeAllPlayerScoreboard();
+			this.wipeTeamboard();
 			
 			for (Player p : this.getPlayers()) {
 				CustomItem.clearPlayerTimers(p);
@@ -625,18 +679,26 @@ public class TdmRoom extends Room {
 		this.mapname = mapname;
 	}
 
-	public HashMap<String, Integer> getPointboard() {
-		return this.pointboard;
+	public HashMap<String, Integer> getTeamtrackboard() {
+		return this.teamtrackboard;
 	}
 
-	public void setPointboard(HashMap<String, Integer> scoreboard) {
-		this.pointboard = scoreboard;
+	public void setTeamtrackboard(HashMap<String, Integer> teamtrackboard) {
+		this.teamtrackboard = teamtrackboard;
 	}
 	
-	public void setPointboard(Player p, int amt) {
-		this.pointboard.put(p.getName(), amt);
+	public void setPlayerTeamtrackboard(Player p, int amt) {
+		this.teamtrackboard.put(p.getName(), amt);
 	}
 	
+	public HashMap<String, Integer> getPointboard() {
+		return pointboard;
+	}
+
+	public void setPointboard(HashMap<String, Integer> pointboard) {
+		this.pointboard = pointboard;
+	}
+
 	public HashMap<Player, Integer> getKit() {
 		return this.kit;
 	}

@@ -33,6 +33,14 @@ public class TdmRoomListener implements Listener {
 				if (room.getWinningTeam() != null) {
 					room.gameOverMessage(room.getWinningTeam().getName()); // Broadcast who won.
 				}
+				
+				if (room.getPlayers() != null) {
+					for (Player p : room.getPlayers()) {
+						if (p != null) {
+							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + room.getMVP() + " is the MVP with " + room.getPointboard().get(room.getMVP()) + " kills!");
+						}
+					}
+				}
 
 				if (Config.isRankedEnabled(RoomType.TDM)) { // Only change the player's Elo if it is enabled.
 					for (Player p : room.getPlayers()) {
@@ -41,25 +49,31 @@ public class TdmRoomListener implements Listener {
 							int oldelo = data.getFfaRanking();
 							int newelo = data.getFfaRanking();
 							
-							if (room.getPointboard().get(p.getName()) == room.getWinningTeam().getId()) { // If the player's team won
-								try {
-									newelo = GameMathUtil.addElo(oldelo, room.getAvgElo());
-								} catch (Exception e) {
-									
-								}
+							if (room.getRedScore() == room.getBlueScore()) { // If the game ended in a tie.
+								p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your TDM Elo did not change: " + oldelo + " (-).");
+								
 							} else {
-								try {
-									newelo = GameMathUtil.removeElo(oldelo, room.getAvgElo());
-								} catch (Exception e) {
-									
+								if (room.getTeamtrackboard().get(p.getName()) == room.getWinningTeam().getId()) { // If the player's team won
+									try {
+										newelo = GameMathUtil.addElo(oldelo, room.getAvgElo());
+									} catch (Exception e) {
+
+									}
+								} else {
+									try {
+										newelo = GameMathUtil.removeElo(oldelo, room.getAvgElo());
+									} catch (Exception e) {
+
+									}
 								}
+								
+								int diff = newelo - oldelo;
+								p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your TDM Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
+								data.setTdmRanking(newelo);
+								
 							}
 							
-							int diff = newelo - oldelo;
-							data.setTdmRanking(newelo);
 							data.save(p);
-							
-							p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your TDM Elo: " + oldelo + " > " + newelo + " (" + diff + ").");
 							
 						}
 					}
@@ -73,7 +87,7 @@ public class TdmRoomListener implements Listener {
 							int lifetime = data.getCurrencyLifetime();
 							int add = 0;
 							
-							if (room.getPointboard().get(p.getName()) == room.getWinningTeam().getId()) { // If the player's team won
+							if (room.getTeamtrackboard().get(p.getName()) == room.getWinningTeam().getId()) { // If the player's team won
 								add = TdmConfig.getCurrencyWinner();
 							} else {
 								add = TdmConfig.getCurrencyLoser();
@@ -97,18 +111,25 @@ public class TdmRoomListener implements Listener {
 							PlayerData data = PlayerData.get(p);
 							data.setTdmGamesPlayed(data.getTdmGamesPlayed() + 1); // Increase their play count.
 							
-							if (room.getPointboard().get(p.getName()).intValue() == room.getWinningTeam().getId()) {
+							if (room.getTeamtrackboard().get(p.getName()).intValue() == room.getWinningTeam().getId()) {
 								data.setTdmGamesWon(data.getTdmGamesWon() + 1); // If the player won the game.
 							}
 							
 							int add = 0;
-							if (room.getPointboard().get(p.getName()).intValue() == room.getWinningTeam().getId()) { // Give the player EXP.
+							if (room.getTeamtrackboard().get(p.getName()).intValue() == room.getWinningTeam().getId()) { // Give the player EXP.
 								add = TdmConfig.getExpWinner();
 							} else {
 								add = TdmConfig.getExpLoser();
 							}
 							
 							data.setExp(data.getExp() + add);
+							
+							int points = room.getPointboard().get(p.getName());
+							if (points > data.getTdmRecord()) { // If the player has set a new record:
+								data.setTdmRecord(points);
+								p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have set a new personal record: " + points + "!");
+								
+							}
 							
 						}
 						
@@ -147,6 +168,13 @@ public class TdmRoomListener implements Listener {
 							PlayerData data = PlayerData.get(p);
 							data.setTdmGamesPlayed(data.getTdmGamesPlayed() + 1); // Increase their play count.
 
+							int points = room.getPointboard().get(p.getName());
+							if (points > data.getTdmRecord()) { // If the player has set a new record:
+								data.setTdmRecord(points);
+								p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You have set a new personal record: " + points + "!");
+								
+							}
+							
 							data.save(p);
 						}
 

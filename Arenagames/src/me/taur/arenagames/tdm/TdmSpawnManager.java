@@ -28,7 +28,7 @@ public class TdmSpawnManager {
 	public static void kill(Player p, Location tp) {
 		Location loc = p.getLocation();
 		ParticleUtil.RED_SMOKE.sendToLocation(loc, 1.5F, 1.5F, 80);
-		ParticleUtil.CLOUD.sendToLocation(loc, 2.0F, 4.0F, 125);
+		ParticleUtil.EXPLODE.sendToLocation(loc, 2.0F, 4.0F, 125);
 		ParticleUtil.LAVA_DRIP.sendToLocation(loc.add(0.0, 1.0, 0.0), 0.6F, 1.0F, 70);
 		
 		p.setHealth(p.getMaxHealth());

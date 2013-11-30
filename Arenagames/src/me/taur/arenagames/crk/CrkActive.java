@@ -101,10 +101,6 @@ public class CrkActive {
 				if (room.isGameInWaiting()) {
 					int waitcount = room.getWaitTimer();
 
-					for (Player p : room.getPlayers()) { // Make the levels the timer.
-						p.setLevel(waitcount);
-					}
-
 					if (waitcount > -1) {
 						room.setWaitTimer(waitcount - 1);
 
@@ -117,7 +113,7 @@ public class CrkActive {
 						}
 						
 						if (waitcount == 0) { // Game start
-							ConfigurationSection cs = CrkConfig.getData().getConfigurationSection("lfl.maps");
+							ConfigurationSection cs = CrkConfig.getData().getConfigurationSection("crk.maps");
 							if (cs != null) {
 								Set<String> maps = cs.getKeys(false);
 
@@ -132,7 +128,7 @@ public class CrkActive {
 										r.setGameInProgress(false);
 
 										for (Player p : r.getPlayers()) {
-											p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Currently all of the Lifeline arenas are in progress.");
+											p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Currently all of the Cranked arenas are in progress.");
 											p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Please wait until an arena frees up.");
 
 										}
@@ -214,7 +210,7 @@ public class CrkActive {
 								}
 							} else {
 								Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "An error has occured in " + room.getRoomId() + ": Maps cannot be loaded.");
-								Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Lifeline match " + room.getRoomId() + " has ended.");
+								Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.ITALIC + "Cranked match " + room.getRoomId() + " has ended.");
 
 								room.resetRoom(true);
 

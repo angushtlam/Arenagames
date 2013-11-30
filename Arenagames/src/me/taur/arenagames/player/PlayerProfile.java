@@ -79,7 +79,7 @@ public class PlayerProfile {
 					 "\u258b " + "Wins: " + data.getTdmGamesWon() + ChatColor.RESET + "\n" +
 					 "\u258f  " + "Games: " + data.getTdmGamesPlayed() + ChatColor.RESET + "\n" +
 					 "\u258f  " + "Elo: " + data.getTdmRanking() + ChatColor.RESET + "\n" +
-					 "\u258f \n" +
+					 "\u258f  " + "Record: " + data.getTdmRecord() + ChatColor.RESET + "\n" +
 					 "\u258f  " + "KDR: " + GameMathUtil.kdrCalculator(data.getTdmTotalKills(), data.getTdmTotalDeaths()) + ChatColor.RESET + "\n" +
 					 "\n" +
 					 "\u258b " + "Ngts Obt'd.: " + data.getTdmCurrencyEarned());

@@ -73,7 +73,7 @@ public class PerkEffectActive {
 			
 			if (fx.equals(EffectPerk.STORM)) {
 				ParticleUtil.WATER_DRIP.sendToLocation(p.getLocation().add(0.0, 3.0, 0.0), 0.2F, 0.0F, 8);
-				ParticleUtil.SMOKE.sendToLocation(p.getLocation().add(0.0, 3.0, 0.0), 0.2F, 0.1F, 8);
+				ParticleUtil.RISING_SMOKE.sendToLocation(p.getLocation().add(0.0, 3.0, 0.0), 0.2F, 0.1F, 8);
 				
 			}
 			
@@ -86,13 +86,14 @@ public class PerkEffectActive {
 			}
 			
 			if (fx.equals(EffectPerk.CLOUD)) {
-				ParticleUtil.CLOUD.sendToLocation(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.1F, 22);
-				ParticleUtil.SPELL.sendToLocation(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.2F, 16);
+				ParticleUtil.EXPLODE.sendToLocation(p.getLocation().add(0.0, 0.3, 0.0), 0.2F, 0.0F, 2);
+				ParticleUtil.CLOUD.sendToLocation(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.1F, 12);
+				ParticleUtil.SPELL.sendToLocation(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.2F, 8);
 				
 			}
 			
 			if (fx.equals(EffectPerk.SOIL)) {
-				ParticleUtil.SMOKE.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 1.0F, 0.0F, 16);
+				ParticleUtil.EXPAND_SMOKE.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.5F, 0.0F, 6);
 			}
 			
 			if (fx.equals(EffectPerk.ENDER)) {
@@ -100,7 +101,7 @@ public class PerkEffectActive {
 			}
 			
 			if (fx.equals(EffectPerk.FIRESCARF)) {
-				ParticleUtil.FIRE.sendToLocation(p.getLocation().add(0.0, 1.4, 0.0), 0.2F, 0.0F, 8);		
+				ParticleUtil.STILL_FIRE.sendToLocation(p.getLocation().add(0.0, 1.4, 0.0), 0.2F, 0.0F, 8);		
 			}
 			
 			if (fx.equals(EffectPerk.FIRETRAIL)) {
@@ -116,11 +117,11 @@ public class PerkEffectActive {
 			}
 			
 			if (fx.equals(EffectPerk.KNOWLEDGE)) {
-				ParticleUtil.MAGIC_RUNES.sendToLocation(p.getLocation().add(0.0, 2.0, 0.0), 0.3F, 0.2F, 12);
+				ParticleUtil.FALLING_RUNES.sendToLocation(p.getLocation().add(0.0, 2.0, 0.0), 0.3F, 0.2F, 12);
 			}
 			
 			if (fx.equals(EffectPerk.SUPERCHICKEN)) {
-				ParticleUtil.CLOUD.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.3F, 0.5F, 3);
+				ParticleUtil.EXPLODE.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.3F, 0.5F, 3);
 			}
 			
 			if (fx.equals(EffectPerk.BLOOD)) {

@@ -69,7 +69,7 @@ public class TdmPlayerListener implements Listener {
 				
 				r.updateSigns();
 				r.updateScoreboard(); // Update scoreboard
-				r.getPointboard().remove(p);
+				r.getTeamtrackboard().remove(p);
 				
 				r.removePlayerScoreboard(p);
 
