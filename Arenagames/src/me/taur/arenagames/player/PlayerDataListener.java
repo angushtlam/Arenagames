@@ -1,5 +1,6 @@
 package me.taur.arenagames.player;
 
+import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.util.TimeUtil;
 
 import org.bukkit.Bukkit;
@@ -22,7 +23,16 @@ public class PlayerDataListener implements Listener {
 		}
 		
 		PlayerData data = PlayerData.get(p);
-		data.setFirstJoined(p.getFirstPlayed());
+		if (data.getFirstJoined() < 1) {
+			data.setFirstJoined(TimeUtil.currentMilliseconds());
+			data.setMojangUUID(Arenagames.identifier.getPlayerUUID(p.getName()));
+			
+		}
+		
+		if (data.getMojangUUID().equals("-1")) {
+			data.setMojangUUID(Arenagames.identifier.getPlayerUUID(p.getName()));
+		}
+		
 		data.setLastLogin(TimeUtil.currentMilliseconds());
 		data.save(p);
 		

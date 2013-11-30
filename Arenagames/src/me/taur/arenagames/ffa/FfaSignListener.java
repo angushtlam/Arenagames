@@ -35,12 +35,6 @@ public class FfaSignListener implements Listener {
 		if (sign.getLine(0).contains("[" + RoomType.FFA.getSign() + "]")) {
 			Player p = evt.getPlayer();
 
-			if (!p.hasPermission("arenagames.join")) {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
-				return;
-
-			}
-
 			String l1 = ChatColor.stripColor(sign.getLine(1)); // Remove the fancyness
 			Room r = Room.ROOMS.get(l1.toLowerCase());
 

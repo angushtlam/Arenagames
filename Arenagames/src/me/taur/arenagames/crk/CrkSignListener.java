@@ -3,6 +3,7 @@ package me.taur.arenagames.crk;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.item.InvUtil;
+import me.taur.arenagames.player.Premium;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.ParticleUtil;
 import me.taur.arenagames.util.RoomType;
@@ -35,12 +36,6 @@ public class CrkSignListener implements Listener {
 		if (sign.getLine(0).contains("[" + RoomType.CRK.getSign() + "]")) {		
 			Player p = evt.getPlayer();
 			
-			if (!p.hasPermission("arenagames.join")) {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
-				return;
-				
-			}
-			
 			String l1 = ChatColor.stripColor(sign.getLine(1)); // Remove the fancyness
 			Room r = Room.ROOMS.get(l1.toLowerCase());
 			
@@ -67,7 +62,7 @@ public class CrkSignListener implements Listener {
 			}
 			
 			if (r.getRoomId().contains("-p")) {
-				if (!p.hasPermission("arenagames.premium")) {
+				if (!Premium.isPremium(p)) {
 					p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "This queue is for Premium only.");
 					return;
 					

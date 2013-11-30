@@ -42,13 +42,17 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.edawg878.identifier.IdentifierAPI;
+
 public class Arenagames extends JavaPlugin {
-	
 	public static Arenagames plugin;
+	public static IdentifierAPI identifier;
 
 	@Override
 	public void onEnable() {
 		plugin = this;
+		
+		hookIdentifierAPI();
 		
 		Config.startCheck();
 		
@@ -79,6 +83,7 @@ public class Arenagames extends JavaPlugin {
 		
 		loadGamemodes();
 		Scheduler.start();
+		
 	}
 
 	@Override
@@ -86,7 +91,7 @@ public class Arenagames extends JavaPlugin {
 		
 	}
 	
-	public static void loadGamemodes() {
+	private static void loadGamemodes() {
 		String[] gm = Config.gamemode;
 		
 		for (int i = 0; i < gm.length; i++) {
@@ -112,14 +117,6 @@ public class Arenagames extends JavaPlugin {
 			}
 			
 		}
-	}
-	
-	public static void regEvent(Listener file) {
-		Bukkit.getServer().getPluginManager().registerEvents(file, Arenagames.plugin);
-	}
-
-	public static void regCmd(String cmd, CommandExecutor exe) {
-		Bukkit.getServer().getPluginCommand(cmd).setExecutor(exe);
 	}
 
 	private static void regFfa() {		
@@ -148,4 +145,19 @@ public class Arenagames extends JavaPlugin {
 		regEvent(new TdmRoomListener());
 		
 	}
+	
+	private static void hookIdentifierAPI() {
+		if (Bukkit.getPluginManager().getPlugin("IdentifierAPI") instanceof IdentifierAPI) {
+			identifier = (IdentifierAPI) Bukkit.getPluginManager().getPlugin("IdentifierAPI");
+		}
+	}
+	
+	public static void regEvent(Listener file) {
+		Bukkit.getServer().getPluginManager().registerEvents(file, Arenagames.plugin);
+	}
+
+	public static void regCmd(String cmd, CommandExecutor exe) {
+		Bukkit.getServer().getPluginCommand(cmd).setExecutor(exe);
+	}
+	
 }
