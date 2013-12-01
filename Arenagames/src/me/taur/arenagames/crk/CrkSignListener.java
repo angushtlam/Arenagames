@@ -2,7 +2,7 @@ package me.taur.arenagames.crk;
 
 import me.taur.arenagames.Config;
 import me.taur.arenagames.item.InvUtil;
-import me.taur.arenagames.player.Premium;
+import me.taur.arenagames.player.Permission;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.ParticleUtil;
 import me.taur.arenagames.util.RoomType;
@@ -61,7 +61,7 @@ public class CrkSignListener implements Listener {
 			}
 			
 			if (r.getRoomId().contains("-p")) {
-				if (!Premium.isPremium(p)) {
+				if (!Permission.isPremium(p)) {
 					p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "This queue is for Premium only.");
 					return;
 					

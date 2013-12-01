@@ -9,8 +9,8 @@ import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.item.CustomItem;
 import me.taur.arenagames.item.InvUtil;
+import me.taur.arenagames.player.Permission;
 import me.taur.arenagames.player.PlayerData;
-import me.taur.arenagames.player.Premium;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.RoomType;
 
@@ -219,6 +219,12 @@ public class TdmRoom extends Room {
 
 			// Automatically set the player's armor if the item is an armor, and they don't have the armor on.
 			if (inv.getHelmet() == null && i.getType().name().contains("HELMET")) {
+				inv.setHelmet(i);
+				continue;
+				
+			}
+			
+			if (inv.getHelmet() == null && i.getType().name().equals(Material.GLASS)) {
 				inv.setHelmet(i);
 				continue;
 				
@@ -505,7 +511,7 @@ public class TdmRoom extends Room {
 					while (kitloop) { // Make sure non-Premiums cannot random into Premium kits. 
 						r = rand.nextInt(kits);
 						
-						if (TdmConfig.isKitPremium(r) && !(Premium.isPremium(p))) {
+						if (TdmConfig.isKitPremium(r) && !(Permission.isPremium(p))) {
 							continue;
 						}
 						

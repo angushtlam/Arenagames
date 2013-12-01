@@ -46,6 +46,7 @@ public class TdmKitSelectorListener implements Listener {
 		if (!Room.PLAYERS.containsKey(p)) { // If the player is not in a game and has the kit selector.
 			p.getInventory().removeItem(i); // Remove it
 			return;
+			
 		}
 		
 		Room r = Room.ROOMS.get(Room.PLAYERS.get(p));
@@ -53,12 +54,14 @@ public class TdmKitSelectorListener implements Listener {
 		if (r == null) { // If the room doesn't exist
 			p.getInventory().removeItem(i); // Remove it
 			return;
+			
 		}
 		
 		if (r.getRoomType() == RoomType.TDM) { // If the player is in a TDM room.
 			TdmUtil.kitMenu.open(p);
 			p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1.0F, 0.3F);
 			return;
+			
 		}
 		
 	}

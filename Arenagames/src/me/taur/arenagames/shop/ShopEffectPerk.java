@@ -3,9 +3,9 @@ package me.taur.arenagames.shop;
 import java.util.HashMap;
 
 import me.taur.arenagames.Arenagames;
+import me.taur.arenagames.perk.EffectPerkUtil;
 import me.taur.arenagames.player.PlayerPerk;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.EffectPerk;
 import me.taur.arenagames.util.IconMenu;
 
 import org.bukkit.Bukkit;
@@ -31,7 +31,7 @@ public class ShopEffectPerk {
 	}
 
 	public static void generateMenu(Player p) {
-		int perkamt = EffectPerk.values().length;
+		int perkamt = EffectPerkUtil.values().length;
 		int lines = ((perkamt / 9) + 1) * 9; // Gets how many lines the plugin needs.
 
 		IconMenu menu = new IconMenu("Shop Effect Perks", lines, new IconMenu.OptionClickEventHandler() {
@@ -49,7 +49,7 @@ public class ShopEffectPerk {
 
 				String name = ChatColor.stripColor(menuevt.getName()); // Clear colors because we add colors in the menu name.
 
-				for (EffectPerk fx : EffectPerk.values()) {
+				for (EffectPerkUtil fx : EffectPerkUtil.values()) {
 					if (fx.getName().equalsIgnoreCase(name)) { // If the name of the item matched the name of the perk.
 						if (!PlayerPerk.isPerkOwned(p, fx)) {
 							ShopEffectPerkConfirm.openMenu(p, fx);
@@ -72,7 +72,7 @@ public class ShopEffectPerk {
 		}, Arenagames.plugin);
 
 		for (int i = 0; i < perkamt; i++) { // Checks which are owned by the player.
-			EffectPerk fx = EffectPerk.values()[i];
+			EffectPerkUtil fx = EffectPerkUtil.values()[i];
 			String cost = ChatColor.GOLD + "Cost: " + ChatColor.ITALIC;
 			
 			if (fx.getCurrencyCost() > 0 && fx.getCashCost() < 1) {

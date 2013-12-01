@@ -3,6 +3,8 @@ package me.taur.arenagames;
 import me.taur.arenagames.admin.CashCommand;
 import me.taur.arenagames.admin.CurrencyCommand;
 import me.taur.arenagames.admin.PremiumCommand;
+import me.taur.arenagames.chat.ChatCommand;
+import me.taur.arenagames.chat.ChatListener;
 import me.taur.arenagames.crk.CrkDeathListener;
 import me.taur.arenagames.crk.CrkKitSelectorListener;
 import me.taur.arenagames.crk.CrkPlayerListener;
@@ -17,8 +19,11 @@ import me.taur.arenagames.ffa.FfaSignListener;
 import me.taur.arenagames.ffa.FfaUtil;
 import me.taur.arenagames.fix.ArrowFix;
 import me.taur.arenagames.fix.TeleportFix;
+import me.taur.arenagames.item.CustomConsumableListener;
 import me.taur.arenagames.item.CustomItemListener;
 import me.taur.arenagames.item.CustomItemUtil;
+import me.taur.arenagames.item.CustomProjectileListener;
+import me.taur.arenagames.item.CustomWeaponListener;
 import me.taur.arenagames.perk.Perk;
 import me.taur.arenagames.perk.PerkSelectorListener;
 import me.taur.arenagames.player.PlayerCommand;
@@ -58,6 +63,7 @@ public class Arenagames extends JavaPlugin {
 		
 		regCmd("queue", new RoomCommand());
 		regCmd("player", new PlayerCommand());
+		regCmd("chat", new ChatCommand());
 		regCmd("premium", new PremiumCommand());
 		regCmd("curr", new CurrencyCommand());
 		regCmd("cash", new CashCommand());
@@ -69,6 +75,8 @@ public class Arenagames extends JavaPlugin {
 		regEvent(new PlayerDataListener());
 		regEvent(new PlayerProfileListener());
 		
+		regEvent(new ChatListener());
+		
 		regEvent(new ShopSignListener());
 		Shop.enable();
 		
@@ -76,6 +84,9 @@ public class Arenagames extends JavaPlugin {
 		Perk.enable();
 		
 		regEvent(new CustomItemListener());
+		regEvent(new CustomWeaponListener());
+		regEvent(new CustomConsumableListener());
+		regEvent(new CustomProjectileListener());
 		CustomItemUtil.enable();
 		
 		regEvent(new ArrowFix());

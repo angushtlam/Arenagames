@@ -10,8 +10,8 @@ import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.item.CustomItem;
 import me.taur.arenagames.item.InvUtil;
+import me.taur.arenagames.player.Permission;
 import me.taur.arenagames.player.PlayerData;
-import me.taur.arenagames.player.Premium;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.RoomType;
 
@@ -386,7 +386,7 @@ public class FfaRoom extends Room {
 					while (kitloop) { // Make sure non-Premiums cannot random into Premium kits. 
 						r = rand.nextInt(kits);
 						
-						if (FfaConfig.isKitPremium(r) && !(Premium.isPremium(p))) {
+						if (FfaConfig.isKitPremium(r) && !(Permission.isPremium(p))) {
 							continue;
 						}
 						

@@ -25,7 +25,7 @@ public class PlayerProfile {
 			page.add(FANCY_HEADING +
 					 ChatColor.GOLD + "" + ChatColor.BOLD + "       Profile" + ChatColor.RESET + "\n" +
 					 FANCY_HEADING +
-					 "\u258b " + (Premium.isPremium(p) ? ChatColor.GOLD + "" : "") + ChatColor.BOLD + "" + p.getName() + (Premium.isPremium(p) ? " /P" : "") + ChatColor.RESET + "\n" + 
+					 "\u258b " + (Permission.isPremium(p) ? ChatColor.GOLD + "" : "") + ChatColor.BOLD + "" + p.getName() + (Permission.isPremium(p) ? " /P" : "") + ChatColor.RESET + "\n" + 
 					 ChatColor.BLACK + "\u258f  " + data.getExp() + ChatColor.ITALIC + " EXP" + ChatColor.RESET + "\n" +
 					 "\n" +
 					 "\u258b Nuggets: " + data.getCurrency() + ChatColor.RESET + "\n" +
@@ -36,11 +36,11 @@ public class PlayerProfile {
 			NumberFormat df = NumberFormat.getCurrencyInstance(Locale.US); // Formats the user's money spent double into USD.
 			String moneyspent = df.format(data.getMoneySpent());
 			
-			if (Premium.isPremium(p)) {
+			if (Permission.isPremium(p)) {
 				page.add(FANCY_HEADING +
 						 ChatColor.GOLD + "" + ChatColor.BOLD + "       Profile" + ChatColor.RESET + "\n" +
 						 FANCY_HEADING +
-						 "\u258b You have " + (Premium.daysLeft(p) + 1) + ChatColor.RESET + "\n" +
+						 "\u258b You have " + (Permission.premiumDaysLeft(p) + 1) + ChatColor.RESET + "\n" +
 						 "\u258f  days of Premium left.\n" +
 						 "\n" +
 						 "\u258b Alphacash: " + data.getCash() + ChatColor.RESET + "\n" +

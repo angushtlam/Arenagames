@@ -16,6 +16,9 @@ commands:
   player:
     description: Player related commands.
     aliases: [self]
+  chat:
+    description: Chat channel related commands.
+    aliases: [c]
   premium:
     description: Premium related commands.
   curr:

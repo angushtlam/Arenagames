@@ -17,9 +17,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 public class SpellUtil {
-	public static void forceKnockbackZone(Player p, Sound sound, int range, float force, float vertForce, float highestY, float power) {
+	public static List<Entity> getNearbyEntities(Player p, int range) {
+		return p.getNearbyEntities(range, range, range);
+	}
+	
+	public static void forceKnockZone(Player p, Sound sound, int range, float force, float vertForce, float highestY, float power) {
 		Vector pv = p.getLocation().toVector();
-		List<Entity> entities = p.getNearbyEntities(range, range, range);
+		List<Entity> entities = getNearbyEntities(p, range);
 		Vector e, v;
 
 		for (Entity ent : entities) {
@@ -45,19 +49,44 @@ public class SpellUtil {
 
 				ent.setVelocity(v);
 				ParticleUtil.ANGRY_VILLAGER.sendToLocation(ent.getLocation().add(0.0, 2.5, 0.0), 0.0F, 0.0F, 1);
-				drawLine(ParticleUtil.MAGIC_CRITIAL, p.getLocation(), ent.getLocation(), 0.0, 0.0F, 0.0F, 1);
+				drawLine(ParticleUtil.MAGIC_CRITIAL, p.getLocation(), ent.getLocation(), 0.0, 0.0F, 0.0F, 5);
 
 			}
 		}
 	}
+	
+	public static void forceKnockEntity(Location toLoc, LivingEntity ent, float force, float vertForce, float highestY, float power) {
+		if (!ent.getWorld().equals(toLoc.getWorld())) {
+			return;
+		}
+		
+		Vector pv = ent.getLocation().toVector();
+		Vector e = toLoc.toVector();
+		Vector v = pv.subtract(e).normalize().multiply(force / 10.0 * power);
+		
+		if (force != 0) {
+			v.setY(v.getY() + (vertForce / 10.0 * power));
+		} else {
+			v.setY(vertForce / 10.0 * power);
+		}
 
-	public static void drawLine(ParticleUtil fx, Location location1, Location location2, double moveVert, float offset, float offsetVert, int amt) {
+		if (v.getY() > (highestY / 10.0)) {
+			v.setY(highestY / 10.0);
+		}
+
+		ent.setVelocity(v);
+		ParticleUtil.ANGRY_VILLAGER.sendToLocation(ent.getLocation().add(0.0, 2.5, 0.0), 0.0F, 0.0F, 1);
+		drawLine(ParticleUtil.MAGIC_CRITIAL, ent.getLocation(), toLoc, 0.0, 0.0F, 0.0F, 5);
+		
+	}
+
+	public static void drawLine(ParticleUtil fx, Location loc1, Location loc2, double moveVert, float offset, float offsetVert, int amt) {
 		double distanceBetween = 1;
 
-		int c = (int)Math.ceil(location1.distance(location2) / distanceBetween) - 1;
+		int c = (int)Math.ceil(loc1.distance(loc2) / distanceBetween) - 1;
 		if (c <= 0) return;
-		Vector v = location2.toVector().subtract(location1.toVector()).normalize().multiply(distanceBetween);
-		Location l = location1.clone();
+		Vector v = loc2.toVector().subtract(loc1.toVector()).normalize().multiply(distanceBetween);
+		Location l = loc1.clone();
 
 		for (int i = 0; i < c; i++) {
 			l.add(v);

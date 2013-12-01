@@ -40,13 +40,15 @@ public class ReflectionUtil {
 	}
 
 	public static void sendPacketToLocation(Location l, Object packet) throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
-		for (Entity e : getNearbyEntities(l, 20)) {
-			if (e instanceof Player) {
-				Player p = (Player) e;
-				Object nmsPlayer = getMethod(p.getClass(), "getHandle").invoke(p);
-				Object con = nmsPlayer.getClass().getField("playerConnection").get(nmsPlayer);
-				getMethod(con.getClass(), "sendPacket").invoke(con, packet);
-				
+		if (getNearbyEntities(l, 20) != null) {
+			for (Entity e : getNearbyEntities(l, 20)) {
+				if (e instanceof Player) {
+					Player p = (Player) e;
+					Object nmsPlayer = getMethod(p.getClass(), "getHandle").invoke(p);
+					Object con = nmsPlayer.getClass().getField("playerConnection").get(nmsPlayer);
+					getMethod(con.getClass(), "sendPacket").invoke(con, packet);
+
+				}
 			}
 		}
 	}

@@ -19,7 +19,7 @@ public class PlayerData {
 	private int premiumForMonths;
 	private double moneySpent;
 	
-	private int moderatorRank, violationLevel;
+	private int playerRank, violationLevel;
 	private int currency, currencyLifetime, cash, cashLifetime, exp;
 	
 	private int ffaGamesWon, ffaGamesPlayed, ffaRanking, ffaRecord;
@@ -102,7 +102,7 @@ public class PlayerData {
 					conf.addDefault("user.premium.for-months", 0);
 					conf.addDefault("user.premium.money-spent", 0.0);
 					
-					conf.addDefault("user.moderation.mod-rank", 0);
+					conf.addDefault("user.moderation.player-rank", 0);
 					conf.addDefault("user.moderation.violation", 0);
 					
 					conf.addDefault("user.economy.currency", 0);
@@ -191,7 +191,7 @@ public class PlayerData {
 				data.setPremiumForMonths(conf.getInt("user.premium.for-months"));
 				data.setMoneySpent(conf.getDouble("user.premium.money-spent"));
 				
-				data.setModeratorRank(conf.getInt("user.moderation.mod-rank"));
+				data.setPlayerRank(conf.getInt("user.moderation.player-rank"));
 				data.setViolationLevel(conf.getInt("user.moderation.violation"));
 				
 				data.setCurrency(conf.getInt("user.economy.currency"));
@@ -272,7 +272,7 @@ public class PlayerData {
 				conf.set("user.premium.for-months", data.getPremiumForMonths());
 				conf.set("user.premium.money-spent", data.getMoneySpent());
 				
-				conf.set("user.moderation.mod-rank", data.getModeratorRank());
+				conf.set("user.moderation.player-rank", data.getPlayerRank());
 				conf.set("user.moderation.violation", data.getViolationLevel());
 				
 				conf.set("user.economy.currency", data.getCurrency());
@@ -386,12 +386,12 @@ public class PlayerData {
 		this.moneySpent = moneySpent;
 	}
 
-	public int getModeratorRank() {
-		return moderatorRank;
+	public int getPlayerRank() {
+		return playerRank;
 	}
 
-	public void setModeratorRank(int moderatorRank) {
-		this.moderatorRank = moderatorRank;
+	public void setPlayerRank(int playerRank) {
+		this.playerRank = playerRank;
 	}
 
 	public int getViolationLevel() {

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.player.PlayerPerk;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.EffectPerk;
 import me.taur.arenagames.util.IconMenu;
 
 import org.bukkit.Bukkit;
@@ -14,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class PerkEffect {
-	public static HashMap<Player, EffectPerk> ACTIVE_EFFECT_PERK = new HashMap<Player, EffectPerk>();
+	public static HashMap<Player, EffectPerkUtil> ACTIVE_EFFECT_PERK = new HashMap<Player, EffectPerkUtil>();
 	public static HashMap<Player, IconMenu> MENU_STORE = new HashMap<Player, IconMenu>();
 	
 	public static void openMenu(final Player p) {
@@ -33,7 +32,7 @@ public class PerkEffect {
 	}
 
 	public static void generateMenu(Player p) {
-		int perkamt = EffectPerk.values().length;
+		int perkamt = EffectPerkUtil.values().length;
 		int lines = ((perkamt / 9) + 1) * 9; // Gets how many lines the plugin needs.
 
 		IconMenu menu = new IconMenu(p.getName() + "'s Effect Perks", lines, new IconMenu.OptionClickEventHandler() {
@@ -51,7 +50,7 @@ public class PerkEffect {
 
 				String name = ChatColor.stripColor(menuevt.getName()); // Clear colors because we add colors in the menu name.
 
-				for (EffectPerk fx : EffectPerk.values()) {
+				for (EffectPerkUtil fx : EffectPerkUtil.values()) {
 					if (fx.getName().equalsIgnoreCase(name)) { // If the name of the item matched the name of the perk.
 						if (PlayerPerk.isPerkOwned(p, fx)) {
 							if (ACTIVE_EFFECT_PERK.containsKey(p)) { // If the player already has an active effect perk.
@@ -90,7 +89,7 @@ public class PerkEffect {
 		}, Arenagames.plugin);
 
 		for (int i = 0; i < perkamt; i++) { // Checks which are owned by the player.
-			EffectPerk fx = EffectPerk.values()[i];
+			EffectPerkUtil fx = EffectPerkUtil.values()[i];
 			String owned = ChatColor.GREEN + "Owned";
 
 			if (!PlayerPerk.isPerkOwned(p, fx)) {

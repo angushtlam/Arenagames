@@ -9,8 +9,8 @@ import java.util.TreeSet;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.item.InvUtil;
+import me.taur.arenagames.player.Permission;
 import me.taur.arenagames.player.PlayerData;
-import me.taur.arenagames.player.Premium;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.RoomType;
 
@@ -26,8 +26,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 public class CrkRoom extends Room {
 	private String mapname;
@@ -313,13 +311,6 @@ public class CrkRoom extends Room {
 		this.playertimer.put(p, reset); // Reset the player's timer.
 		p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Get another kill within " + reset + " seconds or you'll die!");
 		
-		int potionstr = (kill / 3); // Perks increases every 3 kills
-		if (potionstr > 0) {
-			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, CrkConfig.getCrankedTimer() * 20, potionstr));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, CrkConfig.getCrankedTimer() * 20, potionstr));
-			
-		}
-		
 		addRefill(p);
 		
 	}
@@ -465,7 +456,7 @@ public class CrkRoom extends Room {
 					while (kitloop) { // Make sure non-Premiums cannot random into Premium kits. 
 						r = rand.nextInt(kits);
 						
-						if (FfaConfig.isKitPremium(r) && !(Premium.isPremium(p))) {
+						if (FfaConfig.isKitPremium(r) && !(Permission.isPremium(p))) {
 							continue;
 						}
 						

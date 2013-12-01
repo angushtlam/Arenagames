@@ -1,8 +1,8 @@
-package me.taur.arenagames.util;
+package me.taur.arenagames.perk;
 
 import org.bukkit.Material;
 
-public enum EffectPerk {
+public enum EffectPerkUtil {
 	STORM("Mother Nature's Curse", Material.GHAST_TEAR, 0, 820),
 	BLOOM("Spring Bloom", Material.RED_ROSE, 0, 290),
 	MUSIC("Symphony", Material.RECORD_8, 0, 290),
@@ -22,7 +22,7 @@ public enum EffectPerk {
 	private final int curr;
 	private final int cash;
 	
-	EffectPerk(String name, Material mat, int curr, int cash) {
+	EffectPerkUtil(String name, Material mat, int curr, int cash) {
 		this.name = name;
 		this.mat = mat;
 		this.curr = curr;

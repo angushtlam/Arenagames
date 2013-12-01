@@ -11,16 +11,18 @@ public class CustomItemUtil {
 	public static void enable() {
 		CustomPotion.loadPotionOfDegeneration();
 		CustomPotion.loadPotionOfGrimace();
-		CustomPotion.loadPotionOfMercy();
 		CustomPotion.loadPotionOfRevitalization();
-		CustomPotion.loadElixirOfVictory();
+		CustomPotion.loadElixirOfBerserkers();
 		CustomPotion.loadElixirOfShadows();
 		CustomPotion.loadElixirOfOnslaught();
-		CustomPotion.loadElixirOfFocus();
 		CustomPotion.loadElixirOfAdrenaline();
+		CustomPotion.loadElixirOfCranked();
 		
-		CustomItem.loadCommandVacuum();
-		CustomItem.loadCommandEndure();
+		CustomItem.loadCommandTremble();
+		CustomItem.loadCommandLockdown();
+		CustomItem.loadTheStrangler();
+		CustomItem.loadBaneOfTheForest();
+		CustomItem.loadTasteOfIsolation();
 		
 	}
 	

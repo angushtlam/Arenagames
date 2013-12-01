@@ -4,7 +4,6 @@ import java.util.Random;
 
 import me.taur.arenagames.item.SpellUtil;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.EffectPerk;
 import me.taur.arenagames.util.ParticleUtil;
 
 import org.bukkit.ChatColor;
@@ -22,9 +21,9 @@ public class PerkEffectActive {
 				
 			}
 			
-			EffectPerk fx = PerkEffect.ACTIVE_EFFECT_PERK.get(p);
+			EffectPerkUtil fx = PerkEffect.ACTIVE_EFFECT_PERK.get(p);
 			
-			if (fx.equals(EffectPerk.STORM)) {
+			if (fx.equals(EffectPerkUtil.STORM)) {
 				Random rand = new Random();
 				int r = rand.nextInt(4); 
 				if (r == 0) {
@@ -33,7 +32,7 @@ public class PerkEffectActive {
 				
 			}
 			
-			if (fx.equals(EffectPerk.SUPERCHICKEN)) {
+			if (fx.equals(EffectPerkUtil.SUPERCHICKEN)) {
 				Random rand = new Random();
 				int r = rand.nextInt(8); 
 				if (r == 0) {
@@ -44,7 +43,7 @@ public class PerkEffectActive {
 				
 			}
 			
-			if (fx.equals(EffectPerk.KNOWLEDGE)) {
+			if (fx.equals(EffectPerkUtil.KNOWLEDGE)) {
 				Random rand = new Random();
 				int r = rand.nextInt(8); 
 				if (r == 0) {
@@ -53,7 +52,7 @@ public class PerkEffectActive {
 				
 			}
 
-			if (fx.equals(EffectPerk.BLOOD)) {
+			if (fx.equals(EffectPerkUtil.BLOOD)) {
 				Random rand = new Random();
 				int r = rand.nextInt(4); 
 				if (r == 0) {
@@ -69,63 +68,64 @@ public class PerkEffectActive {
 	
 	public static void tick5() {
 		for (Player p : PerkEffect.ACTIVE_EFFECT_PERK.keySet()) {
-			EffectPerk fx = PerkEffect.ACTIVE_EFFECT_PERK.get(p);
+			EffectPerkUtil fx = PerkEffect.ACTIVE_EFFECT_PERK.get(p);
 			
-			if (fx.equals(EffectPerk.STORM)) {
-				ParticleUtil.WATER_DRIP.sendToLocation(p.getLocation().add(0.0, 3.0, 0.0), 0.2F, 0.0F, 8);
-				ParticleUtil.RISING_SMOKE.sendToLocation(p.getLocation().add(0.0, 3.0, 0.0), 0.2F, 0.1F, 8);
+			if (fx.equals(EffectPerkUtil.STORM)) {
+				ParticleUtil.WATER_DRIP.sendToLocation(p.getLocation().add(0.0, 3.0, 0.0), 0.2F, 0.2F, 8);
+				ParticleUtil.RISING_SMOKE.sendToLocation(p.getLocation().add(0.0, 3.0, 0.0), 0.2F, 0.1F, 16);
 				
 			}
 			
-			if (fx.equals(EffectPerk.BLOOM)) {
+			if (fx.equals(EffectPerkUtil.BLOOM)) {
 				ParticleUtil.MOB_SPELL.sendToLocation(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.2F, 12);
 			}
 			
-			if (fx.equals(EffectPerk.MUSIC)) {
+			if (fx.equals(EffectPerkUtil.MUSIC)) {
 				ParticleUtil.NOTE.sendToLocation(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.2F, 16);
 			}
 			
-			if (fx.equals(EffectPerk.CLOUD)) {
+			if (fx.equals(EffectPerkUtil.CLOUD)) {
 				ParticleUtil.EXPLODE.sendToLocation(p.getLocation().add(0.0, 0.3, 0.0), 0.2F, 0.0F, 2);
 				ParticleUtil.CLOUD.sendToLocation(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.1F, 12);
 				ParticleUtil.SPELL.sendToLocation(p.getLocation().add(0.0, 0.3, 0.0), 0.4F, 0.2F, 8);
 				
 			}
 			
-			if (fx.equals(EffectPerk.SOIL)) {
-				ParticleUtil.EXPAND_SMOKE.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.5F, 0.0F, 6);
+			if (fx.equals(EffectPerkUtil.SOIL)) {
+				ParticleUtil.VOID.sendToLocation(p.getLocation().add(0.0, 0.0, 0.0), 0.3F, 0.0F, 180);
 			}
 			
-			if (fx.equals(EffectPerk.ENDER)) {
-				ParticleUtil.PORTAL.sendToLocation(p.getLocation().add(0.0, -0.8, 0.0), 0.25F, 0.5F, 130);
+			if (fx.equals(EffectPerkUtil.ENDER)) {
+				ParticleUtil.PORTAL_FUNNEL.sendToLocation(p.getLocation().add(0.0, -1.8, 0.0), 0.0F, 0.0F, 20);
+				ParticleUtil.PORTAL_STILL.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.2F, 0.1F, 80);
 			}
 			
-			if (fx.equals(EffectPerk.FIRESCARF)) {
-				ParticleUtil.STILL_FIRE.sendToLocation(p.getLocation().add(0.0, 1.4, 0.0), 0.2F, 0.0F, 8);		
+			if (fx.equals(EffectPerkUtil.FIRESCARF)) {
+				ParticleUtil.FIRE_STILL.sendToLocation(p.getLocation().add(0.0, 1.4, 0.0), 0.2F, 0.0F, 8);		
 			}
 			
-			if (fx.equals(EffectPerk.FIRETRAIL)) {
+			if (fx.equals(EffectPerkUtil.FIRETRAIL)) {
 				ParticleUtil.LAVA_SPARK.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.5F, 0.0F, 2);	
 			}
 			
-			if (fx.equals(EffectPerk.HEARTSCARF)) {
+			if (fx.equals(EffectPerkUtil.HEARTSCARF)) {
 				ParticleUtil.HEART.sendToLocation(p.getLocation().add(0.0, 0.7, 0.0), 0.12F, 0.0F, 1);
 			}
 			
-			if (fx.equals(EffectPerk.HEARTTRAIL)) {
-				ParticleUtil.HEART.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.5F, 0.0F, 6);			
+			if (fx.equals(EffectPerkUtil.HEARTTRAIL)) {
+				ParticleUtil.HEART.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.3F, 0.2F, 4);			
 			}
 			
-			if (fx.equals(EffectPerk.KNOWLEDGE)) {
+			if (fx.equals(EffectPerkUtil.KNOWLEDGE)) {
 				ParticleUtil.FALLING_RUNES.sendToLocation(p.getLocation().add(0.0, 2.0, 0.0), 0.3F, 0.2F, 12);
 			}
 			
-			if (fx.equals(EffectPerk.SUPERCHICKEN)) {
+			if (fx.equals(EffectPerkUtil.SUPERCHICKEN)) {
 				ParticleUtil.EXPLODE.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.3F, 0.5F, 3);
 			}
 			
-			if (fx.equals(EffectPerk.BLOOD)) {
-				ParticleUtil.RED_SMOKE.sendToLocation(p.getLocation().add(0.0, 0.2, 0.0), 0.4F, 0.2F, 14);
+			if (fx.equals(EffectPerkUtil.BLOOD)) {
+				ParticleUtil.RED_SMOKE.sendToLocation(p.getLocation().add(0.0, 0.2, 0.0), 0.3F, 0.2F, 12);
 				ParticleUtil.LAVA_DRIP.sendToLocation(p.getLocation().add(0.0, 0.2, 0.0), 0.2F, 0.0F, 3);
 				
 			}

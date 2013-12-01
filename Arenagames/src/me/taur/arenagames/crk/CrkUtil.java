@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
-import me.taur.arenagames.player.Premium;
+import me.taur.arenagames.player.Permission;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.IconMenu;
 import me.taur.arenagames.util.RoomType;
@@ -64,7 +64,7 @@ public class CrkUtil {
                 int id = menuevt.getPosition();
                 
                 if (CrkConfig.isKitPremium(id)) {
-        			if (!Premium.isPremium(p)) {
+        			if (!Permission.isPremium(p)) {
         				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You don't have permission to use this kit.");
         				menuevt.setWillClose(true);
         				return;

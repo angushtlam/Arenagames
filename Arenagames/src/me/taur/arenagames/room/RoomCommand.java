@@ -36,12 +36,6 @@ public class RoomCommand implements CommandExecutor {
 			}
 			
 			if (arg[0].equalsIgnoreCase("list")) {
-				if (!s.hasPermission("arenagames.list")) {
-					s.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
-					return true;
-					
-				}
-				
 				String rooms = "";
 				
 				for (String r : Room.ROOMS.keySet()) {
@@ -65,11 +59,6 @@ public class RoomCommand implements CommandExecutor {
 					
 				} else {
 					Player p = (Player) s;
-					
-					if (!p.hasPermission("arenagames.join")) {
-						p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
-						return true;
-					}
 					
 					if (Room.PLAYERS.containsKey(p)) {
 						Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
@@ -233,12 +222,6 @@ public class RoomCommand implements CommandExecutor {
 					
 				} else {
 					Player p = (Player) s;
-					
-					if (!p.hasPermission("arenagames.info")) {
-						p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
-						return true;
-						
-					}
 					
 					Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
 					if (room == null) {

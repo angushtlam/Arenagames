@@ -3,10 +3,10 @@ package me.taur.arenagames.shop;
 import java.util.HashMap;
 
 import me.taur.arenagames.Arenagames;
+import me.taur.arenagames.perk.EffectPerkUtil;
 import me.taur.arenagames.player.PlayerEconomy;
 import me.taur.arenagames.player.PlayerPerk;
 import me.taur.arenagames.room.Room;
-import me.taur.arenagames.util.EffectPerk;
 import me.taur.arenagames.util.IconMenu;
 
 import org.bukkit.Bukkit;
@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 public class ShopEffectPerkConfirm {
 	public static HashMap<Player, IconMenu> MENU_STORE = new HashMap<Player, IconMenu>();
 
-	public static void openMenu(final Player p, final EffectPerk fx) {
+	public static void openMenu(final Player p, final EffectPerkUtil fx) {
 		Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
 			public void run() {
 				if (MENU_STORE.containsKey(p)) { // Destroy previous opened item.
@@ -32,7 +32,7 @@ public class ShopEffectPerkConfirm {
 		}, 2L);
 	}
 
-	public static void generateMenu(Player p, final EffectPerk fx) {
+	public static void generateMenu(Player p, final EffectPerkUtil fx) {
 		IconMenu menu = new IconMenu("Confirm: " + fx.getName(), 9, new IconMenu.OptionClickEventHandler() {
 			@Override
 			public void onOptionClick(IconMenu.OptionClickEvent menuevt) {

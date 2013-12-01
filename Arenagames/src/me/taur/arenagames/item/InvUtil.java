@@ -122,7 +122,7 @@ public class InvUtil {
                 			level = ench.getMaxLevel();
                 		}
 
-                		i.addUnsafeEnchantment(ench, level);
+                		i.getItemMeta().addEnchant(ench, level, true);
                 		
                 	}
                 }
