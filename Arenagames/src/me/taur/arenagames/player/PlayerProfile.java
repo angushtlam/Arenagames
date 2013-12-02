@@ -22,10 +22,18 @@ public class PlayerProfile {
 		if (PlayerData.isLoaded(p)) { // Make sure the PlayerData exists.
 			PlayerData data = PlayerData.get(p);
 			
+			String name = p.getName();
+			
+			if (Permission.isModerator(p)) {
+				name = ChatColor.DARK_RED + "" + ChatColor.BOLD + "\u265a" + name;
+			} else if (Permission.isPremium(p)){
+				name = ChatColor.GOLD + "\u2667" + ChatColor.UNDERLINE + name;
+			}
+			
 			page.add(FANCY_HEADING +
 					 ChatColor.GOLD + "" + ChatColor.BOLD + "       Profile" + ChatColor.RESET + "\n" +
 					 FANCY_HEADING +
-					 "\u258b " + (Permission.isPremium(p) ? ChatColor.GOLD + "" : "") + ChatColor.BOLD + "" + p.getName() + (Permission.isPremium(p) ? " /P" : "") + ChatColor.RESET + "\n" + 
+					 "\u258b " + name + ChatColor.RESET + "\n" + 
 					 ChatColor.BLACK + "\u258f  " + data.getExp() + ChatColor.ITALIC + " EXP" + ChatColor.RESET + "\n" +
 					 "\n" +
 					 "\u258b Nuggets: " + data.getCurrency() + ChatColor.RESET + "\n" +
@@ -36,7 +44,19 @@ public class PlayerProfile {
 			NumberFormat df = NumberFormat.getCurrencyInstance(Locale.US); // Formats the user's money spent double into USD.
 			String moneyspent = df.format(data.getMoneySpent());
 			
-			if (Permission.isPremium(p)) {
+			if (Permission.isPermaPremium(p)) {
+				page.add(FANCY_HEADING +
+						 ChatColor.GOLD + "" + ChatColor.BOLD + "       Profile" + ChatColor.RESET + "\n" +
+						 FANCY_HEADING +
+						 "\u258b You have \u221e" + ChatColor.RESET + "\n" +
+						 "\u258f  days of Premium left.\n" +
+						 "\n" +
+						 "\u258b Alphacash: " + data.getCash() + ChatColor.RESET + "\n" +
+						 "\u258f  Total AC.: " + data.getCashLifetime() + ChatColor.RESET + "\n" +
+						 "\n" +
+						 "\u258b " + "USD Spent: " + moneyspent);
+				
+			} else if (Permission.isPremium(p)) {
 				page.add(FANCY_HEADING +
 						 ChatColor.GOLD + "" + ChatColor.BOLD + "       Profile" + ChatColor.RESET + "\n" +
 						 FANCY_HEADING +
@@ -83,17 +103,6 @@ public class PlayerProfile {
 					 "\u258f  " + "KDR: " + GameMathUtil.kdrCalculator(data.getTdmTotalKills(), data.getTdmTotalDeaths()) + ChatColor.RESET + "\n" +
 					 "\n" +
 					 "\u258b " + "Ngts Obt'd.: " + data.getTdmCurrencyEarned());
-			
-			page.add(FANCY_HEADING +
-					 RoomType.CRK.getColor() + "" + ChatColor.BOLD + "      Cranked\n" + ChatColor.RESET + "" +
-					 FANCY_HEADING +
-					 "\u258b " + "1st Place: " + data.getCrkGamesWon() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "Games: " + data.getCrkGamesPlayed() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "Elo: " + data.getCrkRanking() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "Record: " + data.getCrkRecord() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "KDR: " + GameMathUtil.kdrCalculator(data.getCrkTotalKills(), data.getCrkTotalDeaths()) + ChatColor.RESET + "\n" +
-					 "\n" +
-					 "\u258b " + "Ngts Obt'd.: " + data.getCrkCurrencyEarned());
 			
 		} else {
 			page.add("\n\n\n\n" + ChatColor.ITALIC + " Loading PlayerData...");

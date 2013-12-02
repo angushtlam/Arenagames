@@ -74,7 +74,7 @@ public class CurrencyCommand implements CommandExecutor {
 							data.setCurrency(0);
 						} else {
 							data.setCurrency(currency);
-							data.setCurrencyLifetime(currency + data.getFfaCurrencyEarned() + data.getCrkCurrencyEarned());
+							data.setCurrencyLifetime(currency + data.getFfaCurrencyEarned() + data.getTdmCurrencyEarned());
 						}
 
 						data.setMoneySpent(data.getMoneySpent() + money);
@@ -87,7 +87,7 @@ public class CurrencyCommand implements CommandExecutor {
 							data.setCurrency(0);
 						} else {
 							data.setCurrency(currency);
-							data.setCurrencyLifetime(currency + data.getFfaCurrencyEarned() + data.getCrkCurrencyEarned());
+							data.setCurrencyLifetime(currency + data.getFfaCurrencyEarned() + data.getTdmCurrencyEarned());
 						}
 
 						data.setMoneySpent(data.getMoneySpent() + money);
@@ -102,7 +102,7 @@ public class CurrencyCommand implements CommandExecutor {
 				} else {
 					PlayerData data = new PlayerData(arg[1]);
 					data.setCurrency(currency);
-					data.setCurrencyLifetime(currency + data.getFfaCurrencyEarned() + data.getCrkCurrencyEarned());
+					data.setCurrencyLifetime(currency + data.getFfaCurrencyEarned() + data.getTdmCurrencyEarned());
 					data.setMoneySpent(data.getMoneySpent() + money);
 					data.save(arg[1]);
 

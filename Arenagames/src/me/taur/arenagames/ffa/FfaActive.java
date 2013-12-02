@@ -36,12 +36,17 @@ public class FfaActive {
 					int countdown = room.getCountdownTimer();
 					if (countdown > 0) {
 						room.setCountdownTimer(countdown - 1);
-
-						if (countdown < 5) { // If there is only less than 5 seconds left:
-							for (Player p : room.getPlayers()) {
-								if (p != null) {
+						
+						for (Player p : room.getPlayers()) {
+							if (p != null) {
+								if (Config.isHungerRegenEnabled(RoomType.FFA)) {
+									if (countdown % Config.getHungerRegen(RoomType.FFA) == 0) {
+										p.setFoodLevel(Math.min(20, p.getFoodLevel() + 1));
+									}
+								}
+								
+								if (countdown < 5) { // If there is only less than 5 seconds left:
 									p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1F, 0F);
-									
 								}
 							}
 						}

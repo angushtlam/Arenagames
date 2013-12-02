@@ -1,6 +1,5 @@
 package me.taur.arenagames;
 
-import me.taur.arenagames.crk.CrkActive;
 import me.taur.arenagames.ffa.FfaActive;
 import me.taur.arenagames.item.CustomItem;
 import me.taur.arenagames.perk.PerkEffectActive;
@@ -26,7 +25,6 @@ public class Scheduler {
 		
 		if (checkTick(20)) {
 			FfaActive.run();
-			CrkActive.run();
 			TdmActive.run();
 
 			CustomItem.run();

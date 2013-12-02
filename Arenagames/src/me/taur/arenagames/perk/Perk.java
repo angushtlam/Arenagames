@@ -26,16 +26,23 @@ public class Perk {
 
 				String name = ChatColor.stripColor(menuevt.getName()); // Clear colors because we add colors in the menu name.
 
-				if (name.equalsIgnoreCase("My Effect Perks")) {
+				if (name.equalsIgnoreCase("My Effects")) {
 					menuevt.setWillClose(true);
 					PerkEffect.openMenu(p);
 					return;
 
 				}
 
-				if (name.equalsIgnoreCase("My Hat Perks")) {
-					p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Hat Perks are coming soon.");
+				if (name.equalsIgnoreCase("My Pets")) {
+					p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Pets are coming soon.");
 					menuevt.setWillClose(true);
+					return;
+
+				}
+				
+				if (name.equalsIgnoreCase("My Hats")) {
+					menuevt.setWillClose(true);
+					PerkHat.openMenu(p);
 					return;
 
 				}
@@ -48,8 +55,9 @@ public class Perk {
 		}, Arenagames.plugin);
 
 
-		perkMenu.setOption(11, new ItemStack(Material.MAP, 1), ChatColor.RESET + "" + ChatColor.BOLD + "My Effect Perks");
-		perkMenu.setOption(15, new ItemStack(Material.IRON_HELMET, 1), ChatColor.RESET + "" + ChatColor.BOLD + "My Hat Perks");
+		perkMenu.setOption(11, new ItemStack(Material.MAP, 1), ChatColor.RESET + "" + ChatColor.BOLD + "My Effects");
+		perkMenu.setOption(13, new ItemStack(Material.EGG, 1), ChatColor.RESET + "" + ChatColor.BOLD + "My Pets");
+		perkMenu.setOption(15, new ItemStack(Material.IRON_HELMET, 1), ChatColor.RESET + "" + ChatColor.BOLD + "My Hats");
 
 	}
 }

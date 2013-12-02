@@ -5,12 +5,6 @@ import me.taur.arenagames.admin.CurrencyCommand;
 import me.taur.arenagames.admin.PremiumCommand;
 import me.taur.arenagames.chat.ChatCommand;
 import me.taur.arenagames.chat.ChatListener;
-import me.taur.arenagames.crk.CrkDeathListener;
-import me.taur.arenagames.crk.CrkKitSelectorListener;
-import me.taur.arenagames.crk.CrkPlayerListener;
-import me.taur.arenagames.crk.CrkRoomListener;
-import me.taur.arenagames.crk.CrkSignListener;
-import me.taur.arenagames.crk.CrkUtil;
 import me.taur.arenagames.ffa.FfaDeathListener;
 import me.taur.arenagames.ffa.FfaKitSelectorListener;
 import me.taur.arenagames.ffa.FfaPlayerListener;
@@ -18,6 +12,7 @@ import me.taur.arenagames.ffa.FfaRoomListener;
 import me.taur.arenagames.ffa.FfaSignListener;
 import me.taur.arenagames.ffa.FfaUtil;
 import me.taur.arenagames.fix.ArrowFix;
+import me.taur.arenagames.fix.InventoryFix;
 import me.taur.arenagames.fix.TeleportFix;
 import me.taur.arenagames.item.CustomConsumableListener;
 import me.taur.arenagames.item.CustomItemListener;
@@ -25,6 +20,7 @@ import me.taur.arenagames.item.CustomItemUtil;
 import me.taur.arenagames.item.CustomProjectileListener;
 import me.taur.arenagames.item.CustomWeaponListener;
 import me.taur.arenagames.perk.Perk;
+import me.taur.arenagames.perk.PerkHatListener;
 import me.taur.arenagames.perk.PerkSelectorListener;
 import me.taur.arenagames.player.PlayerCommand;
 import me.taur.arenagames.player.PlayerDataListener;
@@ -81,6 +77,7 @@ public class Arenagames extends JavaPlugin {
 		Shop.enable();
 		
 		regEvent(new PerkSelectorListener());
+		regEvent(new PerkHatListener());
 		Perk.enable();
 		
 		regEvent(new CustomItemListener());
@@ -91,6 +88,7 @@ public class Arenagames extends JavaPlugin {
 		
 		regEvent(new ArrowFix());
 		regEvent(new TeleportFix());
+		regEvent(new InventoryFix());
 		
 		loadGamemodes();
 		Scheduler.start();
@@ -109,13 +107,6 @@ public class Arenagames extends JavaPlugin {
 			if (gm[i].contains("ffa")) {
 				FfaUtil.enable();
 				regFfa();
-				continue;
-				
-			}
-			
-			if (gm[i].contains("crk")) {
-				CrkUtil.enable();
-				regCrk();
 				continue;
 				
 			}
@@ -139,15 +130,6 @@ public class Arenagames extends JavaPlugin {
 		
 	}
 	
-	private static void regCrk() {
-		regEvent(new CrkDeathListener());
-		regEvent(new CrkKitSelectorListener());
-		regEvent(new CrkPlayerListener());
-		regEvent(new CrkSignListener());
-		regEvent(new CrkRoomListener());
-		
-	}
-
 	private static void regTdm() {
 		regEvent(new TdmDeathListener());
 		regEvent(new TdmKitSelectorListener());

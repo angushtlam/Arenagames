@@ -6,7 +6,7 @@ public enum ChatChannels {
 	OFF(0, "disabled", "", ChatColor.BLACK),
 	GLOBAL(1, "Global", "G/ ", ChatColor.WHITE),
 	QUEUE(2, "Queue-Only", "Q/ ", ChatColor.BLUE),
-	ADMIN(3, "Moderator-Chat", "M/ ", ChatColor.YELLOW);
+	MOD(3, "Moderator-Chat", "M/ ", ChatColor.RED);
 	
 	private int id;
 	private String name;

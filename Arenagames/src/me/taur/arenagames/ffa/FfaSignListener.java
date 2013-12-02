@@ -1,12 +1,15 @@
 package me.taur.arenagames.ffa;
 
 import me.taur.arenagames.Config;
+import me.taur.arenagames.event.PerkHatChangeEvent;
 import me.taur.arenagames.item.InvUtil;
+import me.taur.arenagames.perk.PerkHat;
 import me.taur.arenagames.player.Permission;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.ParticleUtil;
 import me.taur.arenagames.util.RoomType;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -138,6 +141,15 @@ public class FfaSignListener implements Listener {
 					ParticleUtil.SPARKLE.sendToLocation(bloc.add(0.5, 1.0, 0.5), 0.2F, 0.2F, 5);
 				}
 			}
+			
+			if (PerkHat.ACTIVE_HAT_PERK.containsKey(p)) { // Remove player hat.
+				PerkHat.ACTIVE_HAT_PERK.remove(p);
+				
+				PerkHatChangeEvent event = new PerkHatChangeEvent(p); // Call the event to update the player's hat.
+				Bukkit.getPluginManager().callEvent(event);
+				
+			}
+			
 		}
 	}
 }

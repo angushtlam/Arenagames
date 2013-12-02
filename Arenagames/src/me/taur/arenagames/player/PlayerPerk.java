@@ -1,6 +1,7 @@
 package me.taur.arenagames.player;
 
 import me.taur.arenagames.perk.EffectPerkUtil;
+import me.taur.arenagames.perk.HatPerkUtil;
 
 import org.bukkit.entity.Player;
 
@@ -67,6 +68,40 @@ public class PlayerPerk {
 
 		return false;
 
+	}
+	
+	public static boolean isPerkOwned(Player p, HatPerkUtil hat) {
+		PlayerData data = null;
+		if (!PlayerData.isLoaded(p)) {
+			data = new PlayerData(p);
+		} else {
+			data = PlayerData.get(p);
+		}
+
+		switch (hat) {
+		case BEDROCK: return (data.getPerkHatBedrock() > 0 ? true : false);
+		case BOOKSHELF: return (data.getPerkHatBookshelf() > 0 ? true : false);
+		case BRICK: return (data.getPerkHatBrick() > 0 ? true : false);
+		case CHEST: return (data.getPerkHatChest() > 0 ? true : false);
+		case COAL: return (data.getPerkHatCoal() > 0 ? true : false);
+		case DIAMOND: return (data.getPerkHatDiamond() > 0 ? true : false);
+		case EMERALD: return (data.getPerkHatEmerald() > 0 ? true : false);
+		case ENDER_CHEST: return (data.getPerkHatEnderChest() > 0 ? true : false);
+		case GLASS: return (data.getPerkHatGlass() > 0 ? true : false);
+		case GOLD: return (data.getPerkHatGold() > 0 ? true : false);
+		case ICE: return (data.getPerkHatIce() > 0 ? true : false);
+		case IRON: return (data.getPerkHatIron() > 0 ? true : false);
+		case LAPIS: return (data.getPerkHatLapis() > 0 ? true : false);
+		case MELON: return (data.getPerkHatMelon() > 0 ? true : false);
+		case NOTE: return (data.getPerkHatNote() > 0 ? true : false);
+		case PUMPKIN: return (data.getPerkHatPumpkin() > 0 ? true : false);
+		case REDSTONE: return (data.getPerkHatRedstone() > 0 ? true : false);
+		case SOULSAND: return (data.getPerkHatSoulsand() > 0 ? true : false);
+		case SPONGE: return (data.getPerkHatSponge() > 0 ? true : false);
+		case TNT: return (data.getPerkHatTNT() > 0 ? true : false);
+		default: return false;
+		
+		}
 	}
 	
 	public static void grantPerk(Player p, EffectPerkUtil fx) {
@@ -153,6 +188,41 @@ public class PlayerPerk {
 			data.setPerkFxBlood(1);
 			return;
 			
+		}
+		
+	}
+	
+	public static void grantPerk(Player p, HatPerkUtil hat) {
+		PlayerData data = null;
+		if (!PlayerData.isLoaded(p)) {
+			data = new PlayerData(p);
+		} else {
+			data = PlayerData.get(p);
+		}
+
+		switch (hat) {
+		case BEDROCK: data.setPerkHatBedrock(1);
+		case BOOKSHELF: data.setPerkHatBookshelf(1);
+		case BRICK: data.setPerkHatBrick(1);
+		case CHEST: data.setPerkHatChest(1);
+		case COAL: data.setPerkHatCoal(1);
+		case DIAMOND: data.setPerkHatDiamond(1);
+		case EMERALD: data.setPerkHatEmerald(1);
+		case ENDER_CHEST: data.setPerkHatEnderChest(1);
+		case GLASS: data.setPerkHatGlass(1);
+		case GOLD: data.setPerkHatGold(1);
+		case ICE: data.setPerkHatIce(1);
+		case IRON: data.setPerkHatIron(1);
+		case LAPIS: data.setPerkHatLapis(1);
+		case MELON: data.setPerkHatMelon(1);
+		case NOTE: data.setPerkHatNote(1);
+		case PUMPKIN: data.setPerkHatPumpkin(1);
+		case REDSTONE: data.setPerkHatRedstone(1);
+		case SOULSAND: data.setPerkHatSoulsand(1);
+		case SPONGE: data.setPerkHatSponge(1);
+		case TNT: data.setPerkHatTNT(1);
+		default: return;
+		
 		}
 		
 	}

@@ -7,9 +7,9 @@ import org.bukkit.entity.Player;
 
 public class ChatCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender s, Command c, String l, String[] arg) {
-		if (c.getName().equalsIgnoreCase("chat") || c.getName().equalsIgnoreCase("c")) {
+		if (c.getName().equalsIgnoreCase("chat") || c.getName().equalsIgnoreCase("ch") || c.getName().equalsIgnoreCase("c")) {
 			if (arg.length < 1) {
-				s.sendMessage(ChatUtil.cmdUsageMsg("/chat <global/queue/admin/off>"));
+				s.sendMessage(ChatUtil.cmdUsageMsg("/chat <global/queue/mod/off>"));
 				return true;
 				
 			}
@@ -29,8 +29,9 @@ public class ChatCommand implements CommandExecutor {
 				}
 			}
 			
-			s.sendMessage(ChatUtil.cmdUsageMsg("/chat <global/queue/admin/off>"));
+			s.sendMessage(ChatUtil.cmdUsageMsg("/chat <global/queue/mod/off>"));
 			return true;
+			
 		}
 		
 		return false;

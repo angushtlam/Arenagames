@@ -58,7 +58,7 @@ public class ChatListener implements Listener {
 		}
 		
 		if (Permission.isModerator(p)) {
-			msg = ChatColor.YELLOW + msg; // Add colors to the player's message if the channel is not overridden.
+			msg = ch.getColor() + "" + ChatColor.ITALIC + msg; // Add colors to the player's message if the channel is not overridden.
 		} else {
 			msg = ch.getColor() + msg;
 		}
@@ -124,14 +124,20 @@ public class ChatListener implements Listener {
 			ChatUtil.sendToLog("Chat", format);
 			return;
 			
-		} else if (ch.equals(ChatChannels.ADMIN)) {
+		} else if (ch.equals(ChatChannels.MOD)) {
 			Set<Player> ls = new HashSet<Player>();
 			ls.add(p); // Send the message to the player.
 			
 			if (Bukkit.getOnlinePlayers() != null) {
 				for (Player pl : Bukkit.getOnlinePlayers()) {
+					if (Permission.isModerator(pl)) { // This channel will send all messages to moderators even if their channels are off.
+						ls.add(pl);
+						continue;
+						
+					}
+					
 					if (ChatUtil.STORE.get(pl.getName()) != null) {
-						if (ChatUtil.STORE.get(pl.getName()).intValue() == ChatChannels.ADMIN.getId()) {
+						if (ChatUtil.STORE.get(pl.getName()).intValue() == ChatChannels.MOD.getId()) {
 							if (pl != null) {
 								ls.add(pl);
 							}	

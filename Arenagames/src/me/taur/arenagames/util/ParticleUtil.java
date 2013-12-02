@@ -62,7 +62,7 @@ public enum ParticleUtil {
     
     public void sendToLocation(Location loc, float offset, float offsetVert, int amt) {
     	try {
-        	Object packet = Class.forName("net.minecraft.server." + ReflectionUtil.getVersionString() + ".Packet63WorldParticles").getConstructors()[0].newInstance();
+        	Object packet = Class.forName("net.minecraft.server." + ReflectionUtil.getVersionString() + ".PacketPlayOutWorldParticles").getConstructors()[0].newInstance();
 			ReflectionUtil.setValue(packet, "a", name); // Particle ID
 			ReflectionUtil.setValue(packet, "b", (float) loc.getX()); // X Coord
 	        ReflectionUtil.setValue(packet, "c", (float) loc.getY()); // Y Coord

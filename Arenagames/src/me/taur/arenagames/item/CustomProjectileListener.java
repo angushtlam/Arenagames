@@ -3,10 +3,7 @@ package me.taur.arenagames.item;
 import java.util.HashMap;
 
 import me.taur.arenagames.chat.ChatUtil;
-import me.taur.arenagames.crk.CrkRoom;
-import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.ParticleUtil;
-import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -74,15 +71,6 @@ public class CustomProjectileListener implements Listener {
 			
 			if (im == null) {
 				return;
-			}
-			
-			if (Room.ROOMS.get(Room.PLAYERS.get(p)).getRoomType() == RoomType.CRK) { // Only apply check when gamemode is Cranked.
-				CrkRoom room = (CrkRoom) Room.ROOMS.get(Room.PLAYERS.get(p));
-				if (room.isGameInProgress()) {
-					if (room.isPlayerDead(p)) { // Make sure the player cannot use custom weapons if they are dead.
-						return;
-					}
-				}
 			}
 			
 			if (ChatColor.stripColor(im).equalsIgnoreCase("Taste of Isolation")) {

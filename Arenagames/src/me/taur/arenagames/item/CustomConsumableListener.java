@@ -1,10 +1,8 @@
 package me.taur.arenagames.item;
 
 import me.taur.arenagames.chat.ChatUtil;
-import me.taur.arenagames.crk.CrkRoom;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.ParticleUtil;
-import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -40,17 +38,6 @@ public class CustomConsumableListener implements Listener {
 		
 		if (!Room.PLAYERS.containsKey(p)) { // This only applies in gamemodes.
 			return;
-		}
-		
-		if (Room.ROOMS.get(Room.PLAYERS.get(p)).getRoomType() == RoomType.CRK) { // Only apply check when gamemode is Cranked.
-			CrkRoom room = (CrkRoom) Room.ROOMS.get(Room.PLAYERS.get(p));
-			if (room.isGameInProgress()) {
-				if (room.isPlayerDead(p)) { // Make sure the player cannot cast spells if they are dead.
-					p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You cannot use skills while dead.");
-					return;
-					
-				}
-			}
 		}
 		
 		if (ChatColor.stripColor(im).equalsIgnoreCase("Elixir Of Berserkers")) {

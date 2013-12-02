@@ -39,8 +39,10 @@ public class TdmActive {
 						
 						for (Player p : room.getPlayers()) {
 							if (p != null) {
-								if (countdown % 3 == 0) {
-									p.setFoodLevel(Math.min(20, p.getFoodLevel() + 1));
+								if (Config.isHungerRegenEnabled(RoomType.TDM)) {
+									if (countdown % Config.getHungerRegen(RoomType.TDM) == 0) {
+										p.setFoodLevel(Math.min(20, p.getFoodLevel() + 1));
+									}
 								}
 								
 								if (countdown < 5) { // If there is only less than 5 seconds left:

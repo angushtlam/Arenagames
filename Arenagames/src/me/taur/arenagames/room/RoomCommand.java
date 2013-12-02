@@ -1,8 +1,6 @@
 package me.taur.arenagames.room;
 
 import me.taur.arenagames.Config;
-import me.taur.arenagames.crk.CrkConfig;
-import me.taur.arenagames.crk.CrkRoom;
 import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.ffa.FfaRoom;
 import me.taur.arenagames.item.InvUtil;
@@ -120,45 +118,6 @@ public class RoomCommand implements CommandExecutor {
 							}
 						}
 						
-						// Only applies if the room is an LFL room.
-						if (room.getRoomType() == RoomType.CRK) {
-							if (!room.isGameInProgress()) {
-								// Check if there are enough people in the room.
-								int needed = room.getPlayersInRoom();
-								if (needed > Config.getMinPlayersInWait(RoomType.CRK) - 1) {
-									if (!room.isGameInWaiting()) {
-										room.waitStartMessage(RoomType.CRK);
-										room.setGameInWaiting(true);
-										room.setWaitTimer(Config.getWaitTimer(RoomType.CRK));
-										
-										for (Player pl : room.getPlayers()) {
-											pl.setLevel(0);
-											pl.setExp((float) 0.0);
-											
-										}
-									
-									} else {
-										room.waitStartMessage(p, RoomType.CRK);
-									}
-									
-								} else {
-									room.waitCancelledMessage(RoomType.CRK);
-									room.setGameInWaiting(false);
-									
-								}
-							}
-							
-							CrkRoom r = (CrkRoom) room;
-							r.updateSigns(); // Update signs.
-							r.updateScoreboard(); // Update scoreboard
-							r.removePlayerScoreboard(p);
-							
-							Location[] blocs = CrkConfig.getSignsStored(room.getRoomId());
-							for (Location bloc : blocs) {
-								ParticleUtil.ANGRY_VILLAGER.sendToLocation(bloc.add(0.5, 1.0, 0.5), 0F, 0F, 1);
-							}
-						}
-						
 						// Only applies if the room is a TDM room.
 						if (room.getRoomType() == RoomType.TDM) {
 							TdmRoom r = (TdmRoom) room;
@@ -239,8 +198,8 @@ public class RoomCommand implements CommandExecutor {
 						p.sendMessage(ChatColor.YELLOW + "Game In Progress?: " + ChatColor.ITALIC + "Yes");
 						if (room.getRoomType() == RoomType.FFA) {
 							p.sendMessage(ChatColor.YELLOW + "Map: " + ChatColor.ITALIC + ((FfaRoom) room).getMapName());
-						} else if (room.getRoomType() == RoomType.CRK) {
-							p.sendMessage(ChatColor.YELLOW + "Map: " + ChatColor.ITALIC + ((CrkRoom) room).getMapName());
+						} else if (room.getRoomType() == RoomType.TDM) {
+							p.sendMessage(ChatColor.YELLOW + "Map: " + ChatColor.ITALIC + ((TdmRoom) room).getMapName());
 						}
 						
 					} else {

@@ -59,18 +59,18 @@ public class ShopEffectPerkConfirm {
 
 							PlayerPerk.grantPerk(p, fx);
 							
-							p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have purchased the " + fx.getName() + " perk.");
+							p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have purchased the " + fx.getName() + " effect.");
 
 						} else {
-							p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You don\'t have enough to purchase this perk.");
+							p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You don\'t have enough to purchase this effect.");
 						}
 
 					} else {
-						p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have cancelled the purchase of this perk.");
+						p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have cancelled the purchase of this effect.");
 					}
 
 				} else { // If the player already owns the effect.
-					p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "You already own this effect perk.");
+					p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "You already own this effect.");
 				}
 
 				menuevt.setWillClose(true);

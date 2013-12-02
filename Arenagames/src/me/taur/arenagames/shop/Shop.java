@@ -26,16 +26,23 @@ public class Shop {
 
 				String name = ChatColor.stripColor(menuevt.getName()); // Clear colors because we add colors in the menu name.
 
-				if (name.equalsIgnoreCase("Shop Effect Perks")) {
+				if (name.equalsIgnoreCase("Shop Effects")) {
 					menuevt.setWillClose(true);
 					ShopEffectPerk.openMenu(p);
 					return;
 
 				}
 
-				if (name.equalsIgnoreCase("Shop Hat Perks")) {
-					p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Hat Perks are coming soon.");
+				if (name.equalsIgnoreCase("Shop Pets")) {
+					p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Pets are coming soon.");
 					menuevt.setWillClose(true);
+					return;
+
+				}
+				
+				if (name.equalsIgnoreCase("Shop Hats")) {
+					menuevt.setWillClose(true);
+					ShopHatPerk.openMenu(p);
 					return;
 
 				}
@@ -47,8 +54,9 @@ public class Shop {
 			}
 		}, Arenagames.plugin);
 
-		shopMenu.setOption(11, new ItemStack(Material.MAP, 1), ChatColor.RESET + "" + ChatColor.BOLD + "Shop Effect Perks");
-		shopMenu.setOption(15, new ItemStack(Material.IRON_HELMET, 1), ChatColor.RESET + "" + ChatColor.BOLD + "Shop Hat Perks");
+		shopMenu.setOption(11, new ItemStack(Material.MAP, 1), ChatColor.RESET + "" + ChatColor.BOLD + "Shop Effects");
+		shopMenu.setOption(13, new ItemStack(Material.EGG, 1), ChatColor.RESET + "" + ChatColor.BOLD + "Shop Pets");
+		shopMenu.setOption(15, new ItemStack(Material.IRON_HELMET, 1), ChatColor.RESET + "" + ChatColor.BOLD + "Shop Hats");
 
 	}
 }

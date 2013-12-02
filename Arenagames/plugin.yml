@@ -18,7 +18,7 @@ commands:
     aliases: [self]
   chat:
     description: Chat channel related commands.
-    aliases: [c]
+    aliases: [c, ch]
   premium:
     description: Premium related commands.
   curr:

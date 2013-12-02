@@ -1,6 +1,5 @@
 package me.taur.arenagames;
 
-import me.taur.arenagames.crk.CrkConfig;
 import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.tdm.TdmConfig;
 import me.taur.arenagames.util.RoomType;
@@ -11,16 +10,16 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class Config {
 
-	public static String[] gamemode = {"ffa", "tdm", "crk"};
+	public static String[] gamemode = {"ffa", "tdm"};
 	
 	public static void startCheck() {
 		FileConfiguration config = Arenagames.plugin.getConfig();
 		
 		// Change every time a new gamemode is added.
-		int latestVer = 2;
+		int latestVer = 3;
 		
 		if (config.getInt("do-not-change.current-version") != latestVer) {
-			config.addDefault("do-not-change.current-version", latestVer);
+			config.set("do-not-change.current-version", latestVer);
 			
 			config.addDefault("global.lobby.world", "world");
 			config.addDefault("global.lobby.x", 0.0);
@@ -30,6 +29,8 @@ public class Config {
 			for (int i = 0; i < gamemode.length; i++) {
 				String gm = gamemode[i];
 				config.addDefault("gamemode." + gm + ".enabled", true);
+				config.addDefault("gamemode." + gm + ".gameplay.hunger-regen-enabled", true);
+				config.addDefault("gamemode." + gm + ".gameplay.hunger-regen-amt", 3);
 				config.addDefault("gamemode." + gm + ".countdown.round-in-seconds", 240);
 				config.addDefault("gamemode." + gm + ".countdown.wait-in-seconds", 45);
 				config.addDefault("gamemode." + gm + ".countdown.min-players-to-start-wait", 2);
@@ -47,7 +48,6 @@ public class Config {
 		}
 		
 		FfaConfig.defaultConf();
-		CrkConfig.defaultConf();
 		TdmConfig.defaultConf();
 	    
 	}
@@ -55,6 +55,18 @@ public class Config {
 	public static boolean isEnabled(RoomType type) {
 		String gm = type.toString().toLowerCase();
 		return Arenagames.plugin.getConfig().getBoolean("gamemode." + gm + ".enabled");
+		
+	}
+	
+	public static boolean isHungerRegenEnabled(RoomType type) {
+		String gm = type.toString().toLowerCase();
+		return Arenagames.plugin.getConfig().getBoolean("gamemode." + gm + ".gameplay.hunger-regen-enabled");
+		
+	}
+	
+	public static int getHungerRegen(RoomType type) {
+		String gm = type.toString().toLowerCase();
+		return Arenagames.plugin.getConfig().getInt("gamemode." + gm + ".gameplay.hunger-regen-amt");
 		
 	}
 	

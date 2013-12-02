@@ -34,7 +34,7 @@ public class ShopEffectPerk {
 		int perkamt = EffectPerkUtil.values().length;
 		int lines = ((perkamt / 9) + 1) * 9; // Gets how many lines the plugin needs.
 
-		IconMenu menu = new IconMenu("Shop Effect Perks", lines, new IconMenu.OptionClickEventHandler() {
+		IconMenu menu = new IconMenu("Shop Effects", lines, new IconMenu.OptionClickEventHandler() {
 			@Override
 			public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
 				menuevt.setWillDestroy(true); // Destroy this object after it is used.

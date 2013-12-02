@@ -30,12 +30,12 @@ public class PlayerData {
 	private int tdmTotalKills, tdmTotalDeaths;
 	private int tdmCurrencyEarned;
 	
-	private int crkGamesWon, crkGamesPlayed, crkRanking, crkRecord;
-	private int crkTotalKills, crkTotalDeaths;
-	private int crkCurrencyEarned;
-	
 	private int perkFxStorm, perkFxBloom, perkFxMusic, perkFxCloud, perkFxSoil, perkFxEnder, perkFxFireScarf, perkFxFireTrail,
 				perkFxHeartScarf, perkFxHeartTrail, perkFxKnowledge, perkFxSuperchicken, perkFxBlood;
+	
+	private int perkHatGlass, perkHatSponge, perkHatPumpkin, perkHatBrick, perkHatBookshelf, perkHatMelon, perkHatSoulsand, perkHatIce,
+				perkHatNote, perkHatChest, perkHatTNT, perkHatCoal, perkHatIron, perkHatLapis, perkHatRedstone, perkHatGold, perkHatEmerald,
+				perkHatDiamond, perkHatEnderChest, perkHatBedrock;
 	
 	public PlayerData(Player p) {
 		new PlayerData(p.getName());
@@ -148,6 +148,27 @@ public class PlayerData {
 					conf.addDefault("user.perk.fx.superchicken", 0);
 					conf.addDefault("user.perk.fx.blood", 0);
 					
+					conf.addDefault("user.perk.hat.glass", 0);
+					conf.addDefault("user.perk.hat.sponge", 0);
+					conf.addDefault("user.perk.hat.pumpkin", 0);
+					conf.addDefault("user.perk.hat.brick", 0);
+					conf.addDefault("user.perk.hat.bookshelf", 0);
+					conf.addDefault("user.perk.hat.melon", 0);
+					conf.addDefault("user.perk.hat.soulsand", 0);
+					conf.addDefault("user.perk.hat.ice", 0);
+					conf.addDefault("user.perk.hat.note", 0);
+					conf.addDefault("user.perk.hat.chest", 0);
+					conf.addDefault("user.perk.hat.tnt", 0);
+					conf.addDefault("user.perk.hat.coal", 0);
+					conf.addDefault("user.perk.hat.iron", 0);
+					conf.addDefault("user.perk.hat.lapis", 0);
+					conf.addDefault("user.perk.hat.redstone", 0);
+					conf.addDefault("user.perk.hat.gold", 0);
+					conf.addDefault("user.perk.hat.emerald", 0);
+					conf.addDefault("user.perk.hat.diamond", 0);
+					conf.addDefault("user.perk.hat.enderchest", 0);
+					conf.addDefault("user.perk.hat.bedrock", 0);
+					
 					conf.options().copyDefaults(true);
 					conf.save(file);
 					return true;
@@ -215,14 +236,6 @@ public class PlayerData {
 				data.setTdmTotalDeaths(conf.getInt("user.tdm.deaths"));
 				data.setTdmCurrencyEarned(conf.getInt("user.tdm.currency-earned"));
 				
-				data.setCrkGamesWon(conf.getInt("user.crk.games-won"));
-				data.setCrkGamesPlayed(conf.getInt("user.crk.games-played"));
-				data.setCrkRanking(conf.getInt("user.crk.ranking"));
-				data.setCrkRecord(conf.getInt("user.crk.record"));
-				data.setCrkTotalKills(conf.getInt("user.crk.kills"));
-				data.setCrkTotalDeaths(conf.getInt("user.crk.deaths"));
-				data.setCrkCurrencyEarned(conf.getInt("user.crk.currency-earned"));
-				
 				data.setPerkFxStorm(conf.getInt("user.perk.fx.storm"));
 				data.setPerkFxBloom(conf.getInt("user.perk.fx.bloom"));
 				data.setPerkFxMusic(conf.getInt("user.perk.fx.music"));
@@ -236,6 +249,27 @@ public class PlayerData {
 				data.setPerkFxKnowledge(conf.getInt("user.perk.fx.knowledge"));
 				data.setPerkFxSuperchicken(conf.getInt("user.perk.fx.superchicken"));
 				data.setPerkFxBlood(conf.getInt("user.perk.fx.blood"));
+				
+				data.setPerkHatGlass(conf.getInt("user.perk.hat.glass"));
+				data.setPerkHatSponge(conf.getInt("user.perk.hat.sponge"));
+				data.setPerkHatPumpkin(conf.getInt("user.perk.hat.pumpkin"));
+				data.setPerkHatBrick(conf.getInt("user.perk.hat.brick"));
+				data.setPerkHatBookshelf(conf.getInt("user.perk.hat.bookshelf"));
+				data.setPerkHatMelon(conf.getInt("user.perk.hat.melon"));
+				data.setPerkHatSoulsand(conf.getInt("user.perk.hat.soulsand"));
+				data.setPerkHatIce(conf.getInt("user.perk.hat.ice"));
+				data.setPerkHatNote(conf.getInt("user.perk.hat.note"));
+				data.setPerkHatChest(conf.getInt("user.perk.hat.chest"));
+				data.setPerkHatTNT(conf.getInt("user.perk.hat.tnt"));
+				data.setPerkHatCoal(conf.getInt("user.perk.hat.coal"));
+				data.setPerkHatIron(conf.getInt("user.perk.hat.iron"));
+				data.setPerkHatLapis(conf.getInt("user.perk.hat.lapis"));
+				data.setPerkHatRedstone(conf.getInt("user.perk.hat.redstone"));
+				data.setPerkHatGold(conf.getInt("user.perk.hat.gold"));
+				data.setPerkHatEmerald(conf.getInt("user.perk.hat.emerald"));
+				data.setPerkHatDiamond(conf.getInt("user.perk.hat.diamond"));
+				data.setPerkHatEnderChest(conf.getInt("user.perk.hat.enderchest"));
+				data.setPerkHatBedrock(conf.getInt("user.perk.hat.bedrock"));
 				
 				return true;
 			}
@@ -296,14 +330,6 @@ public class PlayerData {
 				conf.set("user.tdm.deaths", data.getTdmTotalDeaths());
 				conf.set("user.tdm.currency-earned", data.getTdmCurrencyEarned());
 				
-				conf.set("user.crk.games-won", data.getCrkGamesWon());
-				conf.set("user.crk.games-played", data.getCrkGamesPlayed());
-				conf.set("user.crk.ranking", data.getCrkRanking());
-				conf.set("user.crk.record", data.getCrkRecord());
-				conf.set("user.crk.kills", data.getCrkTotalKills());
-				conf.set("user.crk.deaths", data.getCrkTotalDeaths());
-				conf.set("user.crk.currency-earned", data.getCrkCurrencyEarned());
-				
 				conf.set("user.perk.fx.storm", data.getPerkFxStorm());
 				conf.set("user.perk.fx.bloom", data.getPerkFxBlood());
 				conf.set("user.perk.fx.music", data.getPerkFxMusic());
@@ -317,6 +343,27 @@ public class PlayerData {
 				conf.set("user.perk.fx.knowledge", data.getPerkFxKnowledge());
 				conf.set("user.perk.fx.superchicken", data.getPerkFxSuperchicken());
 				conf.set("user.perk.fx.blood", data.getPerkFxBlood());
+				
+				conf.set("user.perk.hat.glass", data.getPerkHatGlass());
+				conf.set("user.perk.hat.sponge", data.getPerkHatSponge());
+				conf.set("user.perk.hat.pumpkin", data.getPerkHatPumpkin());
+				conf.set("user.perk.hat.brick", data.getPerkHatBrick());
+				conf.set("user.perk.hat.bookshelf", data.getPerkHatBookshelf());
+				conf.set("user.perk.hat.melon", data.getPerkHatMelon());
+				conf.set("user.perk.hat.soulsand", data.getPerkHatSoulsand());
+				conf.set("user.perk.hat.ice", data.getPerkHatIce());
+				conf.set("user.perk.hat.note", data.getPerkHatNote());
+				conf.set("user.perk.hat.chest", data.getPerkHatChest());
+				conf.set("user.perk.hat.tnt", data.getPerkHatTNT());
+				conf.set("user.perk.hat.coal", data.getPerkHatCoal());
+				conf.set("user.perk.hat.iron", data.getPerkHatIron());
+				conf.set("user.perk.hat.lapis", data.getPerkHatLapis());
+				conf.set("user.perk.hat.redstone", data.getPerkHatRedstone());
+				conf.set("user.perk.hat.gold", data.getPerkHatGold());
+				conf.set("user.perk.hat.emerald", data.getPerkHatEmerald());
+				conf.set("user.perk.hat.diamond", data.getPerkHatDiamond());
+				conf.set("user.perk.hat.enderchest", data.getPerkHatEnderChest());
+				conf.set("user.perk.hat.bedrock", data.getPerkHatBedrock());
 				
 				conf.save(file);
 				return true;
@@ -498,62 +545,6 @@ public class PlayerData {
 		this.ffaCurrencyEarned = ffaCurrencyEarned;
 	}
 
-	public int getCrkGamesWon() {
-		return crkGamesWon;
-	}
-
-	public void setCrkGamesWon(int crkGamesWon) {
-		this.crkGamesWon = crkGamesWon;
-	}
-
-	public int getCrkGamesPlayed() {
-		return crkGamesPlayed;
-	}
-
-	public void setCrkGamesPlayed(int crkGamesPlayed) {
-		this.crkGamesPlayed = crkGamesPlayed;
-	}
-
-	public int getCrkRanking() {
-		return crkRanking;
-	}
-
-	public void setCrkRanking(int crkRanking) {
-		this.crkRanking = crkRanking;
-	}
-
-	public int getCrkRecord() {
-		return crkRecord;
-	}
-
-	public void setCrkRecord(int crkRecord) {
-		this.crkRecord = crkRecord;
-	}
-
-	public int getCrkTotalKills() {
-		return crkTotalKills;
-	}
-
-	public void setCrkTotalKills(int crkTotalKills) {
-		this.crkTotalKills = crkTotalKills;
-	}
-
-	public int getCrkTotalDeaths() {
-		return crkTotalDeaths;
-	}
-
-	public void setCrkTotalDeaths(int crkTotalDeaths) {
-		this.crkTotalDeaths = crkTotalDeaths;
-	}
-
-	public int getCrkCurrencyEarned() {
-		return crkCurrencyEarned;
-	}
-
-	public void setCrkCurrencyEarned(int crkCurrencyEarned) {
-		this.crkCurrencyEarned = crkCurrencyEarned;
-	}
-
 	public int getTdmGamesWon() {
 		return tdmGamesWon;
 	}
@@ -712,6 +703,166 @@ public class PlayerData {
 
 	public void setPerkFxBlood(int perkFxBlood) {
 		this.perkFxBlood = perkFxBlood;
+	}
+
+	public int getPerkHatGlass() {
+		return perkHatGlass;
+	}
+
+	public void setPerkHatGlass(int perkHatGlass) {
+		this.perkHatGlass = perkHatGlass;
+	}
+
+	public int getPerkHatSponge() {
+		return perkHatSponge;
+	}
+
+	public void setPerkHatSponge(int perkHatSponge) {
+		this.perkHatSponge = perkHatSponge;
+	}
+
+	public int getPerkHatPumpkin() {
+		return perkHatPumpkin;
+	}
+
+	public void setPerkHatPumpkin(int perkHatPumpkin) {
+		this.perkHatPumpkin = perkHatPumpkin;
+	}
+
+	public int getPerkHatBrick() {
+		return perkHatBrick;
+	}
+
+	public void setPerkHatBrick(int perkHatBrick) {
+		this.perkHatBrick = perkHatBrick;
+	}
+
+	public int getPerkHatBookshelf() {
+		return perkHatBookshelf;
+	}
+
+	public void setPerkHatBookshelf(int perkHatBookshelf) {
+		this.perkHatBookshelf = perkHatBookshelf;
+	}
+
+	public int getPerkHatMelon() {
+		return perkHatMelon;
+	}
+
+	public void setPerkHatMelon(int perkHatMelon) {
+		this.perkHatMelon = perkHatMelon;
+	}
+
+	public int getPerkHatSoulsand() {
+		return perkHatSoulsand;
+	}
+
+	public void setPerkHatSoulsand(int perkHatSoulsand) {
+		this.perkHatSoulsand = perkHatSoulsand;
+	}
+
+	public int getPerkHatIce() {
+		return perkHatIce;
+	}
+
+	public void setPerkHatIce(int perkHatIce) {
+		this.perkHatIce = perkHatIce;
+	}
+
+	public int getPerkHatNote() {
+		return perkHatNote;
+	}
+
+	public void setPerkHatNote(int perkHatNote) {
+		this.perkHatNote = perkHatNote;
+	}
+
+	public int getPerkHatChest() {
+		return perkHatChest;
+	}
+
+	public void setPerkHatChest(int perkHatChest) {
+		this.perkHatChest = perkHatChest;
+	}
+
+	public int getPerkHatTNT() {
+		return perkHatTNT;
+	}
+
+	public void setPerkHatTNT(int perkHatTNT) {
+		this.perkHatTNT = perkHatTNT;
+	}
+
+	public int getPerkHatCoal() {
+		return perkHatCoal;
+	}
+
+	public void setPerkHatCoal(int perkHatCoal) {
+		this.perkHatCoal = perkHatCoal;
+	}
+
+	public int getPerkHatIron() {
+		return perkHatIron;
+	}
+
+	public void setPerkHatIron(int perkHatIron) {
+		this.perkHatIron = perkHatIron;
+	}
+
+	public int getPerkHatLapis() {
+		return perkHatLapis;
+	}
+
+	public void setPerkHatLapis(int perkHatLapis) {
+		this.perkHatLapis = perkHatLapis;
+	}
+
+	public int getPerkHatRedstone() {
+		return perkHatRedstone;
+	}
+
+	public void setPerkHatRedstone(int perkHatRedstone) {
+		this.perkHatRedstone = perkHatRedstone;
+	}
+
+	public int getPerkHatGold() {
+		return perkHatGold;
+	}
+
+	public void setPerkHatGold(int perkHatGold) {
+		this.perkHatGold = perkHatGold;
+	}
+
+	public int getPerkHatEmerald() {
+		return perkHatEmerald;
+	}
+
+	public void setPerkHatEmerald(int perkHatEmerald) {
+		this.perkHatEmerald = perkHatEmerald;
+	}
+
+	public int getPerkHatDiamond() {
+		return perkHatDiamond;
+	}
+
+	public void setPerkHatDiamond(int perkHatDiamond) {
+		this.perkHatDiamond = perkHatDiamond;
+	}
+
+	public int getPerkHatEnderChest() {
+		return perkHatEnderChest;
+	}
+
+	public void setPerkHatEnderChest(int perkHatEnderChest) {
+		this.perkHatEnderChest = perkHatEnderChest;
+	}
+
+	public int getPerkHatBedrock() {
+		return perkHatBedrock;
+	}
+
+	public void setPerkHatBedrock(int perkHatBedrock) {
+		this.perkHatBedrock = perkHatBedrock;
 	}
 
 }

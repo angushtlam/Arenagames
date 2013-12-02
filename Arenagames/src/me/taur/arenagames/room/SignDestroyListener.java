@@ -1,6 +1,6 @@
 package me.taur.arenagames.room;
 
-import me.taur.arenagames.crk.CrkRoom;
+import me.taur.arenagames.chat.ChatUtil;
 import me.taur.arenagames.ffa.FfaRoom;
 import me.taur.arenagames.tdm.TdmRoom;
 import me.taur.arenagames.util.RoomType;
@@ -27,9 +27,9 @@ public class SignDestroyListener implements Listener {
 		Sign sign = (Sign) b.getState();
 		String l0 = ChatColor.stripColor(sign.getLine(0));
 		
-		if (l0.equals("[FFA]")) {
+		if (l0.equals("[" + RoomType.FFA.getSign() + "]")) {
 			if (!p.hasPermission("arenagames.admin")) {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
+				p.sendMessage(ChatUtil.basicErrorMsg("You have no permission."));
 				evt.setCancelled(true);
 				return;
 				
@@ -45,13 +45,16 @@ public class SignDestroyListener implements Listener {
 				FfaRoom room = (FfaRoom) r;
 				room.updateSigns();
 				
-				p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have removed a queue sign for " + r.getRoomId() + ".");
+				p.sendMessage(ChatUtil.basicSuccessMsg("You have removed a queue sign for " + r.getRoomId() + "."));
 			}
+			
+			return;
+			
 		}
 		
-		if (l0.equals("[TDM]")) {
+		if (l0.equals("[" + RoomType.TDM.getSign() + "]")) {
 			if (!p.hasPermission("arenagames.admin")) {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
+				p.sendMessage(ChatUtil.basicErrorMsg("You have no permission."));
 				evt.setCancelled(true);
 				return;
 				
@@ -67,31 +70,12 @@ public class SignDestroyListener implements Listener {
 				TdmRoom room = (TdmRoom) r;
 				room.updateSigns();
 				
-				p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have removed a queue sign for " + r.getRoomId() + ".");
+				p.sendMessage(ChatUtil.basicSuccessMsg("You have removed a queue sign for " + r.getRoomId() + "."));
 			}
+			
+			return;
+			
 		}
 		
-		if (l0.equals("[Cranked]")) {
-			if (!p.hasPermission("arenagames.admin")) {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
-				evt.setCancelled(true);
-				return;
-				
-			}
-			
-			String l1 = ChatColor.stripColor(sign.getLine(1).toLowerCase());
-			if (!Room.ROOMS.containsKey(l1)) {
-				return;
-			}
-			
-			Room r = Room.ROOMS.get(l1);
-			if (r.getRoomType() == RoomType.CRK) {
-				CrkRoom room = (CrkRoom) r;
-				room.updateSigns();
-				
-				p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have removed a queue sign for " + r.getRoomId() + ".");
-				
-			}
-		}
 	}
 }

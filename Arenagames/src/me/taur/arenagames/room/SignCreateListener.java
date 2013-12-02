@@ -1,8 +1,6 @@
 package me.taur.arenagames.room;
 
 import me.taur.arenagames.Arenagames;
-import me.taur.arenagames.crk.CrkConfig;
-import me.taur.arenagames.crk.CrkRoom;
 import me.taur.arenagames.ffa.FfaConfig;
 import me.taur.arenagames.ffa.FfaRoom;
 import me.taur.arenagames.tdm.TdmConfig;
@@ -219,105 +217,6 @@ public class SignCreateListener implements Listener {
 			p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have created a queue sign for " + r.getRoomId() + ".");
 			
 			final TdmRoom room = (TdmRoom) r; // Add a delay to the signs to update it.
-			Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
-				public void run() {
-					room.updateSigns();
-				}
-			}, 2L);
-			
-		}
-		
-		if (l0.equals("[" + RoomType.CRK.getSign() + "]")) {
-			if (!p.hasPermission("arenagames.admin")) {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
-				b.breakNaturally();
-				return;
-				
-			}
-			
-			String l1 = evt.getLine(1).toLowerCase();
-			if (!Room.ROOMS.containsKey(l1)) {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have inserted an incorrect queue ID.");
-				b.breakNaturally();
-				return;
-				
-			}
-			
-			if (!l1.startsWith("crk-")) {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have inserted an non-CRK queue ID.");
-				b.breakNaturally();
-				return;
-				
-			}
-			
-			Room r = Room.ROOMS.get(l1);
-			if (r == null) {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "An error occurred: Queue does not exist.");
-				b.breakNaturally();
-				return;
-				
-			}
-			
-			if (r.getRoomType() != RoomType.CRK) {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "An error occurred: Queue is not a CRK queue.");
-				b.breakNaturally();
-				return;
-				
-			}
-			
-			Location signloc = b.getLocation();
-			Location[] locs = CrkConfig.getSignsStored(r.getRoomId());
-			boolean match = false;
-			
-			if (locs != null) {
-				for (Location loc : locs) {
-					if (loc != null) {
-						Block lb = loc.getBlock();
-						if (lb.getType().name().contains("SIGN")) {
-							Sign sign = (Sign) b.getState();
-							
-							if (!sign.getLine(0).contains("[" + RoomType.CRK.getSign() + "]")) {
-								continue;
-							}
-							
-							if (sign.getLine(1).equals(l1)) {
-								match = true;
-								break;
-								
-							}
-						}
-					}
-				}
-			}
-			
-			if (!match) { // If the sign doesn't exist in the config
-				ConfigurationSection signs = CrkConfig.getSigns(r.getRoomId());
-				if (signs != null) {
-					int size = signs.getKeys(false).size(); // Size is 1 higher of the sign's id
-					
-					World world = signloc.getWorld();
-					double x = signloc.getBlockX();
-					double y = signloc.getBlockY();
-					double z = signloc.getBlockZ();
-					Location saveloc = new Location(world, x, y, z);
-					
-					CrkConfig.setSignLocation(r.getRoomId(), size, saveloc);
-					
-				} else {
-					World world = signloc.getWorld();
-					double x = signloc.getBlockX();
-					double y = signloc.getBlockY();
-					double z = signloc.getBlockZ();
-					Location saveloc = new Location(world, x, y, z);
-					
-					CrkConfig.setSignLocation(r.getRoomId(), 0, saveloc);
-					
-				}
-			}
-			
-			p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have created a queue sign for " + r.getRoomId() + ".");
-			
-			final CrkRoom room = (CrkRoom) r; // Add a delay to the signs to update it.
 			Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
 				public void run() {
 					room.updateSigns();

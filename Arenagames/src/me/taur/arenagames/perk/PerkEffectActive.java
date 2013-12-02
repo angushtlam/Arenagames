@@ -96,8 +96,8 @@ public class PerkEffectActive {
 			}
 			
 			if (fx.equals(EffectPerkUtil.ENDER)) {
-				ParticleUtil.PORTAL_FUNNEL.sendToLocation(p.getLocation().add(0.0, -1.8, 0.0), 0.0F, 0.0F, 20);
-				ParticleUtil.PORTAL_STILL.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.2F, 0.1F, 80);
+				ParticleUtil.PORTAL_FUNNEL.sendToLocation(p.getLocation().add(0.0, 1.8, 0.0), 0.0F, 0.0F, 20);
+				ParticleUtil.PORTAL_STILL.sendToLocation(p.getLocation().add(0.0, 0.5, 0.0), 0.2F, 0.1F, 80);
 			}
 			
 			if (fx.equals(EffectPerkUtil.FIRESCARF)) {
