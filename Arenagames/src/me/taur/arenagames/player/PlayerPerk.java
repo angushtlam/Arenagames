@@ -201,27 +201,87 @@ public class PlayerPerk {
 		}
 
 		switch (hat) {
-		case BEDROCK: data.setPerkHatBedrock(1);
-		case BOOKSHELF: data.setPerkHatBookshelf(1);
-		case BRICK: data.setPerkHatBrick(1);
-		case CHEST: data.setPerkHatChest(1);
-		case COAL: data.setPerkHatCoal(1);
-		case DIAMOND: data.setPerkHatDiamond(1);
-		case EMERALD: data.setPerkHatEmerald(1);
-		case ENDER_CHEST: data.setPerkHatEnderChest(1);
-		case GLASS: data.setPerkHatGlass(1);
-		case GOLD: data.setPerkHatGold(1);
-		case ICE: data.setPerkHatIce(1);
-		case IRON: data.setPerkHatIron(1);
-		case LAPIS: data.setPerkHatLapis(1);
-		case MELON: data.setPerkHatMelon(1);
-		case NOTE: data.setPerkHatNote(1);
-		case PUMPKIN: data.setPerkHatPumpkin(1);
-		case REDSTONE: data.setPerkHatRedstone(1);
-		case SOULSAND: data.setPerkHatSoulsand(1);
-		case SPONGE: data.setPerkHatSponge(1);
-		case TNT: data.setPerkHatTNT(1);
-		default: return;
+		case BEDROCK:
+			data.setPerkHatBedrock(1);
+			break;
+			
+		case BOOKSHELF:
+			data.setPerkHatBookshelf(1);
+			break;
+			
+		case BRICK:
+			data.setPerkHatBrick(1);
+			break;
+			
+		case CHEST:
+			data.setPerkHatChest(1);
+			break;
+			
+		case COAL:
+			data.setPerkHatCoal(1);
+			break;
+			
+		case DIAMOND:
+			data.setPerkHatDiamond(1);
+			break;
+			
+		case EMERALD:
+			data.setPerkHatEmerald(1);
+			break;
+			
+		case ENDER_CHEST:
+			data.setPerkHatEnderChest(1);
+			break;
+			
+		case GLASS:
+			data.setPerkHatGlass(1);
+			break;
+			
+		case GOLD:
+			data.setPerkHatGold(1);
+			break;
+			
+		case ICE:
+			data.setPerkHatIce(1);
+			break;
+			
+		case IRON:
+			data.setPerkHatIron(1);
+			break;
+			
+		case LAPIS:
+			data.setPerkHatLapis(1);
+			break;
+			
+		case MELON:
+			data.setPerkHatMelon(1);
+			break;
+			
+		case NOTE:
+			data.setPerkHatNote(1);
+			break;
+			
+		case PUMPKIN:
+			data.setPerkHatPumpkin(1);
+			break;
+			
+		case REDSTONE:
+			data.setPerkHatRedstone(1);
+			break;
+			
+		case SOULSAND:
+			data.setPerkHatSoulsand(1);
+			break;
+			
+		case SPONGE:
+			data.setPerkHatSponge(1);
+			break;
+			
+		case TNT:
+			data.setPerkHatTNT(1);
+			break;
+			
+		default: break;
 		
 		}
 		
