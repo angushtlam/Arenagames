@@ -6,9 +6,11 @@ import me.taur.arenagames.chat.ChatUtil;
 import me.taur.arenagames.util.ParticleUtil;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -33,13 +35,25 @@ public class CustomProjectileListener implements Listener {
 				Projectile proj = (Projectile) damager;
 				LivingEntity le = (LivingEntity) evt.getEntity();
 				
+				if (proj.getType() == EntityType.SNOWBALL) {
+					evt.setCancelled(true); // Stop snowball knockback
+				}
+				
 				if (PROJECTILES.containsKey(proj)) {
 					if (PROJECTILES.get(proj).equals("Taste of Isolation")) {
-						SpellUtil.forceKnockEntity(proj.getShooter().getLocation(), le, -2.0F, 2.0F, 3.0F, 10.0F);
+						Location loc = proj.getShooter().getLocation();
+						double distance = 5.0;
+						
+						if (loc.distance(le.getLocation()) < distance) {
+							distance = loc.distance(le.getLocation());
+						}
+						
+						SpellUtil.forceKnockEntity(proj.getShooter().getLocation(), le, -2.0F, 2.0F, 2.0F, (float) distance);
 						ParticleUtil.ANGRY_VILLAGER.sendToLocation(le.getLocation().add(0.0, 2.5, 0.0), 0.0F, 0.0F, 1);
 
 						if (le instanceof Player) {
-							((Player) le).playSound(le.getLocation(), Sound.DIG_GRAVEL, 0.5F, 0.5F);
+							((Player) le).playSound(le.getLocation(), Sound.DIG_GRAVEL, 1.0F, 0.2F);
+							((Player) le).playSound(le.getLocation(), Sound.DIG_GRAVEL, 1.0F, 0.4F);
 						}
 						
 					}

@@ -19,7 +19,7 @@ public class CustomItem {
 		
 		ItemMeta pm = i.getItemMeta();
 		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Command: Tremble");
-		pm.setLore(Arrays.asList("22 sec Cooldown / Cost 4 Food", "Inflicts Slow II for 2 sec to", "enemies within 12 blocks."));
+		pm.setLore(Arrays.asList("22 sec Cooldown / Cost 4 Hunger", "Inflicts Slow II for 2 sec to", "enemies within 12 blocks."));
 		
 		i.setItemMeta(pm);
 		CustomItemUtil.STORE.put("COMMAND_TREMBLE", i);
@@ -31,7 +31,7 @@ public class CustomItem {
 		
 		ItemMeta pm = i.getItemMeta();
 		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Command: Lockdown");
-		pm.setLore(Arrays.asList("9 sec Cooldown / Cost 1 Food", "Applies Damage Resistance III and", "Weakness V for 3 sec."));
+		pm.setLore(Arrays.asList("9 sec Cooldown / Cost 1 Hunger", "Applies Damage Resistance III and", "Weakness V for 3 sec."));
 		
 		i.setItemMeta(pm);
 		CustomItemUtil.STORE.put("COMMAND_LOCKDOWN", i);
@@ -43,7 +43,7 @@ public class CustomItem {
 		
 		ItemMeta pm = i.getItemMeta();
 		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Taste of Isolation");
-		pm.setLore(Arrays.asList("Pulls in the enemies hit towards", "you by 4 blocks."));
+		pm.setLore(Arrays.asList("Cost 2 Hunger", "Pulls in the enemies hit towards", "you by 5 blocks."));
 		
 		i.setItemMeta(pm);
 		CustomItemUtil.STORE.put("TASTE_OF_ISOLATION", i);

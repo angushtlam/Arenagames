@@ -38,7 +38,7 @@ public class Scheduler {
 			
 		}
 		
-		if (checkTick(2)) {
+		if (checkTick(1)) {
 			CustomProjectileParticles.tick2();
 		
 			
