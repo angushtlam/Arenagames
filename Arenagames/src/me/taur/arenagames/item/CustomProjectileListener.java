@@ -21,7 +21,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class CustomProjectileListener implements Listener {
-	public static HashMap<Entity, String> PROJECTILES = new HashMap<Entity, String>();
+	public static HashMap<Projectile, String> PROJECTILES = new HashMap<Projectile, String>();
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onHitManager(EntityDamageEvent evt) {
@@ -35,7 +35,7 @@ public class CustomProjectileListener implements Listener {
 				
 				if (PROJECTILES.containsKey(proj)) {
 					if (PROJECTILES.get(proj).equals("Taste of Isolation")) {
-						SpellUtil.forceKnockEntity(proj.getShooter().getLocation(), le, -2.0F, 1.0F, 3.0F, 12.0F);
+						SpellUtil.forceKnockEntity(proj.getShooter().getLocation(), le, -2.0F, 2.0F, 3.0F, 10.0F);
 						ParticleUtil.ANGRY_VILLAGER.sendToLocation(le.getLocation().add(0.0, 2.5, 0.0), 0.0F, 0.0F, 1);
 
 						if (le instanceof Player) {
@@ -74,12 +74,23 @@ public class CustomProjectileListener implements Listener {
 			}
 			
 			if (ChatColor.stripColor(im).equalsIgnoreCase("Taste of Isolation")) {
+				i.setAmount(i.getAmount() + 1); // Return the item to the player
+				InvUtil.updatePlayerInv(p);
+				
+				if ((p.getFoodLevel() - 4) < 0) {
+					p.sendMessage(ChatUtil.gameErrorMsg("You need 2 Hunger to fire Taste of Isolation."));
+					evt.setCancelled(true);
+					return;
+					
+				}
+				
+				p.setFoodLevel(p.getFoodLevel() - 4);
 				PROJECTILES.put(evt.getEntity(), "Taste of Isolation");
 				
 			} else if (ChatColor.stripColor(im).equalsIgnoreCase("Bane Of The Forest")) {
 				if ((p.getFoodLevel() - 6) < 0) {
 					p.sendMessage(ChatUtil.gameErrorMsg("You need 3 Hunger to fire with Bane Of The Forest."));
-					ent.remove();
+					evt.setCancelled(true);
 					
 				}
 				

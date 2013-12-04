@@ -122,7 +122,9 @@ public class InvUtil {
                 			level = ench.getMaxLevel();
                 		}
 
-                		i.getItemMeta().addEnchant(ench, level, true);
+                		ItemMeta im = i.getItemMeta();
+                		im.addEnchant(ench, level, true);
+                		i.setItemMeta(im);
                 		
                 	}
                 }
@@ -136,7 +138,7 @@ public class InvUtil {
 	public static ItemStack getKitSelector() {
 		ItemStack i = new ItemStack(Material.NETHER_STAR, 1);
 		ItemMeta im = i.getItemMeta();
-		im.setDisplayName(ChatColor.GREEN + "Kit Selector");
+		im.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Kit Selector");
 		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to select your kit."));
 		i.setItemMeta(im);
 		return i;
@@ -146,7 +148,7 @@ public class InvUtil {
 	public static ItemStack getProfileItem() {
 		ItemStack i = new ItemStack(Material.WRITTEN_BOOK, 1);
 		ItemMeta im = i.getItemMeta();
-		im.setDisplayName(ChatColor.GOLD + "Profile");
+		im.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Profile");
 		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to check your profile."));
 		i.setItemMeta(im);
 		return i;
@@ -154,10 +156,20 @@ public class InvUtil {
 	}
 	
 	public static ItemStack getPerkItem() {
-		ItemStack i = new ItemStack(Material.ENCHANTED_BOOK, 1);
+		ItemStack i = new ItemStack(Material.DIAMOND, 1);
 		ItemMeta im = i.getItemMeta();
-		im.setDisplayName(ChatColor.BLUE + "Perks");
-		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to check your perks."));
+		im.setDisplayName(ChatColor.BLUE + "" + ChatColor.BOLD + "Perks");
+		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to open your perks."));
+		i.setItemMeta(im);
+		return i;
+		
+	}
+	
+	public static ItemStack getWarpItem() {
+		ItemStack i = new ItemStack(Material.PAPER, 1);
+		ItemMeta im = i.getItemMeta();
+		im.setDisplayName(ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "Warps");
+		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to teleport."));
 		i.setItemMeta(im);
 		return i;
 		
@@ -176,8 +188,9 @@ public class InvUtil {
 		
 		inv.setItem(0, i0);
 		
-		ItemStack i1 = InvUtil.getPerkItem();
-		inv.setItem(1, i1);
+		inv.setItem(4, InvUtil.getWarpItem());
+		inv.setItem(8, InvUtil.getPerkItem());
+		
 		updatePlayerInv(p);
 		
 	}

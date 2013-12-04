@@ -132,7 +132,7 @@ public class TdmSignListener implements Listener {
 			InvUtil.setLobbyInventory(p);
 			
 			PlayerInventory inv = p.getInventory();
-			inv.setItem(8, InvUtil.getKitSelector());
+			inv.setItem(4, InvUtil.getKitSelector());
 			InvUtil.updatePlayerInv(p);
 			
 			Location[] blocs = TdmConfig.getSignsStored(room.getRoomId());

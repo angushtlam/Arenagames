@@ -15,27 +15,12 @@ public class CustomPotion {
 		
 		PotionMeta pm = (PotionMeta) i.getItemMeta();
 		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Potion of Degeneration");
-		PotionEffect effect = new PotionEffect(PotionEffectType.POISON, 12 * 20, 1, true);
+		PotionEffect effect = new PotionEffect(PotionEffectType.POISON, 4 * 20, 1, true);
 		pm.addCustomEffect(effect, true);
 		pm.setMainEffect(effect.getType());
 		
 		i.setItemMeta(pm);
 		CustomItemUtil.STORE.put("POTION_OF_DEGEN", i);
-		
-	}
-	
-	public static void loadPotionOfGrimace() {
-		ItemStack i = CustomItemUtil.getSplashPotion().clone();
-		i.setDurability(PotionColor.DARK_GRAY.getSplash());
-		
-		PotionMeta pm = (PotionMeta) i.getItemMeta();
-		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Potion of Grimace");
-		PotionEffect effect = new PotionEffect(PotionEffectType.WITHER, 8 * 20, 1, true);
-		pm.addCustomEffect(effect, true);
-		pm.setMainEffect(effect.getType());
-		
-		i.setItemMeta(pm);
-		CustomItemUtil.STORE.put("POTION_OF_GRIM", i);
 		
 	}
 	
@@ -60,7 +45,7 @@ public class CustomPotion {
 		
 		PotionMeta pm = (PotionMeta) i.getItemMeta();
 		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Elixir Of Berserkers");
-		pm.setLore(Arrays.asList("Cost Half Health + Max Hunger", "Applies Speed II and Strength I", "for 7 sec."));
+		pm.setLore(Arrays.asList("Cost Half Health, 7 Hunger", "Requires 10 Hunger To Use", "Applies Speed I and Strength II", "for 10 sec."));
 		
 		PotionEffect effect = new PotionEffect(PotionEffectType.SATURATION, 1, 0, false);
 		pm.addCustomEffect(effect, true);
@@ -86,24 +71,6 @@ public class CustomPotion {
 		
 	}
 	
-	public static void loadElixirOfAdrenaline() {
-		ItemStack i = CustomItemUtil.getDrinkPotion().clone();
-		i.setDurability(PotionColor.BLUE.getDmg());
-		
-		PotionMeta pm = (PotionMeta) i.getItemMeta();
-		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Elixir Of Adrenaline");
-		PotionEffect effect = new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 8 * 20, 1, true);
-		pm.addCustomEffect(effect, true);
-		pm.setMainEffect(effect.getType());
-		
-		PotionEffect effect2 = new PotionEffect(PotionEffectType.SPEED, 8 * 20, 1, true);
-		pm.addCustomEffect(effect2, true);
-		
-		i.setItemMeta(pm);
-		CustomItemUtil.STORE.put("ELIXIR_OF_ADREN", i);
-		
-	}
-	
 	public static void loadElixirOfShadows() {
 		ItemStack i = CustomItemUtil.getDrinkPotion().clone();
 		i.setDurability(PotionColor.RED.getDmg());
@@ -116,24 +83,6 @@ public class CustomPotion {
 		
 		i.setItemMeta(pm);
 		CustomItemUtil.STORE.put("ELIXIR_OF_SHADOWS", i);
-		
-	}
-	
-	public static void loadElixirOfCranked() {
-		ItemStack i = CustomItemUtil.getDrinkPotion().clone();
-		i.setDurability(PotionColor.ORANGE.getDmg());
-		
-		PotionMeta pm = (PotionMeta) i.getItemMeta();
-		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Elixir Of Cranked");
-		PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, 20 * 30, 2, true);
-		pm.addCustomEffect(effect, true);
-		pm.setMainEffect(effect.getType());
-		
-		PotionEffect effect2 = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 20 * 30, 0, true);
-		pm.addCustomEffect(effect2, true);
-		
-		i.setItemMeta(pm);
-		CustomItemUtil.STORE.put("ELIXIR_OF_CRANKED", i);
 		
 	}
 	

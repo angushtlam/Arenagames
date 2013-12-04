@@ -47,7 +47,7 @@ public class ShopSignListener implements Listener {
 			}
 			
 			p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have created a Perk Shop sign.");
-			evt.setLine(0, ChatColor.GOLD + "" + ChatColor.BOLD + "[Perk Shop]");
+			evt.setLine(0, ChatColor.AQUA + "" + ChatColor.BOLD + "[Perk Shop]");
 			evt.setLine(1, "Right click on");
 			evt.setLine(2, "this sign to");
 			evt.setLine(3, "open shop.");

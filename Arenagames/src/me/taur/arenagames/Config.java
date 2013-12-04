@@ -10,7 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class Config {
 
-	public static String[] gamemode = {"ffa", "tdm"};
+	public static String[] gamemode = {"FFA", "TDM"};
 	
 	public static void startCheck() {
 		FileConfiguration config = Arenagames.plugin.getConfig();
@@ -27,7 +27,7 @@ public class Config {
 			config.addDefault("global.lobby.z", 0.0);
 			
 			for (int i = 0; i < gamemode.length; i++) {
-				String gm = gamemode[i];
+				String gm = gamemode[i].toLowerCase();
 				config.addDefault("gamemode." + gm + ".enabled", true);
 				config.addDefault("gamemode." + gm + ".gameplay.hunger-regen-enabled", true);
 				config.addDefault("gamemode." + gm + ".gameplay.hunger-regen-amt", 3);

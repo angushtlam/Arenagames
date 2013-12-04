@@ -41,6 +41,8 @@ public class CustomConsumableListener implements Listener {
 		}
 		
 		if (ChatColor.stripColor(im).equalsIgnoreCase("Elixir Of Berserkers")) {
+			evt.setCancelled(true); // The pot is returned to the player.
+			
 			if (p.getFoodLevel() != 20) {
 				p.sendMessage(ChatUtil.gameErrorMsg("You need 10 Hunger to activate this ability."));
 				return;
@@ -48,18 +50,17 @@ public class CustomConsumableListener implements Listener {
 			}
 			
 			p.setHealth(p.getHealth() / 2);
-			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 7, 1, true));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 7, 0, true));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 10, 0, true));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * 10, 1, true));
 			
-			ParticleUtil.LAVA_SPARK.sendToLocation(p.getLocation(), 3.0F, 1.0F, 20);
-			ParticleUtil.FIRE.sendToLocation(p.getLocation(), 2.0F, 1.0F, 30);
-			p.playSound(p.getLocation(), Sound.WOLF_BARK, 2.0F, 0.5F);
+			ParticleUtil.LAVA_SPARK.sendToLocation(p.getLocation(), 2.0F, 1.0F, 20);
+			ParticleUtil.FIRE.sendToLocation(p.getLocation(), 1.0F, 1.0F, 30);
+			p.playSound(p.getLocation(), Sound.WOLF_BARK, 1.0F, 0.5F);
 			
-			p.setFoodLevel(0);
+			p.setFoodLevel(6); // 3.0 Hunger
 			
-			p.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.ITALIC + "You activated Berserker for 7 sec.");
-
-			evt.setCancelled(true); // The pot is returned to the player.
+			p.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.ITALIC + "You activated Berserker for 10 sec.");
+			
 			return;
 
 		} else {

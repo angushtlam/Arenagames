@@ -46,8 +46,8 @@ public class TdmRoomListener implements Listener {
 					for (Player p : room.getPlayers()) {
 						if (PlayerData.isLoaded(p)) {
 							PlayerData data = PlayerData.get(p);
-							int oldelo = data.getFfaRanking();
-							int newelo = data.getFfaRanking();
+							int oldelo = data.getTdmRanking();
+							int newelo = data.getTdmRanking();
 							
 							if (room.getRedScore() == room.getBlueScore()) { // If the game ended in a tie.
 								p.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "Your TDM Elo did not change: " + oldelo + " (-).");
@@ -188,7 +188,7 @@ public class TdmRoomListener implements Listener {
 						
 					}
 				}
-
+				
 				Bukkit.broadcastMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Team Deathmatch match " + room.getRoomId() + " has ended.");
 				room.resetRoom(true);
 				

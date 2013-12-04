@@ -1,4 +1,4 @@
-package me.taur.arenagames.perk;
+package me.taur.arenagames.item;
 
 import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.room.Room;
@@ -14,7 +14,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class PerkSelectorListener implements Listener {
+public class WarpSelectorListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void kitSelector(PlayerInteractEvent evt) {
 		Action a = evt.getAction();
@@ -32,13 +32,13 @@ public class PerkSelectorListener implements Listener {
 		}
 		
 		String im = i.getItemMeta().getDisplayName();
-		String perksel = InvUtil.getPerkItem().getItemMeta().getDisplayName();
+		String warpsel = InvUtil.getWarpItem().getItemMeta().getDisplayName();
 		
-		if (im == null || perksel == null) {
+		if (im == null || warpsel == null) {
 			return;
 		}
 		
-		if (!im.equals(perksel)) { // Make sure the item they're holding is the kit item.
+		if (!im.equals(warpsel)) { // Make sure the item they're holding is the kit item.
 			return;
 		}
 		
@@ -47,14 +47,14 @@ public class PerkSelectorListener implements Listener {
 			if (Room.ROOMS.get(Room.PLAYERS.get(p)).isGameInProgress()) {
 				p.getInventory().removeItem(i); // Remove it
 			} else {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You cannot change perks while in queue.");
+				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You cannot warp while in queue.");
 			}
 			
 			return;
 			
 		}
 		
-		Perk.menu.open(p);
+		Warp.menu.open(p);
 		p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1.0F, 0.3F);
 
 	}

@@ -43,7 +43,7 @@ public class CustomItem {
 		
 		ItemMeta pm = i.getItemMeta();
 		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Taste of Isolation");
-		pm.setLore(Arrays.asList("Pulls in the enemies hit towards", "you by 5 blocks."));
+		pm.setLore(Arrays.asList("Pulls in the enemies hit towards", "you by 4 blocks."));
 		
 		i.setItemMeta(pm);
 		CustomItemUtil.STORE.put("TASTE_OF_ISOLATION", i);

@@ -132,7 +132,7 @@ public class FfaSignListener implements Listener {
 			InvUtil.setLobbyInventory(p);
 			
 			PlayerInventory inv = p.getInventory();
-			inv.setItem(8, InvUtil.getKitSelector());
+			inv.setItem(4, InvUtil.getKitSelector());
 			InvUtil.updatePlayerInv(p);
 			
 			Location[] blocs = FfaConfig.getSignsStored(room.getRoomId());

@@ -5,20 +5,23 @@ import me.taur.arenagames.admin.CurrencyCommand;
 import me.taur.arenagames.admin.PremiumCommand;
 import me.taur.arenagames.chat.ChatCommand;
 import me.taur.arenagames.chat.ChatListener;
-import me.taur.arenagames.ffa.FfaDeathListener;
 import me.taur.arenagames.ffa.FfaKitSelectorListener;
 import me.taur.arenagames.ffa.FfaPlayerListener;
+import me.taur.arenagames.ffa.FfaRespawnListener;
 import me.taur.arenagames.ffa.FfaRoomListener;
 import me.taur.arenagames.ffa.FfaSignListener;
 import me.taur.arenagames.ffa.FfaUtil;
 import me.taur.arenagames.fix.ArrowFix;
 import me.taur.arenagames.fix.InventoryFix;
+import me.taur.arenagames.fix.StrengthFix;
 import me.taur.arenagames.fix.TeleportFix;
 import me.taur.arenagames.item.CustomConsumableListener;
 import me.taur.arenagames.item.CustomItemListener;
 import me.taur.arenagames.item.CustomItemUtil;
 import me.taur.arenagames.item.CustomProjectileListener;
 import me.taur.arenagames.item.CustomWeaponListener;
+import me.taur.arenagames.item.Warp;
+import me.taur.arenagames.item.WarpSelectorListener;
 import me.taur.arenagames.perk.Perk;
 import me.taur.arenagames.perk.PerkHatListener;
 import me.taur.arenagames.perk.PerkSelectorListener;
@@ -31,12 +34,13 @@ import me.taur.arenagames.room.SignCreateListener;
 import me.taur.arenagames.room.SignDestroyListener;
 import me.taur.arenagames.shop.Shop;
 import me.taur.arenagames.shop.ShopSignListener;
-import me.taur.arenagames.tdm.TdmDeathListener;
 import me.taur.arenagames.tdm.TdmKitSelectorListener;
 import me.taur.arenagames.tdm.TdmPlayerListener;
+import me.taur.arenagames.tdm.TdmRespawnListener;
 import me.taur.arenagames.tdm.TdmRoomListener;
 import me.taur.arenagames.tdm.TdmSignListener;
 import me.taur.arenagames.tdm.TdmUtil;
+import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -54,7 +58,6 @@ public class Arenagames extends JavaPlugin {
 		plugin = this;
 		
 		hookIdentifierAPI();
-		
 		Config.startCheck();
 		
 		regCmd("queue", new RoomCommand());
@@ -86,9 +89,13 @@ public class Arenagames extends JavaPlugin {
 		regEvent(new CustomProjectileListener());
 		CustomItemUtil.enable();
 		
+		regEvent(new WarpSelectorListener());
+		Warp.enable();
+		
 		regEvent(new ArrowFix());
-		regEvent(new TeleportFix());
 		regEvent(new InventoryFix());
+		regEvent(new StrengthFix());
+		regEvent(new TeleportFix());
 		
 		loadGamemodes();
 		Scheduler.start();
@@ -101,28 +108,21 @@ public class Arenagames extends JavaPlugin {
 	}
 	
 	private static void loadGamemodes() {
-		String[] gm = Config.gamemode;
-		
-		for (int i = 0; i < gm.length; i++) {
-			if (gm[i].contains("ffa")) {
-				FfaUtil.enable();
-				regFfa();
-				continue;
-				
-			}
-			
-			if (gm[i].contains("tdm")) {
-				TdmUtil.enable();
-				regTdm();
-				continue;
-				
-			}
+		if (Config.isEnabled(RoomType.FFA)) {
+			FfaUtil.enable();
+			regFfa();
+
+		}
+
+		if (Config.isEnabled(RoomType.TDM)) {
+			TdmUtil.enable();
+			regTdm();
 			
 		}
 	}
 
 	private static void regFfa() {		
-		regEvent(new FfaDeathListener());
+		regEvent(new FfaRespawnListener());
 		regEvent(new FfaKitSelectorListener());
 		regEvent(new FfaPlayerListener());
 		regEvent(new FfaSignListener());
@@ -131,7 +131,7 @@ public class Arenagames extends JavaPlugin {
 	}
 	
 	private static void regTdm() {
-		regEvent(new TdmDeathListener());
+		regEvent(new TdmRespawnListener());
 		regEvent(new TdmKitSelectorListener());
 		regEvent(new TdmPlayerListener());
 		regEvent(new TdmSignListener());

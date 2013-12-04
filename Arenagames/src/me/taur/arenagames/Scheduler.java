@@ -2,6 +2,7 @@ package me.taur.arenagames;
 
 import me.taur.arenagames.ffa.FfaActive;
 import me.taur.arenagames.item.CustomItem;
+import me.taur.arenagames.item.CustomProjectileParticles;
 import me.taur.arenagames.perk.PerkEffectActive;
 import me.taur.arenagames.tdm.TdmActive;
 
@@ -28,11 +29,18 @@ public class Scheduler {
 			TdmActive.run();
 
 			CustomItem.run();
+			
 			PerkEffectActive.tick20();
 		}
 		
 		if (checkTick(5)) {
 			PerkEffectActive.tick5();
+			
+		}
+		
+		if (checkTick(2)) {
+			CustomProjectileParticles.tick2();
+		
 			
 		}
 	}

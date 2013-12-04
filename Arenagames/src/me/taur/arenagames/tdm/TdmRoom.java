@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.item.CustomItem;
 import me.taur.arenagames.item.InvUtil;
@@ -14,7 +13,6 @@ import me.taur.arenagames.player.PlayerData;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.RoomType;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -383,7 +381,7 @@ public class TdmRoom extends Room {
 		
 	}
 	
-	public void playerDied(Player p, String msg) {
+	public void playerKilled(Player p, String msg) {
 		PlayerData data = null;
 		if (PlayerData.isLoaded(p)) {
 			data = PlayerData.get(p);
@@ -401,26 +399,11 @@ public class TdmRoom extends Room {
 			}	
 		}
 		
-		int team = this.getTeamtrackboard().get(p.getName());
-		
-		if (team == TdmTeams.RED.getId()) {
-			TdmSpawnManager.respawn(p, TdmConfig.getPossibleRedSpawnLocation(this));
-		} else if (team == TdmTeams.BLUE.getId()) {
-			TdmSpawnManager.respawn(p, TdmConfig.getPossibleBlueSpawnLocation(this));
-		}
-		
-		final Player pl = p; // Reset the kit the same time the player's invulnerability ends.
-		Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
-		    public void run() {
-		    	if (pl != null) {
-		    		resetKit(pl);
-		    	}
-		    }
-		}, 60L);
+		TdmSpawnManager.respawnTimer(p);
 		
 	}
 	
-	public void playerDied(Player p, Player killer) { // Player loses 1 point for being executed by another player.
+	public void playerKilled(Player p, Player killer) { // Player loses 1 point for being executed by another player.
 		PlayerData data = null;
 		if (PlayerData.isLoaded(killer)) {
 			data = PlayerData.get(killer);
@@ -439,17 +422,17 @@ public class TdmRoom extends Room {
 		
 		this.pointboard.put(killer.getName(), this.pointboard.get(killer.getName()).intValue() + 1);
 		
-		this.playerDied(p, p.getName() + " has been executed by " + killer.getName() + "!");
+		this.playerKilled(p, p.getName() + " has been executed by " + killer.getName() + "!");
 		
 	}
 	
-	public void playerDied(Player p, EntityType ent) {
+	public void playerKilled(Player p, EntityType ent) {
 		String entity = ent.toString().charAt(0) + ent.toString().toLowerCase().substring(1);
-		this.playerDied(p, p.getName() + " has been slain by " + entity + ".");
+		this.playerKilled(p, p.getName() + " has been slain by " + entity + ".");
 		
 	}
 	
-	public void playerDied(Player p, DamageCause cause) {
+	public void playerKilled(Player p, DamageCause cause) {
 		String c = "";
 		
 		if (cause.equals(DamageCause.BLOCK_EXPLOSION)) {
@@ -486,11 +469,11 @@ public class TdmRoom extends Room {
 			c = "died";
 		}
 		
-		this.playerDied(p, p.getName() + " " + c + ".");
+		this.playerKilled(p, p.getName() + " " + c + ".");
 	}
 
-	public void playerDied(Player p) {
-		this.playerDied(p, p.getName() + " died.");
+	public void playerKilled(Player p) {
+		this.playerKilled(p, p.getName() + " died.");
 	}
 	
 	public void startGame() {

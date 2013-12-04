@@ -10,13 +10,10 @@ public class CustomItemUtil {
 	
 	public static void enable() {
 		CustomPotion.loadPotionOfDegeneration();
-		CustomPotion.loadPotionOfGrimace();
 		CustomPotion.loadPotionOfRevitalization();
 		CustomPotion.loadElixirOfBerserkers();
 		CustomPotion.loadElixirOfShadows();
 		CustomPotion.loadElixirOfOnslaught();
-		CustomPotion.loadElixirOfAdrenaline();
-		CustomPotion.loadElixirOfCranked();
 		
 		CustomItem.loadCommandTremble();
 		CustomItem.loadCommandLockdown();

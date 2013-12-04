@@ -6,7 +6,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
-import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
 import me.taur.arenagames.item.CustomItem;
 import me.taur.arenagames.item.InvUtil;
@@ -15,7 +14,6 @@ import me.taur.arenagames.player.PlayerData;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.RoomType;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -249,7 +247,8 @@ public class FfaRoom extends Room {
 		
 	}
 	
-	public void playerDied(Player p, int subtract, String msg) {
+
+	public void playerKilled(Player p, String msg) {
 		PlayerData data = null;
 		if (PlayerData.isLoaded(p)) {
 			data = PlayerData.get(p);
@@ -260,14 +259,7 @@ public class FfaRoom extends Room {
 		data.setFfaTotalDeaths(data.getFfaTotalDeaths() + 1); // Increase death count
 		
 		int died = this.pointboard.get(p.getName());
-		
-		if (this.getPlayers() != null) {
-			for (Player pl : this.getPlayers()) {
-				if (pl != null) {
-					pl.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + msg);
-				}
-			}	
-		}
+		int subtract = 2;
 		
 		if (died - subtract > 0) {
 			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have lost " + subtract + " point for dying.");
@@ -285,20 +277,19 @@ public class FfaRoom extends Room {
 			
 		}
 		
-		FfaSpawnManager.respawn(p, FfaConfig.getPossibleSpawnLocation(this));
+		if (this.getPlayers() != null) {
+			for (Player pl : this.getPlayers()) {
+				if (pl != null) {
+					pl.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + msg);
+				}
+			}	
+		}
 		
-		final Player pl = p; // Reset the kit the same time the player's invulnerability ends.
-		Bukkit.getScheduler().runTaskLater(Arenagames.plugin, new Runnable() {
-		    public void run() {
-		    	if (pl != null) {
-		    		resetKit(pl);
-		    	}
-		    }
-		}, 60L);
+		FfaSpawnManager.respawnTimer(p);
 		
 	}
 	
-	public void playerDied(Player p, Player killer) { // Player loses 1 point for being executed by another player.
+	public void playerKilled(Player p, Player killer) { // Player loses 1 point for being executed by another player.
 		PlayerData data = null;
 		if (PlayerData.isLoaded(killer)) {
 			data = PlayerData.get(killer);
@@ -306,25 +297,26 @@ public class FfaRoom extends Room {
 			data = new PlayerData(killer);
 		}
 		
-		data.setFfaTotalKills(data.getFfaTotalKills() + 1); // Increase kill count
+		data.setTdmTotalKills(data.getTdmTotalKills() + 1); // Increase kill count
 		
+		int add = 3;
 		int kill = this.pointboard.get(killer.getName());
 		killer.setLevel(kill + 3);
-		this.pointboard.put(killer.getName(), kill + 3);
+		this.pointboard.put(killer.getName(), kill + add);
+		killer.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have gained " + add + " points by slaying " + p.getName() + ".");
+		killer.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You now have " + (kill + add) + " points.");
 		
-		this.playerDied(p, 1, p.getName() + " has been executed by " + killer.getName() + "!");
-		killer.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "You have gained 3 points by slaying " + p.getName() + ".");
-		killer.sendMessage(ChatColor.AQUA + "" + ChatColor.ITALIC + "You now have " + (kill + 3) + " points.");
-
+		this.playerKilled(p, p.getName() + " has been executed by " + killer.getName() + "!");
+		
 	}
 	
-	public void playerDied(Player p, EntityType ent) {
+	public void playerKilled(Player p, EntityType ent) {
 		String entity = ent.toString().charAt(0) + ent.toString().toLowerCase().substring(1);
-		this.playerDied(p, 2, p.getName() + " has been slain by " + entity + ".");
+		this.playerKilled(p, p.getName() + " has been slain by " + entity + ".");
 		
 	}
 	
-	public void playerDied(Player p, DamageCause cause) {
+	public void playerKilled(Player p, DamageCause cause) {
 		String c = "";
 		
 		if (cause.equals(DamageCause.BLOCK_EXPLOSION)) {
@@ -361,13 +353,13 @@ public class FfaRoom extends Room {
 			c = "died";
 		}
 		
-		this.playerDied(p, 2, p.getName() + " " + c + ".");
+		this.playerKilled(p, p.getName() + " " + c + ".");
 	}
 
-	public void playerDied(Player p) {
-		this.playerDied(p, 2, p.getName() + " died.");
+	public void playerKilled(Player p) {
+		this.playerKilled(p, p.getName() + " died.");
 	}
-	
+
 	public void startGame() {
 		for (Player p : this.getPlayers()) {
 			if (p != null) {

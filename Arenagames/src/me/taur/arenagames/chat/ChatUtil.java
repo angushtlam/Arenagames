@@ -12,6 +12,10 @@ public class ChatUtil {
 	}
 	
 	public static String basicSuccessMsg(String msg) {
+		return ChatColor.GREEN + "" + ChatColor.ITALIC + msg;
+	}
+	
+	public static String basicImportantMsg(String msg) {
 		return ChatColor.AQUA + "" + ChatColor.ITALIC + msg;
 	}
 	

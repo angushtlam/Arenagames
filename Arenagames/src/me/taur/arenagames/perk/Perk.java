@@ -10,10 +10,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class Perk {
-	public static IconMenu perkMenu = null;
+	public static IconMenu menu = null;
 
 	public static void enable() {
-		perkMenu = new IconMenu("Perk Menu", 3 * 9, new IconMenu.OptionClickEventHandler() {
+		menu = new IconMenu("Perk Menu", 3 * 9, new IconMenu.OptionClickEventHandler() {
 			@Override
 			public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
 				Player p = menuevt.getPlayer();
@@ -55,9 +55,9 @@ public class Perk {
 		}, Arenagames.plugin);
 
 
-		perkMenu.setOption(11, new ItemStack(Material.MAP, 1), ChatColor.RESET + "" + ChatColor.BOLD + "My Effects");
-		perkMenu.setOption(13, new ItemStack(Material.EGG, 1), ChatColor.RESET + "" + ChatColor.BOLD + "My Pets");
-		perkMenu.setOption(15, new ItemStack(Material.IRON_HELMET, 1), ChatColor.RESET + "" + ChatColor.BOLD + "My Hats");
+		menu.setOption(11, new ItemStack(Material.MAP, 1), ChatColor.RESET + "" + ChatColor.BOLD + "My Effects");
+		menu.setOption(13, new ItemStack(Material.EGG, 1), ChatColor.RESET + "" + ChatColor.BOLD + "My Pets");
+		menu.setOption(15, new ItemStack(Material.IRON_HELMET, 1), ChatColor.RESET + "" + ChatColor.BOLD + "My Hats");
 
 	}
 }

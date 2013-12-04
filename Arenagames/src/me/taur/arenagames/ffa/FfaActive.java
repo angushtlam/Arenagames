@@ -37,6 +37,19 @@ public class FfaActive {
 					if (countdown > 0) {
 						room.setCountdownTimer(countdown - 1);
 						
+						for (Player ptimer : FfaSpawnManager.RESPAWN_TIMER.keySet()) { // Update the player's death timers.
+							int time = FfaSpawnManager.RESPAWN_TIMER.get(ptimer).intValue() - 1;
+							
+							if (time < 1) {
+								FfaSpawnManager.RESPAWN_TIMER.remove(ptimer);
+								continue;
+								
+							}
+							
+							FfaSpawnManager.RESPAWN_TIMER.put(ptimer, time);
+							
+						}
+						
 						for (Player p : room.getPlayers()) {
 							if (p != null) {
 								if (Config.isHungerRegenEnabled(RoomType.FFA)) {

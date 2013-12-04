@@ -37,6 +37,19 @@ public class TdmActive {
 					if (countdown > 0) {
 						room.setCountdownTimer(countdown - 1);
 						
+						for (Player ptimer : TdmSpawnManager.RESPAWN_TIMER.keySet()) { // Update the player's death timers.
+							int time = TdmSpawnManager.RESPAWN_TIMER.get(ptimer).intValue() - 1;
+							
+							if (time < 1) {
+								TdmSpawnManager.RESPAWN_TIMER.remove(ptimer);
+								continue;
+								
+							}
+							
+							TdmSpawnManager.RESPAWN_TIMER.put(ptimer, time);
+							
+						}
+						
 						for (Player p : room.getPlayers()) {
 							if (p != null) {
 								if (Config.isHungerRegenEnabled(RoomType.TDM)) {
