@@ -3,6 +3,8 @@ package me.taur.arenagames.item;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
+import me.taur.arenagames.util.Sym;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -19,9 +21,13 @@ public class CustomItem {
 		
 		ItemMeta pm = i.getItemMeta();
 		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Command: Tremble");
-		pm.setLore(Arrays.asList("22 sec Cooldown / Cost 4 Hunger", "Inflicts Slow II for 2 sec to", "enemies within 12 blocks."));
+		pm.setLore(Arrays.asList(ChatColor.GOLD + "Cost: 4 " + Sym.HUNGER,
+				ChatColor.GOLD + "Cooldown: 22 sec.",
+				ChatColor.YELLOW + "Inflicts Slow II for 2 sec. to",
+				ChatColor.YELLOW + "enemies within 12 blocks."));
 		
 		i.setItemMeta(pm);
+		
 		CustomItemUtil.STORE.put("COMMAND_TREMBLE", i);
 		
 	}
@@ -31,10 +37,57 @@ public class CustomItem {
 		
 		ItemMeta pm = i.getItemMeta();
 		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Command: Lockdown");
-		pm.setLore(Arrays.asList("9 sec Cooldown / Cost 1 Hunger", "Applies Damage Resistance III and", "Weakness V for 3 sec."));
+		pm.setLore(Arrays.asList(ChatColor.GOLD + "Cost: 1 " + Sym.HUNGER,
+				ChatColor.GOLD + "Cooldown: 9 sec.",
+				ChatColor.YELLOW + "Applies Damage Resistance III and",
+				ChatColor.YELLOW + "Weakness V for 3 sec."));
 		
 		i.setItemMeta(pm);
+		
 		CustomItemUtil.STORE.put("COMMAND_LOCKDOWN", i);
+		
+	}
+	
+	public static void loadSickScalpel() {
+		ItemStack i = new ItemStack(Material.IRON_HOE, 1);
+		
+		ItemMeta pm = i.getItemMeta();
+		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Sick Scalpel");
+		pm.setLore(Arrays.asList(ChatColor.GOLD + "Cost: 1 " + Sym.HUNGER,
+				ChatColor.YELLOW + "Inflicts Poison I for 4 sec."));
+		
+		i.setItemMeta(pm);
+		
+		CustomItemUtil.STORE.put("SICK_SCALPEL", i);
+		
+	}
+	
+	public static void loadMachete() {
+		ItemStack i = new ItemStack(Material.IRON_AXE, 1);
+		
+		ItemMeta pm = i.getItemMeta();
+		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Machete");
+		pm.setLore(Arrays.asList(ChatColor.BLUE + "The Bloodhunter uses the Machete to",
+				ChatColor.BLUE + "slice through their enemies."));
+		
+		i.setItemMeta(pm);
+		
+		CustomItemUtil.STORE.put("MACHETE", i);
+		
+	}
+	
+	public static void loadBladeNoir() {
+		ItemStack i = new ItemStack(Material.STONE_SWORD, 1);
+		
+		ItemMeta pm = i.getItemMeta();
+		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Blade Noir");
+		pm.setLore(Arrays.asList(ChatColor.YELLOW + "Inflicts 3 bonus " + Sym.HEART + " of",
+				ChatColor.YELLOW + "damage to isolated players.",
+				ChatColor.YELLOW + "(10 blocks from other players)"));
+		
+		i.setItemMeta(pm);
+		
+		CustomItemUtil.STORE.put("BLADE_NOIR", i);
 		
 	}
 	
@@ -43,9 +96,12 @@ public class CustomItem {
 		
 		ItemMeta pm = i.getItemMeta();
 		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Taste of Isolation");
-		pm.setLore(Arrays.asList("Cost 2 Hunger", "Pulls in the enemies hit towards", "you by 5 blocks."));
+		pm.setLore(Arrays.asList(ChatColor.GOLD + "Cost: 2 " + Sym.HUNGER,
+				ChatColor.YELLOW + "Pulls in the enemies hit towards",
+				ChatColor.YELLOW + "you by a maximum of 5 blocks."));
 		
 		i.setItemMeta(pm);
+		
 		CustomItemUtil.STORE.put("TASTE_OF_ISOLATION", i);
 		
 	}
@@ -55,26 +111,31 @@ public class CustomItem {
 		
 		ItemMeta pm = i.getItemMeta();
 		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "The Strangler");
-		pm.setLore(Arrays.asList("Basic attacks inflict Wither I and", "Slow I for 1 sec, applies Weakness", "and Slow I for 1 sec."));
-		pm.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+		pm.setLore(Arrays.asList(ChatColor.GOLD + "Melee Cost: " + Sym.HALF + " " + Sym.HUNGER,
+				ChatColor.YELLOW + "Basic attacks inflict Wither I and",
+				ChatColor.YELLOW + "Slow I for 1 sec., applies Weakness I",
+				ChatColor.YELLOW + "and Slow I for 1 sec."));
 		
+		pm.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
 		i.setItemMeta(pm);
+		
 		CustomItemUtil.STORE.put("THE_STRANGLER", i);
 		
 	}
 	
-	public static void loadBaneOfTheForest() {
+	public static void loadWondershot() {
 		ItemStack i = new ItemStack(Material.BOW, 1);
 		
 		ItemMeta pm = i.getItemMeta();
-		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Bane Of The Forest");
-		pm.setLore(Arrays.asList("Cost 3 Hunger each arrow fired."));
-		pm.addEnchant(Enchantment.ARROW_FIRE, 1, true);
-		pm.addEnchant(Enchantment.ARROW_DAMAGE, 2, true);
-		pm.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Wondershot");
+		pm.setLore(Arrays.asList(ChatColor.GOLD + "Ranged Cost: 6 " + Sym.HUNGER,
+				ChatColor.YELLOW + "Refunds 3 " + Sym.HUNGER + " if shot hits."));
 		
+		pm.addEnchant(Enchantment.ARROW_DAMAGE, 4, true);
+		pm.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
 		i.setItemMeta(pm);
-		CustomItemUtil.STORE.put("BANE_OF_THE_FOREST", i);
+		
+		CustomItemUtil.STORE.put("WONDERSHOT", i);
 		
 	}
 	

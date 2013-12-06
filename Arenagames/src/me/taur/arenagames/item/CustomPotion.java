@@ -2,6 +2,8 @@ package me.taur.arenagames.item;
 
 import java.util.Arrays;
 
+import me.taur.arenagames.util.Sym;
+
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -45,7 +47,10 @@ public class CustomPotion {
 		
 		PotionMeta pm = (PotionMeta) i.getItemMeta();
 		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Elixir Of Berserkers");
-		pm.setLore(Arrays.asList("Cost Half Health, 7 Hunger", "Requires 10 Hunger To Use", "Applies Speed I and Strength II", "for 10 sec."));
+		pm.setLore(Arrays.asList(ChatColor.GOLD + "Cost: Half " + Sym.HEART + ", 7 " + Sym.HUNGER,
+				ChatColor.GOLD + "Requires 10 " + Sym.HUNGER + " To Use",
+				ChatColor.YELLOW + "Applies Speed I and Strength II",
+				ChatColor.YELLOW + "for 10 sec."));
 		
 		PotionEffect effect = new PotionEffect(PotionEffectType.SATURATION, 1, 0, false);
 		pm.addCustomEffect(effect, true);
@@ -53,6 +58,29 @@ public class CustomPotion {
 
 		i.setItemMeta(pm);
 		CustomItemUtil.STORE.put("ELIXIR_OF_BERSERKERS", i);
+		
+	}
+	
+	public static void loadElixirOfSacrifice() {
+		ItemStack i = CustomItemUtil.getDrinkPotion().clone();
+		i.setDurability(PotionColor.PURPLE.getDmg());
+		
+		PotionMeta pm = (PotionMeta) i.getItemMeta();
+		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Elixir Of Sacrifice");
+		pm.setLore(Arrays.asList(ChatColor.GOLD + "Cost: Half " + Sym.HEART + ", 7 " + Sym.HUNGER,
+				ChatColor.GOLD + "Requires 10 " + Sym.HUNGER + " To Use",
+				ChatColor.YELLOW + "Randomly applies 1 of the following",
+				ChatColor.YELLOW + Sym.TAB + "Slow I for 3 sec.",
+				ChatColor.YELLOW + Sym.TAB + "Speed II for 6 sec.",
+				ChatColor.YELLOW + Sym.TAB + "Damage Resistance for 12 sec.",
+				ChatColor.YELLOW + Sym.TAB + "Lightning Strike"));
+		
+		PotionEffect effect = new PotionEffect(PotionEffectType.SATURATION, 1, 0, false);
+		pm.addCustomEffect(effect, true);
+		pm.setMainEffect(effect.getType());
+
+		i.setItemMeta(pm);
+		CustomItemUtil.STORE.put("ELIXIR_OF_SACRIFICE", i);
 		
 	}
 	

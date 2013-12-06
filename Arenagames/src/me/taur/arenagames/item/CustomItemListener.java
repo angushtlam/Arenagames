@@ -16,7 +16,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class CustomItemListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void customItem(PlayerInteractEvent evt) {
+	public void customItemInteract(PlayerInteractEvent evt) {
 		ItemStack i = evt.getPlayer().getItemInHand();
 		if (i.getType() == Material.AIR) {
 			return;

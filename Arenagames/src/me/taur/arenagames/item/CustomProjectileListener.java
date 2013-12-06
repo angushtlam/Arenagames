@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import me.taur.arenagames.chat.ChatUtil;
 import me.taur.arenagames.util.ParticleUtil;
+import me.taur.arenagames.util.Sym;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -56,6 +57,13 @@ public class CustomProjectileListener implements Listener {
 							((Player) le).playSound(le.getLocation(), Sound.DIG_GRAVEL, 1.0F, 0.4F);
 						}
 						
+					} else if (PROJECTILES.get(proj).equals("Wondershot")) {
+						if (proj.getShooter() instanceof Player) {
+							Player p = (Player) proj.getShooter();
+							p.setFoodLevel(Math.min(20, p.getFoodLevel() + 6)); // Refund 3 Hunger
+							
+						}
+						
 					}
 					
 					PROJECTILES.remove(proj);
@@ -92,7 +100,7 @@ public class CustomProjectileListener implements Listener {
 				InvUtil.updatePlayerInv(p);
 				
 				if ((p.getFoodLevel() - 4) < 0) {
-					p.sendMessage(ChatUtil.gameErrorMsg("You need 2 Hunger to fire Taste of Isolation."));
+					p.sendMessage(ChatUtil.gameErrorMsg("You need 2 " + Sym.HUNGER + " to fire Taste of Isolation."));
 					evt.setCancelled(true);
 					return;
 					
@@ -101,14 +109,16 @@ public class CustomProjectileListener implements Listener {
 				p.setFoodLevel(p.getFoodLevel() - 4);
 				PROJECTILES.put(evt.getEntity(), "Taste of Isolation");
 				
-			} else if (ChatColor.stripColor(im).equalsIgnoreCase("Bane Of The Forest")) {
-				if ((p.getFoodLevel() - 6) < 0) {
-					p.sendMessage(ChatUtil.gameErrorMsg("You need 3 Hunger to fire with Bane Of The Forest."));
+			} else if (ChatColor.stripColor(im).equalsIgnoreCase("Wondershot")) {
+				if ((p.getFoodLevel() - 14) < 0) {
+					p.sendMessage(ChatUtil.gameErrorMsg("You need 7 " + Sym.HUNGER + " to fire with Wondershot."));
 					evt.setCancelled(true);
+					return;
 					
 				}
 				
-				p.setFoodLevel(p.getFoodLevel() - 8);
+				p.setFoodLevel(p.getFoodLevel() - 14);
+				PROJECTILES.put(evt.getEntity(), "Wondershot");
 				
 			}
 			

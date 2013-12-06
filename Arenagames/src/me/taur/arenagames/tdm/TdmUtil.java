@@ -100,7 +100,7 @@ public class TdmUtil {
 				
 				String name = ChatColor.RESET + "" + ChatColor.BOLD + TdmConfig.getKitName(i);
 				String lore = ChatColor.GRAY + "" + ChatColor.ITALIC + info;
-				kitMenu.setOption(i, new ItemStack(TdmConfig.getKitMenuIcon(i), 1), name, premium, lore);
+				kitMenu.setOption(i, new ItemStack(TdmConfig.getKitMenuIcon(i), 1), name, lore, premium);
 				
 			}
 		}

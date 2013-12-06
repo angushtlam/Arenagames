@@ -14,12 +14,16 @@ public class CustomItemUtil {
 		CustomPotion.loadElixirOfBerserkers();
 		CustomPotion.loadElixirOfShadows();
 		CustomPotion.loadElixirOfOnslaught();
+		CustomPotion.loadElixirOfSacrifice();
 		
 		CustomItem.loadCommandTremble();
 		CustomItem.loadCommandLockdown();
 		CustomItem.loadTheStrangler();
-		CustomItem.loadBaneOfTheForest();
+		CustomItem.loadWondershot();
 		CustomItem.loadTasteOfIsolation();
+		CustomItem.loadBladeNoir();
+		CustomItem.loadMachete();
+		CustomItem.loadSickScalpel();
 		
 	}
 	
