@@ -2,11 +2,11 @@ package me.taur.arenagames.perk;
 
 import java.util.Random;
 
+import me.taur.arenagames.chat.ChatUtil;
 import me.taur.arenagames.item.SpellUtil;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.ParticleUtil;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +16,7 @@ public class PerkEffectActive {
 		for (Player p : PerkEffect.ACTIVE_EFFECT_PERK.keySet()) {
 			if (Room.PLAYERS.containsKey(p)) {
 				PerkEffect.ACTIVE_EFFECT_PERK.remove(p);
-				p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Your effect perk has been turned off as you joined the queue.");
+				p.sendMessage(ChatUtil.basicInfoMsg("Your effect perk has been turned off as you joined the queue."));
 				continue;
 				
 			}
@@ -108,12 +108,8 @@ public class PerkEffectActive {
 				ParticleUtil.LAVA_SPARK.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.5F, 0.0F, 2);	
 			}
 			
-			if (fx.equals(EffectPerkUtil.HEARTSCARF)) {
-				ParticleUtil.HEART.sendToLocation(p.getLocation().add(0.0, 0.7, 0.0), 0.12F, 0.0F, 1);
-			}
-			
 			if (fx.equals(EffectPerkUtil.HEARTTRAIL)) {
-				ParticleUtil.HEART.sendToLocation(p.getLocation().add(0.0, -0.5, 0.0), 0.3F, 0.2F, 4);			
+				ParticleUtil.HEART.sendToLocation(p.getLocation().add(0.0, -0.4, 0.0), 0.5F, 0.0F, 8);			
 			}
 			
 			if (fx.equals(EffectPerkUtil.KNOWLEDGE)) {

@@ -13,7 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 
 public class InventoryFix implements Listener {
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.LOW)
 	public void preventPlayersFromMovingInventory(InventoryClickEvent evt) {
 		HumanEntity he = evt.getWhoClicked();
 		
@@ -28,6 +28,10 @@ public class InventoryFix implements Listener {
 						return;
 						
 					}
+				}
+				
+				if (!evt.getInventory().getContents().equals(p.getInventory().getContents())) { // Cancel the event if the inventory is not the player's inventory
+					return;
 				}
 				
 				evt.setCancelled(true); // Cancel the player from moving items in the lobby.

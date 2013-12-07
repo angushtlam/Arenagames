@@ -20,9 +20,9 @@ import me.taur.arenagames.item.CustomItemListener;
 import me.taur.arenagames.item.CustomItemUtil;
 import me.taur.arenagames.item.CustomProjectileListener;
 import me.taur.arenagames.item.CustomWeaponListener;
-import me.taur.arenagames.item.Warp;
+import me.taur.arenagames.item.WarpMenu;
 import me.taur.arenagames.item.WarpSelectorListener;
-import me.taur.arenagames.perk.Perk;
+import me.taur.arenagames.perk.PerkMenu;
 import me.taur.arenagames.perk.PerkHatListener;
 import me.taur.arenagames.perk.PerkSelectorListener;
 import me.taur.arenagames.player.PlayerCommand;
@@ -81,7 +81,7 @@ public class Arenagames extends JavaPlugin {
 		
 		regEvent(new PerkSelectorListener());
 		regEvent(new PerkHatListener());
-		Perk.enable();
+		PerkMenu.enable();
 		
 		regEvent(new CustomItemListener());
 		regEvent(new CustomWeaponListener());
@@ -90,7 +90,7 @@ public class Arenagames extends JavaPlugin {
 		CustomItemUtil.enable();
 		
 		regEvent(new WarpSelectorListener());
-		Warp.enable();
+		WarpMenu.enable();
 		
 		regEvent(new ArrowFix());
 		regEvent(new InventoryFix());

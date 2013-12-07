@@ -129,11 +129,16 @@ public class PlayerProfile {
 					 Sym.TAB + "/player <save>" + ChatColor.RESET + "\n" +
 					 Sym.SUB + ChatColor.ITALIC + " Save your data" + ChatColor.RESET + "\n");
 			
+			String[] date = TimeUtil.millisecondsToDate(p.getFirstPlayed()).split("/");
+			String month = date[1];
+			String day = date[0];
+			String year = date[2];
+			
 			page.add(FANCY_HEADING +
-					 ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "   Statistics\n" + ChatColor.RESET + "" +
+					 ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "      Statistics\n" + ChatColor.RESET + "" +
 					 FANCY_HEADING +
 					 Sym.TAB + "First Join Date:" + ChatColor.RESET + "\n" +
-					 Sym.SUB + ChatColor.ITALIC + TimeUtil.millisecondsToDate(p.getFirstPlayed()) + ChatColor.RESET + "\n");
+					 Sym.SUB + ChatColor.ITALIC + year + "/" + month + "/" + day + ChatColor.RESET + "\n");
 			
 		} else {
 			page.add("\n\n\n\n" + ChatColor.ITALIC + " Loading PlayerData...");

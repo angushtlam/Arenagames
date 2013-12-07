@@ -1,9 +1,9 @@
 package me.taur.arenagames.perk;
 
+import me.taur.arenagames.chat.ChatUtil;
 import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.room.Room;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -47,14 +47,14 @@ public class PerkSelectorListener implements Listener {
 			if (Room.ROOMS.get(Room.PLAYERS.get(p)).isGameInProgress()) {
 				p.getInventory().removeItem(i); // Remove it
 			} else {
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You cannot change perks while in queue.");
+				p.sendMessage(ChatUtil.basicErrorMsg("You cannot change perks while in queue."));
 			}
 			
 			return;
 			
 		}
 		
-		Perk.menu.open(p);
+		PerkMenu.menu.open(p);
 		p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1.0F, 0.3F);
 
 	}

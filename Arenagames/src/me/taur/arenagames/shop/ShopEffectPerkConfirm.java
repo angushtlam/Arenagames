@@ -3,9 +3,10 @@ package me.taur.arenagames.shop;
 import java.util.HashMap;
 
 import me.taur.arenagames.Arenagames;
+import me.taur.arenagames.chat.ChatUtil;
 import me.taur.arenagames.perk.EffectPerkUtil;
+import me.taur.arenagames.player.Perk;
 import me.taur.arenagames.player.PlayerEconomy;
-import me.taur.arenagames.player.PlayerPerk;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.IconMenu;
 
@@ -29,11 +30,16 @@ public class ShopEffectPerkConfirm {
 				MENU_STORE.get(p).open(p);
 
 			}
-		}, 2L);
+		}, 6L);
 	}
 
 	public static void generateMenu(Player p, final EffectPerkUtil fx) {
-		IconMenu menu = new IconMenu(ChatColor.BLUE + "" + ChatColor.BOLD + "Confirm: " + ChatColor.RESET + "" + ChatColor.BLUE + fx.getName(), 9, new IconMenu.OptionClickEventHandler() {
+		String fxname = fx.getName();
+		if (fxname.length() > 15) {
+			fxname = fxname.substring(0, 12) + "...";
+		}
+		
+		IconMenu menu = new IconMenu(ChatColor.BLUE + "" + ChatColor.BOLD + "Confirm: " + ChatColor.RESET + "" + ChatColor.BLUE + fxname, 9, new IconMenu.OptionClickEventHandler() {
 			@Override
 			public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
 				menuevt.setWillDestroy(true); // Destroy this object after it is used.
@@ -48,7 +54,7 @@ public class ShopEffectPerkConfirm {
 
 				String name = ChatColor.stripColor(menuevt.getName()); // Clear colors because we add colors in the menu name.
 
-				if (!PlayerPerk.isPerkOwned(p, fx)) {
+				if (!Perk.hasPerk(p, fx)) {
 					if (name.contains("Purchase")) {
 						boolean hasCash = PlayerEconomy.hasEnoughCash(p, fx.getCashCost());
 						boolean hasCurrency = PlayerEconomy.hasEnoughCurrency(p, fx.getCurrencyCost());
@@ -57,20 +63,22 @@ public class ShopEffectPerkConfirm {
 							PlayerEconomy.changeCash(p, 0 - fx.getCashCost()); // Subtract cost from player's account.
 							PlayerEconomy.changeCurrency(p, 0 - fx.getCurrencyCost()); // Subtract cost from player's account.
 
-							PlayerPerk.grantPerk(p, fx);
+							Perk.givePerk(p, fx);
 							
-							p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have purchased the " + fx.getName() + " effect.");
+							p.sendMessage(ChatUtil.basicSuccessMsg("You have purchased the " + fx.getName() + " effect."));
 
 						} else {
-							p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You don\'t have enough to purchase this effect.");
+							p.sendMessage(ChatUtil.basicErrorMsg("You don\'t have enough to purchase this effect."));
 						}
 
 					} else {
-						p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have cancelled the purchase of this effect.");
+						p.sendMessage(ChatUtil.basicErrorMsg("You have cancelled the purchase of this effect."));
+						ShopEffectPerk.openMenu(p);
+						
 					}
 
 				} else { // If the player already owns the effect.
-					p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "You already own this effect.");
+					p.sendMessage(ChatUtil.basicInfoMsg("You already own this effect."));
 				}
 
 				menuevt.setWillClose(true);

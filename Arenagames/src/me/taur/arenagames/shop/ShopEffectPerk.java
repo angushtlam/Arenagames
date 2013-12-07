@@ -3,8 +3,9 @@ package me.taur.arenagames.shop;
 import java.util.HashMap;
 
 import me.taur.arenagames.Arenagames;
+import me.taur.arenagames.chat.ChatUtil;
 import me.taur.arenagames.perk.EffectPerkUtil;
-import me.taur.arenagames.player.PlayerPerk;
+import me.taur.arenagames.player.Perk;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.IconMenu;
 
@@ -27,7 +28,7 @@ public class ShopEffectPerk {
 				MENU_STORE.get(p).open(p);
 				
 			}
-		}, 2L);
+		}, 6L);
 	}
 
 	public static void generateMenu(Player p) {
@@ -51,10 +52,10 @@ public class ShopEffectPerk {
 
 				for (EffectPerkUtil fx : EffectPerkUtil.values()) {
 					if (fx.getName().equalsIgnoreCase(name)) { // If the name of the item matched the name of the perk.
-						if (!PlayerPerk.isPerkOwned(p, fx)) {
+						if (!Perk.hasPerk(p, fx)) {
 							ShopEffectPerkConfirm.openMenu(p, fx);
 						} else { // If the player has no permission for this perk.
-							p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "You already own this effect perk.");
+							p.sendMessage(ChatUtil.basicInfoMsg("You already own this effect."));
 						}
 
 						menuevt.setWillClose(true);
@@ -64,7 +65,7 @@ public class ShopEffectPerk {
 				}
 
 				// The effect name did not match.
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "The effect perk you selected does not exist.");
+				p.sendMessage(ChatUtil.basicErrorMsg("The effect you selected does not exist."));
 				menuevt.setWillClose(true);
 				return;
 
@@ -87,7 +88,7 @@ public class ShopEffectPerk {
 			
 			String owned = ChatColor.GREEN + "Owned";
 
-			if (!PlayerPerk.isPerkOwned(p, fx)) {
+			if (!Perk.hasPerk(p, fx)) {
 				owned = ChatColor.RED + "Not Owned";
 			}
 

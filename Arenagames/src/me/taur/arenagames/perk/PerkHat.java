@@ -5,7 +5,7 @@ import java.util.HashMap;
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.chat.ChatUtil;
 import me.taur.arenagames.event.PerkHatChangeEvent;
-import me.taur.arenagames.player.PlayerPerk;
+import me.taur.arenagames.player.Perk;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.IconMenu;
 
@@ -37,7 +37,7 @@ public class PerkHat {
 		int perkamt = HatPerkUtil.values().length;
 		int lines = ((perkamt / 9) + 1) * 9; // Gets how many lines the plugin needs.
 
-		IconMenu menu = new IconMenu(ChatColor.BLUE + "" + ChatColor.BOLD + p.getName() + "\'s Hat Perks", lines, new IconMenu.OptionClickEventHandler() {
+		IconMenu menu = new IconMenu(ChatColor.BLUE + "" + ChatColor.BOLD + p.getName() + "\'s Hats", lines, new IconMenu.OptionClickEventHandler() {
 			@Override
 			public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
 				menuevt.setWillDestroy(true); // Destroy this object after it is used.
@@ -54,7 +54,7 @@ public class PerkHat {
 
 				for (HatPerkUtil hat : HatPerkUtil.values()) {
 					if (hat.getName().equalsIgnoreCase(name)) { // If the name of the item matched the name of the perk.
-						if (PlayerPerk.isPerkOwned(p, hat)) {
+						if (Perk.hasPerk(p, hat)) {
 							if (ACTIVE_HAT_PERK.containsKey(p)) { // If the player already has an active effect perk.
 								if (ACTIVE_HAT_PERK.get(p).equals(hat)) {
 									p.sendMessage(ChatUtil.basicInfoMsg("You have disabled the " + name + " hat perk."));
@@ -103,7 +103,7 @@ public class PerkHat {
 			HatPerkUtil fx = HatPerkUtil.values()[i];
 			String owned = ChatColor.GREEN + "Owned";
 
-			if (!PlayerPerk.isPerkOwned(p, fx)) {
+			if (!Perk.hasPerk(p, fx)) {
 				owned = ChatColor.RED + "Not Owned";
 			}
 

@@ -1,6 +1,7 @@
 package me.taur.arenagames.perk;
 
 import me.taur.arenagames.Arenagames;
+import me.taur.arenagames.chat.ChatUtil;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.IconMenu;
 
@@ -9,7 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class Perk {
+public class PerkMenu {
 	public static IconMenu menu = null;
 
 	public static void enable() {
@@ -34,7 +35,7 @@ public class Perk {
 				}
 
 				if (name.equalsIgnoreCase("My Pets")) {
-					p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Pets are coming soon.");
+					p.sendMessage(ChatUtil.basicInfoMsg("Pets are coming soon."));
 					menuevt.setWillClose(true);
 					return;
 
@@ -47,7 +48,7 @@ public class Perk {
 
 				}
 
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "The selection you made is invalid.");
+				p.sendMessage(ChatUtil.basicErrorMsg("The selection you made is invalid."));
 				menuevt.setWillClose(true);
 				return;
 

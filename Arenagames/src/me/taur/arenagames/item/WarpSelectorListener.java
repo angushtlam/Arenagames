@@ -54,7 +54,7 @@ public class WarpSelectorListener implements Listener {
 			
 		}
 		
-		Warp.menu.open(p);
+		WarpMenu.menu.open(p);
 		p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1.0F, 0.3F);
 
 	}

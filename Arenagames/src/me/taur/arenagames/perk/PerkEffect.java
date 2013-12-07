@@ -3,7 +3,8 @@ package me.taur.arenagames.perk;
 import java.util.HashMap;
 
 import me.taur.arenagames.Arenagames;
-import me.taur.arenagames.player.PlayerPerk;
+import me.taur.arenagames.chat.ChatUtil;
+import me.taur.arenagames.player.Perk;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.IconMenu;
 
@@ -35,7 +36,7 @@ public class PerkEffect {
 		int perkamt = EffectPerkUtil.values().length;
 		int lines = ((perkamt / 9) + 1) * 9; // Gets how many lines the plugin needs.
 
-		IconMenu menu = new IconMenu(ChatColor.BLUE + "" + ChatColor.BOLD + p.getName() + "\'s Effect Perks", lines, new IconMenu.OptionClickEventHandler() {
+		IconMenu menu = new IconMenu(ChatColor.BLUE + "" + ChatColor.BOLD + p.getName() + "\'s Effects", lines, new IconMenu.OptionClickEventHandler() {
 			@Override
 			public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
 				menuevt.setWillDestroy(true); // Destroy this object after it is used.
@@ -52,26 +53,26 @@ public class PerkEffect {
 
 				for (EffectPerkUtil fx : EffectPerkUtil.values()) {
 					if (fx.getName().equalsIgnoreCase(name)) { // If the name of the item matched the name of the perk.
-						if (PlayerPerk.isPerkOwned(p, fx)) {
+						if (Perk.hasPerk(p, fx)) {
 							if (ACTIVE_EFFECT_PERK.containsKey(p)) { // If the player already has an active effect perk.
 								if (ACTIVE_EFFECT_PERK.get(p).equals(fx)) {
-									p.sendMessage(ChatColor.YELLOW + "" + ChatColor.ITALIC + "You have disabled the " + name + " effect perk.");
+									p.sendMessage(ChatUtil.basicInfoMsg("You have disabled the " + name + " effect."));
 									ACTIVE_EFFECT_PERK.remove(p);
 
 								} else {
-									p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have activated the " + name + " effect perk.");
+									p.sendMessage(ChatUtil.basicSuccessMsg("You have activated the " + name + " effect."));
 									ACTIVE_EFFECT_PERK.put(p, fx);
 
 								}
 
 							} else { // If this player just selected a new perk.
-								p.sendMessage(ChatColor.GREEN + "" + ChatColor.ITALIC + "You have activated the " + name + " effect perk.");
+								p.sendMessage(ChatUtil.basicSuccessMsg("You have activated the " + name + " effect."));
 								ACTIVE_EFFECT_PERK.put(p, fx);
 
 							}
 
 						} else { // If the player has no permission for this perk.
-							p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You do not own this effect perk.");
+							p.sendMessage(ChatUtil.basicErrorMsg("You do not own this effect."));
 						}
 
 						menuevt.setWillClose(true);
@@ -81,7 +82,7 @@ public class PerkEffect {
 				}
 
 				// The effect name did not match.
-				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "The perk you selected does not exist.");
+				p.sendMessage(ChatUtil.basicErrorMsg("The effect you selected does not exist."));
 				menuevt.setWillClose(true);
 				return;
 
@@ -92,7 +93,7 @@ public class PerkEffect {
 			EffectPerkUtil fx = EffectPerkUtil.values()[i];
 			String owned = ChatColor.GREEN + "Owned";
 
-			if (!PlayerPerk.isPerkOwned(p, fx)) {
+			if (!Perk.hasPerk(p, fx)) {
 				owned = ChatColor.RED + "Not Owned";
 			}
 

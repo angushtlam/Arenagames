@@ -5,7 +5,7 @@ import java.util.HashMap;
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.chat.ChatUtil;
 import me.taur.arenagames.perk.HatPerkUtil;
-import me.taur.arenagames.player.PlayerPerk;
+import me.taur.arenagames.player.Perk;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.IconMenu;
 
@@ -28,7 +28,7 @@ public class ShopHatPerk {
 				MENU_STORE.get(p).open(p);
 				
 			}
-		}, 2L);
+		}, 6L);
 	}
 
 	public static void generateMenu(Player p) {
@@ -52,7 +52,7 @@ public class ShopHatPerk {
 
 				for (HatPerkUtil hat : HatPerkUtil.values()) {
 					if (hat.getName().equalsIgnoreCase(name)) { // If the name of the item matched the name of the perk.
-						if (!PlayerPerk.isPerkOwned(p, hat)) {
+						if (!Perk.hasPerk(p, hat)) {
 							ShopHatPerkConfirm.openMenu(p, hat);
 						} else { // If the player has no permission for this perk.
 							p.sendMessage(ChatUtil.basicInfoMsg("You already own this hat."));
@@ -88,7 +88,7 @@ public class ShopHatPerk {
 			
 			String owned = ChatColor.GREEN + "Owned";
 
-			if (!PlayerPerk.isPerkOwned(p, fx)) {
+			if (!Perk.hasPerk(p, fx)) {
 				owned = ChatColor.RED + "Not Owned";
 			}
 

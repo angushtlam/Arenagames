@@ -14,7 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class Warp {
+public class WarpMenu {
 	public static IconMenu menu = null;
 
 	public static void enable() {

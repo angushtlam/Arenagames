@@ -33,6 +33,9 @@ public class PlayerDataListener implements Listener {
 			data.setMojangUUID(Arenagames.identifier.getPlayerUUID(p.getName()));
 		}
 		
+		data.setPerkEffect(Perk.serialize(Perk.updateEffectArray(Perk.deserialize(data.getPerkEffect()))));
+		data.setPerkHat(Perk.serialize(Perk.updateHatArray(Perk.deserialize(data.getPerkHat()))));
+		
 		data.setLastLogin(TimeUtil.currentMilliseconds());
 		data.save(p);
 		
