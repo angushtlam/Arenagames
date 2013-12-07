@@ -110,8 +110,8 @@ public class PlayerProfile {
 					 ChatColor.RED + "" + ChatColor.BOLD + "        Rules\n" + ChatColor.RESET + "" +
 					 FANCY_HEADING +
 					 Sym.TAB + "No cheating/hacking." + ChatColor.RESET + "\n" +
-					 Sym.SUB + "No harassment." + ChatColor.RESET + "\n" +
-					 Sym.SUB + "Don\'t beg. Please." + ChatColor.RESET + "\n" +
+					 Sym.TAB + "No harassment." + ChatColor.RESET + "\n" +
+					 Sym.TAB + "Don\'t beg. Please." + ChatColor.RESET + "\n" +
 					 "\n" +
 					 Sym.TAB + "Your actions will be" + ChatColor.RESET + "\n" +
 					 Sym.SUB + "deemed appropriate" + ChatColor.RESET + "\n" +
