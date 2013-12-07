@@ -34,7 +34,7 @@ public class FfaUtil {
 		final int kitamt = FfaConfig.getKits().getKeys(false).size();
 		int box = ((kitamt / 9) + 1) * 9; // Gets how many box the plugin needs.
 		
-		kitMenu = new IconMenu("FFA: Kit Selection", box, new IconMenu.OptionClickEventHandler() {
+		kitMenu = new IconMenu(RoomType.FFA.getColor() + "" + ChatColor.BOLD + "FFA: Kit Selection", box, new IconMenu.OptionClickEventHandler() {
             @Override
             public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
                 Player p = menuevt.getPlayer();

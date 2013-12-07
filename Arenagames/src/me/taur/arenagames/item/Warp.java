@@ -27,7 +27,7 @@ public class Warp {
 		
 		int box = ((enabledmode / 9) + 1) * 9; // Gets how many box the plugin needs.
 		
-		menu = new IconMenu("Warp Menu", box, new IconMenu.OptionClickEventHandler() {
+		menu = new IconMenu(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Warps", box, new IconMenu.OptionClickEventHandler() {
 			@Override
 			public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
 				Player p = menuevt.getPlayer();

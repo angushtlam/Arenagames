@@ -34,7 +34,7 @@ public class TdmUtil {
 		final int kitamt = TdmConfig.getKits().getKeys(false).size();
 		int box = ((kitamt / 9) + 1) * 9; // Gets how many box the plugin needs.
 		
-		kitMenu = new IconMenu("TDM: Kit Selection", box, new IconMenu.OptionClickEventHandler() {
+		kitMenu = new IconMenu(RoomType.TDM.getColor() + "" + ChatColor.BOLD + "TDM: Kit Selection", box, new IconMenu.OptionClickEventHandler() {
             @Override
             public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
                 Player p = menuevt.getPlayer();

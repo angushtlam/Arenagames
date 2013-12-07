@@ -7,6 +7,7 @@ import me.taur.arenagames.room.Room;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,11 +15,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 
-public class PlayerLoginListener implements Listener {
+public class PlayerActionListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void playerLoggedIn(PlayerJoinEvent evt) {
+	public void playerAction(PlayerJoinEvent evt) {
 		Player p = evt.getPlayer();
 		
 		if (!p.hasPlayedBefore()) {
@@ -68,23 +71,32 @@ public class PlayerLoginListener implements Listener {
 			return;
 		}
 		
-		if (evt.getItemDrop().getItemStack().getItemMeta().getDisplayName() == null) {
-			return;
-		}
+		PlayerInventory inv = p.getInventory();
+		ItemStack is = evt.getItemDrop().getItemStack();
+		int amt = is.getAmount();
 		
-		String name = evt.getItemDrop().getItemStack().getItemMeta().getDisplayName();
+		ItemStack[] isc = inv.getContents().clone();
+		int slot = inv.getHeldItemSlot();
 		
-		if (name.equalsIgnoreCase(InvUtil.getProfileItem().getItemMeta().getDisplayName())) {
+		if (amt > 1) {
 			evt.setCancelled(true);
-			return;
+		} else {
+			evt.getItemDrop().remove();
+			inv.setItem(slot, is);
 			
+			for (int i = 0; i < inv.getContents().length; i++) {
+				if (i > slot) {
+					break;
+				}
+				
+				if (isc[i].getAmount() > 0) {
+					continue;
+				}
+				
+				inv.setItem(i, new ItemStack(Material.AIR, 1));
+				InvUtil.updatePlayerInv(p);
+
+			}
 		}
-		
-		if (name.equalsIgnoreCase(InvUtil.getPerkItem().getItemMeta().getDisplayName())) {
-			evt.setCancelled(true);
-			return;
-			
-		}
-		
 	}
 }

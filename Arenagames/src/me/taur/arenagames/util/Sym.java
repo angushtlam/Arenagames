@@ -5,6 +5,7 @@ public class Sym {
 	public static String HEART_SMALL = "\u2665";
 	public static String HUNGER = "Hunger";
 	public static String HALF = "\u00bd";
+	public static String INFINITE = "\u221e";
 	
 	public static String ADMIN = "\u265a";
 	public static String MOD = "\u2654";

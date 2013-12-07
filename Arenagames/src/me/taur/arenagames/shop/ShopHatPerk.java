@@ -35,7 +35,7 @@ public class ShopHatPerk {
 		int perkamt = HatPerkUtil.values().length;
 		int lines = ((perkamt / 9) + 1) * 9; // Gets how many lines the plugin needs.
 
-		IconMenu menu = new IconMenu("Shop Hats", lines, new IconMenu.OptionClickEventHandler() {
+		IconMenu menu = new IconMenu(ChatColor.BLUE + "" + ChatColor.BOLD + "Shop Hats", lines, new IconMenu.OptionClickEventHandler() {
 			@Override
 			public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
 				menuevt.setWillDestroy(true); // Destroy this object after it is used.

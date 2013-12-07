@@ -13,7 +13,7 @@ public class Shop {
 	public static IconMenu shopMenu = null;
 
 	public static void enable() {
-		shopMenu = new IconMenu("Shop Menu", 3 * 9, new IconMenu.OptionClickEventHandler() {
+		shopMenu = new IconMenu(ChatColor.BLUE + "" + ChatColor.BOLD + "Shop Menu", 3 * 9, new IconMenu.OptionClickEventHandler() {
 			@Override
 			public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
 				Player p = menuevt.getPlayer();

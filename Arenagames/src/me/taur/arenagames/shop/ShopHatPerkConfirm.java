@@ -33,7 +33,7 @@ public class ShopHatPerkConfirm {
 	}
 
 	public static void generateMenu(Player p, final HatPerkUtil hat) {
-		IconMenu menu = new IconMenu("Confirm: " + hat.getName(), 9, new IconMenu.OptionClickEventHandler() {
+		IconMenu menu = new IconMenu(ChatColor.BLUE + "" + ChatColor.BOLD + "Confirm: " + ChatColor.RESET + "" + ChatColor.BLUE + hat.getName(), 9, new IconMenu.OptionClickEventHandler() {
 			@Override
 			public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
 				menuevt.setWillDestroy(true); // Destroy this object after it is used.

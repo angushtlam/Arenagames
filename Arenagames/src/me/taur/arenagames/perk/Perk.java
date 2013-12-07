@@ -13,7 +13,7 @@ public class Perk {
 	public static IconMenu menu = null;
 
 	public static void enable() {
-		menu = new IconMenu("Perk Menu", 3 * 9, new IconMenu.OptionClickEventHandler() {
+		menu = new IconMenu(ChatColor.BLUE + "" + ChatColor.BOLD + "Perk Menu", 3 * 9, new IconMenu.OptionClickEventHandler() {
 			@Override
 			public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
 				Player p = menuevt.getPlayer();

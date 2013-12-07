@@ -1,17 +1,21 @@
 package me.taur.arenagames.tdm;
 
 import me.taur.arenagames.Config;
+import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.RoomType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 public class TdmPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -88,7 +92,33 @@ public class TdmPlayerListener implements Listener {
 		Room room = Room.ROOMS.get(Room.PLAYERS.get(p));
 		if (room != null) {
 			if (room.getRoomType() == RoomType.TDM) {
-				evt.setCancelled(true);
+				PlayerInventory inv = p.getInventory();
+				ItemStack is = evt.getItemDrop().getItemStack();
+				int amt = is.getAmount();
+				
+				ItemStack[] isc = inv.getContents().clone();
+				int slot = inv.getHeldItemSlot();
+				
+				if (amt > 1) {
+					evt.setCancelled(true);
+				} else {
+					evt.getItemDrop().remove();
+					inv.setItem(slot, is);
+					
+					for (int i = 0; i < inv.getContents().length; i++) {
+						if (i > slot) {
+							break;
+						}
+						
+						if (isc[i].getAmount() > 0) {
+							continue;
+						}
+						
+						inv.setItem(i, new ItemStack(Material.AIR, 1));
+						InvUtil.updatePlayerInv(p);
+
+					}
+				}
 			}
 		}
 	}

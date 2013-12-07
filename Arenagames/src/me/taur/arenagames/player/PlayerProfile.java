@@ -9,6 +9,8 @@ import java.util.Set;
 
 import me.taur.arenagames.util.GameMathUtil;
 import me.taur.arenagames.util.RoomType;
+import me.taur.arenagames.util.Sym;
+import me.taur.arenagames.util.TimeUtil;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -25,21 +27,21 @@ public class PlayerProfile {
 			String name = p.getName();
 			
 			if (Permission.isModerator(p)) {
-				name = ChatColor.DARK_RED + "" + ChatColor.BOLD + "\u265a" + name;
+				name = ChatColor.DARK_RED + "" + ChatColor.BOLD + Sym.ADMIN + name;
 			} else if (Permission.isPremium(p)){
-				name = ChatColor.GOLD + "\u2667" + ChatColor.UNDERLINE + name;
+				name = ChatColor.GOLD + Sym.PREMIUM + ChatColor.UNDERLINE + name;
 			}
 			
 			page.add(FANCY_HEADING +
 					 ChatColor.GOLD + "" + ChatColor.BOLD + "       Profile" + ChatColor.RESET + "\n" +
 					 FANCY_HEADING +
-					 "\u258b " + name + ChatColor.RESET + "\n" + 
-					 ChatColor.BLACK + "\u258f  " + data.getExp() + ChatColor.ITALIC + " EXP" + ChatColor.RESET + "\n" +
+					 Sym.TAB + name + ChatColor.RESET + "\n" + ChatColor.BLACK +
+					 Sym.SUB + data.getExp() + ChatColor.ITALIC + " EXP" + ChatColor.RESET + "\n" +
 					 "\n" +
-					 "\u258b Nuggets: " + data.getCurrency() + ChatColor.RESET + "\n" +
-					 "\u258f  Total Ngts.: " + data.getCurrencyLifetime() + ChatColor.RESET + "\n" +
+					 Sym.TAB + "Nuggets: " + data.getCurrency() + ChatColor.RESET + "\n" +
+					 Sym.SUB + "Total Ngts.: " + data.getCurrencyLifetime() + ChatColor.RESET + "\n" +
 					 "\n" +
-					 "\u258b " + "Violations: " + data.getViolationLevel());
+					 Sym.TAB + "Violations: " + data.getViolationLevel());
 			
 			NumberFormat df = NumberFormat.getCurrencyInstance(Locale.US); // Formats the user's money spent double into USD.
 			String moneyspent = df.format(data.getMoneySpent());
@@ -48,25 +50,25 @@ public class PlayerProfile {
 				page.add(FANCY_HEADING +
 						 ChatColor.GOLD + "" + ChatColor.BOLD + "       Profile" + ChatColor.RESET + "\n" +
 						 FANCY_HEADING +
-						 "\u258b You have \u221e" + ChatColor.RESET + "\n" +
-						 "\u258f  days of Premium left.\n" +
+						 Sym.TAB + "You have " + Sym.INFINITE + ChatColor.RESET + "\n" +
+						 Sym.SUB + "days of Premium left.\n" +
 						 "\n" +
-						 "\u258b Alphacash: " + data.getCash() + ChatColor.RESET + "\n" +
-						 "\u258f  Total AC.: " + data.getCashLifetime() + ChatColor.RESET + "\n" +
+						 Sym.TAB + "Alphacash: " + data.getCash() + ChatColor.RESET + "\n" +
+						 Sym.SUB + "Total AC.: " + data.getCashLifetime() + ChatColor.RESET + "\n" +
 						 "\n" +
-						 "\u258b " + "USD Spent: " + moneyspent);
+						 Sym.TAB + "USD Spent: " + moneyspent);
 				
 			} else if (Permission.isPremium(p)) {
 				page.add(FANCY_HEADING +
 						 ChatColor.GOLD + "" + ChatColor.BOLD + "       Profile" + ChatColor.RESET + "\n" +
 						 FANCY_HEADING +
-						 "\u258b You have " + (Permission.premiumDaysLeft(p) + 1) + ChatColor.RESET + "\n" +
-						 "\u258f  days of Premium left.\n" +
+						 Sym.TAB + "You have " + (Permission.premiumDaysLeft(p) + 1) + ChatColor.RESET + "\n" +
+						 Sym.SUB + "days of Premium left.\n" +
 						 "\n" +
-						 "\u258b Alphacash: " + data.getCash() + ChatColor.RESET + "\n" +
-						 "\u258f  Total AC.: " + data.getCashLifetime() + ChatColor.RESET + "\n" +
+						 Sym.TAB + "Alphacash: " + data.getCash() + ChatColor.RESET + "\n" +
+						 Sym.SUB + "Total AC.: " + data.getCashLifetime() + ChatColor.RESET + "\n" +
 						 "\n" +
-						 "\u258b " + "USD Spent: " + moneyspent);
+						 Sym.TAB + "USD Spent: " + moneyspent);
 				
 			} else {
 				page.add(FANCY_HEADING +
@@ -75,34 +77,63 @@ public class PlayerProfile {
 						 " Support the server\n" + ChatColor.RESET +
 						 "by purchasing Premium!\n" + ChatColor.RESET +
 						 "\n" +
-						 "\u258b  Alphacash: " + data.getCash() + ChatColor.RESET + "\n" +
-						 "\u258f   Lifetime AC.: " + data.getCashLifetime() + ChatColor.RESET + "\n" +
+						 Sym.TAB + "Alphacash: " + data.getCash() + ChatColor.RESET + "\n" +
+						 Sym.SUB + "Lifetime AC.: " + data.getCashLifetime() + ChatColor.RESET + "\n" +
 						 "\n" +
-						 "\u258b " + "USD Spent: " + moneyspent);
+						 Sym.TAB + "USD Spent: " + moneyspent);
 				
 			}	
 			
 			page.add(FANCY_HEADING +
 					 RoomType.FFA.getColor() + "" + ChatColor.BOLD + "   Free-For-All" + ChatColor.RESET + ChatColor.RESET + "\n" +
 					 FANCY_HEADING +
-					 "\u258b " + "1st Place: " + data.getFfaGamesWon() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "Games: " + data.getFfaGamesPlayed() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "Elo: " + data.getFfaRanking() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "Record: " + data.getFfaRecord() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "KDR: " + GameMathUtil.kdrCalculator(data.getFfaTotalKills(), data.getFfaTotalDeaths()) + ChatColor.RESET + "\n" +
+					 Sym.TAB + "1st Place: " + data.getFfaGamesWon() + ChatColor.RESET + "\n" +
+					 Sym.SUB + "Games: " + data.getFfaGamesPlayed() + ChatColor.RESET + "\n" +
+					 Sym.SUB + "Elo: " + data.getFfaRanking() + ChatColor.RESET + "\n" +
+					 Sym.SUB + "Record: " + data.getFfaRecord() + ChatColor.RESET + "\n" +
+					 Sym.SUB + "KDR: " + GameMathUtil.kdrCalculator(data.getFfaTotalKills(), data.getFfaTotalDeaths()) + ChatColor.RESET + "\n" +
 					 "\n" +
-					 "\u258b " + "Ngts Obt'd.: " + data.getFfaCurrencyEarned());
+					 Sym.TAB + "Ngts Obt'd.: " + data.getFfaCurrencyEarned());
 			
 			page.add(FANCY_HEADING +
 					 RoomType.TDM.getColor() + "" + ChatColor.BOLD + " Team Deathmatch\n" + ChatColor.RESET + "" +
 					 FANCY_HEADING +
-					 "\u258b " + "Wins: " + data.getTdmGamesWon() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "Games: " + data.getTdmGamesPlayed() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "Elo: " + data.getTdmRanking() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "Record: " + data.getTdmRecord() + ChatColor.RESET + "\n" +
-					 "\u258f  " + "KDR: " + GameMathUtil.kdrCalculator(data.getTdmTotalKills(), data.getTdmTotalDeaths()) + ChatColor.RESET + "\n" +
+					 Sym.TAB + "Wins: " + data.getTdmGamesWon() + ChatColor.RESET + "\n" +
+					 Sym.SUB + "Games: " + data.getTdmGamesPlayed() + ChatColor.RESET + "\n" +
+					 Sym.SUB + "Elo: " + data.getTdmRanking() + ChatColor.RESET + "\n" +
+					 Sym.SUB + "Record: " + data.getTdmRecord() + ChatColor.RESET + "\n" +
+					 Sym.SUB + "KDR: " + GameMathUtil.kdrCalculator(data.getTdmTotalKills(), data.getTdmTotalDeaths()) + ChatColor.RESET + "\n" +
 					 "\n" +
-					 "\u258b " + "Ngts Obt'd.: " + data.getTdmCurrencyEarned());
+					 Sym.TAB + "Ngts Obt'd.: " + data.getTdmCurrencyEarned());
+			
+			page.add(FANCY_HEADING +
+					 ChatColor.RED + "" + ChatColor.BOLD + "        Rules\n" + ChatColor.RESET + "" +
+					 FANCY_HEADING +
+					 Sym.TAB + "No cheating/hacking." + ChatColor.RESET + "\n" +
+					 Sym.SUB + "No harassment." + ChatColor.RESET + "\n" +
+					 Sym.SUB + "Don\'t beg. Please." + ChatColor.RESET + "\n" +
+					 "\n" +
+					 Sym.TAB + "Your actions will be" + ChatColor.RESET + "\n" +
+					 Sym.SUB + "deemed appropriate" + ChatColor.RESET + "\n" +
+					 Sym.SUB + "or not by a mod." + ChatColor.RESET + "\n");
+			
+			page.add(FANCY_HEADING +
+					 ChatColor.YELLOW + "" + ChatColor.BOLD + "      Commands\n" + ChatColor.RESET + "" +
+					 FANCY_HEADING +
+					 Sym.TAB + "/queue <info/leave>" + ChatColor.RESET + "\n" +
+					 Sym.SUB + ChatColor.ITALIC + " Queue info&leave" + ChatColor.RESET + "\n" +
+					 "\n" +
+					 Sym.TAB + "/chat <g/q/m/off>" + ChatColor.RESET + "\n" +
+					 Sym.SUB + ChatColor.ITALIC + " Chat channels" + ChatColor.RESET + "\n" +
+					 "\n" +
+					 Sym.TAB + "/player <save>" + ChatColor.RESET + "\n" +
+					 Sym.SUB + ChatColor.ITALIC + " Save your data" + ChatColor.RESET + "\n");
+			
+			page.add(FANCY_HEADING +
+					 ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "   Statistics\n" + ChatColor.RESET + "" +
+					 FANCY_HEADING +
+					 Sym.TAB + "First Join Date:" + ChatColor.RESET + "\n" +
+					 Sym.SUB + ChatColor.ITALIC + TimeUtil.millisecondsToDate(p.getFirstPlayed()) + ChatColor.RESET + "\n");
 			
 		} else {
 			page.add("\n\n\n\n" + ChatColor.ITALIC + " Loading PlayerData...");

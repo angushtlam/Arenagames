@@ -27,7 +27,7 @@ import me.taur.arenagames.perk.PerkHatListener;
 import me.taur.arenagames.perk.PerkSelectorListener;
 import me.taur.arenagames.player.PlayerCommand;
 import me.taur.arenagames.player.PlayerDataListener;
-import me.taur.arenagames.player.PlayerLoginListener;
+import me.taur.arenagames.player.PlayerActionListener;
 import me.taur.arenagames.player.PlayerProfileListener;
 import me.taur.arenagames.room.RoomCommand;
 import me.taur.arenagames.room.SignCreateListener;
@@ -67,7 +67,7 @@ public class Arenagames extends JavaPlugin {
 		regCmd("curr", new CurrencyCommand());
 		regCmd("cash", new CashCommand());
 		
-		regEvent(new PlayerLoginListener());
+		regEvent(new PlayerActionListener());
 		regEvent(new SignCreateListener());
 		regEvent(new SignDestroyListener());
 		

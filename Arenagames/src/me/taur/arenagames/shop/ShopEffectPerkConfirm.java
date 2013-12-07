@@ -33,7 +33,7 @@ public class ShopEffectPerkConfirm {
 	}
 
 	public static void generateMenu(Player p, final EffectPerkUtil fx) {
-		IconMenu menu = new IconMenu("Confirm: " + fx.getName(), 9, new IconMenu.OptionClickEventHandler() {
+		IconMenu menu = new IconMenu(ChatColor.BLUE + "" + ChatColor.BOLD + "Confirm: " + ChatColor.RESET + "" + ChatColor.BLUE + fx.getName(), 9, new IconMenu.OptionClickEventHandler() {
 			@Override
 			public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
 				menuevt.setWillDestroy(true); // Destroy this object after it is used.
