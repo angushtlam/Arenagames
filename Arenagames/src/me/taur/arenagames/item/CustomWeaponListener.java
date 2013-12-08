@@ -83,7 +83,7 @@ public class CustomWeaponListener implements Listener {
 						if ((p.getFoodLevel() - 2) > 0) { // Only apply if more than 1 Hunger
 							p.setFoodLevel(p.getFoodLevel() - 2);
 							
-							le.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 6, 0), true);
+							le.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 5, 1), true);
 							ParticleUtil.ANGRY_VILLAGER.sendToLocation(le.getLocation().add(0.0, 2.5, 0.0), 0.0F, 0.0F, 1);
 							
 						}
@@ -95,7 +95,7 @@ public class CustomWeaponListener implements Listener {
 							return;
 						}
 						
-						if (ents.size() - 1 > 1) { // If there are more players within 10 blocks.
+						if (ents.size() > 1) { // If there are more players within 10 blocks.
 							return;
 						}
 						

@@ -166,7 +166,8 @@ public class InvUtil {
 	}
 	
 	public static ItemStack getWarpItem() {
-		ItemStack i = new ItemStack(Material.PAPER, 1);
+		ItemStack i = new ItemStack(Material.MAP, 1);
+		i.setDurability((short) 0);
 		ItemMeta im = i.getItemMeta();
 		im.setDisplayName(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Warps");
 		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to teleport."));

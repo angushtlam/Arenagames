@@ -1,6 +1,6 @@
 package me.taur.arenagames.item;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import me.taur.arenagames.chat.ChatUtil;
 import me.taur.arenagames.util.ParticleUtil;
@@ -24,7 +24,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class CustomProjectileListener implements Listener {
-	public static HashMap<Projectile, String> PROJECTILES = new HashMap<Projectile, String>();
+	public static ConcurrentHashMap<Projectile, String> PROJECTILES = new ConcurrentHashMap<Projectile, String>();
 	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onHitManager(EntityDamageEvent evt) {

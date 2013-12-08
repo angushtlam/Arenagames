@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 
 public class ChatUtil {
 	public static HashMap<String, Integer> STORE = new HashMap<String, Integer>();
+	public static HashMap<String, Integer> MUTE = new HashMap<String, Integer>();
 	
 	public static String basicInfoMsg(String msg) {
 		return ChatColor.YELLOW + "" + ChatColor.ITALIC + msg;
@@ -44,7 +45,7 @@ public class ChatUtil {
 	}
 	
 	public static void sendToLog(String part, String msg) {
-		System.out.println("[AG-" + ChatColor.stripColor(part) + "]" +ChatColor.stripColor(msg));		
+		System.out.println("[AG-" + ChatColor.stripColor(part) + "]" + ChatColor.stripColor(msg));		
 	}
 	
 }

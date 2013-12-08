@@ -1,5 +1,6 @@
 package me.taur.arenagames;
 
+import me.taur.arenagames.chat.MuteActive;
 import me.taur.arenagames.ffa.FfaActive;
 import me.taur.arenagames.item.CustomItem;
 import me.taur.arenagames.item.CustomProjectileParticles;
@@ -25,6 +26,8 @@ public class Scheduler {
 		}
 		
 		if (checkTick(20)) {
+			MuteActive.run();
+			
 			FfaActive.run();
 			TdmActive.run();
 

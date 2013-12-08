@@ -20,8 +20,15 @@ commands:
     description: Chat channel related commands.
     aliases: [c, ch]
   premium:
-    description: Premium related commands.
+    description: Premium related admin commands.
   curr:
-    description: Currency related commands.
+    description: Currency related admin commands.
   cash:
-    description: Cash related commands.
+    description: Cash related admin commands.
+  member:
+    description: Member rank set command.
+    aliases: [mem]
+  mute:
+    description: Mute command.
+  kick:
+    description: Kick command.

@@ -2,9 +2,12 @@ package me.taur.arenagames;
 
 import me.taur.arenagames.admin.CashCommand;
 import me.taur.arenagames.admin.CurrencyCommand;
+import me.taur.arenagames.admin.MemberCommand;
 import me.taur.arenagames.admin.PremiumCommand;
 import me.taur.arenagames.chat.ChatCommand;
 import me.taur.arenagames.chat.ChatListener;
+import me.taur.arenagames.chat.KickCommand;
+import me.taur.arenagames.chat.MuteCommand;
 import me.taur.arenagames.ffa.FfaKitSelectorListener;
 import me.taur.arenagames.ffa.FfaPlayerListener;
 import me.taur.arenagames.ffa.FfaRespawnListener;
@@ -63,6 +66,9 @@ public class Arenagames extends JavaPlugin {
 		regCmd("queue", new RoomCommand());
 		regCmd("player", new PlayerCommand());
 		regCmd("chat", new ChatCommand());
+		regCmd("mute", new MuteCommand());
+		regCmd("kick", new KickCommand());
+		regCmd("member", new MemberCommand());
 		regCmd("premium", new PremiumCommand());
 		regCmd("curr", new CurrencyCommand());
 		regCmd("cash", new CashCommand());

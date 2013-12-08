@@ -54,7 +54,7 @@ public class CustomItem {
 		ItemMeta pm = i.getItemMeta();
 		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Sick Scalpel");
 		pm.setLore(Arrays.asList(ChatColor.GOLD + "Cost: 1 " + Sym.HUNGER,
-				ChatColor.YELLOW + "Inflicts Poison I for 4 sec."));
+				ChatColor.YELLOW + "Inflicts Poison II for 5 sec."));
 		
 		i.setItemMeta(pm);
 		

@@ -51,6 +51,23 @@ public class Permission {
 		
 	}
 	
+	public static boolean isMember(Player p) {
+		PlayerData data = null;
+		if (!PlayerData.isLoaded(p)) { // Check 
+			new PlayerData(p);
+		}
+		
+		data = PlayerData.get(p);
+		
+		if (data.getPlayerRank() >= PlayerRank.MEMBER.getRankNumber() || p.isOp()) {
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
+	
 	public static boolean isPermaPremium(Player p) {
 		PlayerData data = null;
 		if (!PlayerData.isLoaded(p)) { // Check 

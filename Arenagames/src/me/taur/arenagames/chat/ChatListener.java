@@ -5,6 +5,7 @@ import java.util.Set;
 
 import me.taur.arenagames.player.Permission;
 import me.taur.arenagames.room.Room;
+import me.taur.arenagames.util.Sym;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,7 +20,7 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 
 public class ChatListener implements Listener {
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.HIGHEST)
     public void formatChat(AsyncPlayerChatEvent evt) {
 		evt.setCancelled(true); // Take over the chat printing.
 		
@@ -29,17 +30,29 @@ public class ChatListener implements Listener {
 		String sep = ChatColor.GRAY + "" + ChatColor.BOLD + ":" + ChatColor.RESET;
 		
 		if (Permission.isAdmin(p)) {
-			name = ChatColor.DARK_RED + "\u265a" + ChatColor.BOLD + name + ChatColor.RESET;
+			name = ChatColor.DARK_RED + Sym.ADMIN + ChatColor.BOLD + name + ChatColor.RESET;
 		} else if (Permission.isModerator(p)) {
-			name = ChatColor.DARK_RED + "\u2654" + ChatColor.BOLD + name + ChatColor.RESET;
+			name = ChatColor.DARK_RED + Sym.MOD + ChatColor.BOLD + name + ChatColor.RESET;
 		} else if (Permission.isPermaPremium(p)) {
-			name = ChatColor.YELLOW + "\u2667" + ChatColor.UNDERLINE + name + ChatColor.RESET;
+			name = ChatColor.GOLD + Sym.PREMIUM + ChatColor.ITALIC + name + ChatColor.RESET;
 		} else if (Permission.isPremium(p)) {
-			name = ChatColor.GOLD + "\u2667" + ChatColor.UNDERLINE + name + ChatColor.RESET;
+			name = ChatColor.GOLD + Sym.PREMIUM + ChatColor.ITALIC + name + ChatColor.RESET;
+		} else if (Permission.isMember(p)) {
+			name = ChatColor.YELLOW + "" + ChatColor.ITALIC + name + ChatColor.RESET;
 		} else {
 			name = ChatColor.GRAY + name + ChatColor.RESET;
 		}
 
+		if (ChatUtil.MUTE.containsKey(p.getName())) {
+			int duration = ChatUtil.MUTE.get(p.getName());
+			p.sendMessage(ChatUtil.basicErrorMsg("You have been muted and you cannot speak for another " + duration + " " + (duration == 1 ? "second" : "seconds") + "."));
+			
+			String format = " *Muted* " + name + sep + " " + msg;
+			ChatUtil.sendToLog("Chat", format);
+			return;
+			
+		}
+		
 		ChatChannels ch = ChatChannels.GLOBAL;
 		
 		for (ChatChannels cch : ChatChannels.values()) {

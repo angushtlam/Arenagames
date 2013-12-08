@@ -92,6 +92,5 @@ public class FfaRespawnListener implements Listener {
 				}
 			}
 		}
-
 	}
 }

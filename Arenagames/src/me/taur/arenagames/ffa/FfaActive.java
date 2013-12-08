@@ -58,6 +58,9 @@ public class FfaActive {
 									}
 								}
 								
+								int points = room.getPointboard().get(p.getName()).intValue();
+								p.setLevel(points);
+								
 								if (countdown < 5) { // If there is only less than 5 seconds left:
 									p.playSound(p.getLocation(), Sound.NOTE_PIANO, 1F, 0F);
 								}

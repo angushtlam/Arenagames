@@ -13,14 +13,14 @@ import org.bukkit.entity.Player;
 public class CashCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender s, Command c, String l, String[] arg) {
 		if (c.getName().equalsIgnoreCase("cash")) {
-			if (arg.length < 1) { // If the sender did not specify any arguments.
-				s.sendMessage(ChatColor.YELLOW + "Usage: " + ChatColor.ITALIC + "/cash <add/remove/set> <username> <amount> (money spent)");
+			if (!s.hasPermission("arenagames.admin")) {
+				s.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
 				return true;
 
 			}
 
-			if (!s.hasPermission("arenagames.admin")) {
-				s.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
+			if (arg.length < 1) { // If the sender did not specify any arguments.
+				s.sendMessage(ChatColor.YELLOW + "Usage: " + ChatColor.ITALIC + "/cash <add/remove/set> <username> <amount> (money spent)");
 				return true;
 
 			}

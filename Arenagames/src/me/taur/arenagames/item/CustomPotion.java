@@ -32,7 +32,7 @@ public class CustomPotion {
 		
 		PotionMeta pm = (PotionMeta) i.getItemMeta();
 		pm.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + "Potion of Revitalization");
-		PotionEffect effect = new PotionEffect(PotionEffectType.REGENERATION, 8 * 20, 1, true);
+		PotionEffect effect = new PotionEffect(PotionEffectType.REGENERATION, 12 * 20, 1, true);
 		pm.addCustomEffect(effect, true);
 		pm.setMainEffect(effect.getType());
 		

@@ -247,7 +247,6 @@ public class FfaRoom extends Room {
 		
 	}
 	
-
 	public void playerKilled(Player p, String msg) {
 		PlayerData data = null;
 		if (PlayerData.isLoaded(p)) {
@@ -503,6 +502,7 @@ public class FfaRoom extends Room {
 			for (Player p : this.getPlayers()) {
 				CustomItem.clearPlayerTimers(p);
 				p.setLevel(0);
+				
 			}
 			
 			this.setMapName(null);
@@ -548,4 +548,5 @@ public class FfaRoom extends Room {
 	public String getMapAuthor() {
 		return FfaConfig.getData().getString("ffa.maps." + this.getMapName() + ".info.author");
 	}
+	
 }
