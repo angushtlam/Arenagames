@@ -32,6 +32,11 @@ public class CustomProjectileListener implements Listener {
 			EntityDamageByEntityEvent edbeEvent = (EntityDamageByEntityEvent) evt;
 			Entity damager = edbeEvent.getDamager();
 
+			if (!(evt.getEntity() instanceof LivingEntity)) {
+				return;
+				
+			}
+			
 			if (damager instanceof Projectile) {
 				Projectile proj = (Projectile) damager;
 				LivingEntity le = (LivingEntity) evt.getEntity();
@@ -42,14 +47,14 @@ public class CustomProjectileListener implements Listener {
 				
 				if (PROJECTILES.containsKey(proj)) {
 					if (PROJECTILES.get(proj).equals("Taste of Isolation")) {
-						Location loc = proj.getShooter().getLocation();
+						Location loc = ((Entity) proj.getShooter()).getLocation();
 						double distance = 5.0;
 						
 						if (loc.distance(le.getLocation()) < distance) {
 							distance = loc.distance(le.getLocation());
 						}
 						
-						SpellUtil.forceKnockEntity(proj.getShooter().getLocation(), le, -2.0F, 2.0F, 2.0F, (float) distance);
+						SpellUtil.forceKnockEntity(((Entity) proj.getShooter()).getLocation(), le, -2.0F, 2.0F, 2.0F, (float) distance);
 						ParticleUtil.ANGRY_VILLAGER.sendToLocation(le.getLocation().add(0.0, 2.5, 0.0), 0.0F, 0.0F, 1);
 
 						if (le instanceof Player) {

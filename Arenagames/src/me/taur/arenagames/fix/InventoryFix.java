@@ -20,7 +20,7 @@ public class InventoryFix implements Listener {
 		if (he instanceof Player) {
 			Player p = (Player) he;
 			
-			if (p.getGameMode() == GameMode.ADVENTURE) {
+			if (p.getGameMode().equals(GameMode.ADVENTURE)) {
 				if (Room.PLAYERS.containsKey(p)) {
 					if (evt.getSlotType().equals(SlotType.ARMOR)) {
 						evt.setCancelled(true);
@@ -28,10 +28,6 @@ public class InventoryFix implements Listener {
 						return;
 						
 					}
-				}
-				
-				if (!evt.getInventory().getContents().equals(p.getInventory().getContents())) { // Cancel the event if the inventory is not the player's inventory
-					return;
 				}
 				
 				evt.setCancelled(true); // Cancel the player from moving items in the lobby.

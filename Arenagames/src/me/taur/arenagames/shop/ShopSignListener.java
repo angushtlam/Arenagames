@@ -1,5 +1,7 @@
 package me.taur.arenagames.shop;
 
+import me.taur.arenagames.player.Permission;
+
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -27,7 +29,7 @@ public class ShopSignListener implements Listener {
 		Sign sign = (Sign) b.getState();
 		if (sign.getLine(0).contains("[Perk Shop]")) {
 			Player p = evt.getPlayer();
-			Shop.shopMenu.open(p);
+			ShopMenu.menu.open(p);
 			
 		}
 	}
@@ -39,7 +41,7 @@ public class ShopSignListener implements Listener {
 		String l0 = evt.getLine(0);
 		
 		if (l0.equals("[Perk Shop]")) {
-			if (!p.hasPermission("arenagames.admin")) {
+			if (!Permission.isAdmin(p)) {
 				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
 				b.breakNaturally();
 				return;
@@ -68,7 +70,7 @@ public class ShopSignListener implements Listener {
 		String l0 = ChatColor.stripColor(sign.getLine(0));
 		
 		if (l0.equals("[Perk Shop]")) {
-			if (!p.hasPermission("arenagames.admin")) {
+			if (!Permission.isAdmin(p)) {
 				p.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "You have no permission.");
 				evt.setCancelled(true);
 				return;

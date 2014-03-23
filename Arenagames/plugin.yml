@@ -7,7 +7,7 @@ website: http://taurhuzz.me
 main: me.taur.arenagames.Arenagames
 database: false
 
-depend: [IdentifierAPI]
+depend: [IdentifierAPI, ProtocolLib]
 
 commands:
   queue:

@@ -38,7 +38,7 @@ public class MemberCommand implements CommandExecutor {
 
 			OfflinePlayer op = Bukkit.getOfflinePlayer(arg[0]);
 			
-			if (!op.hasPlayedBefore()) {
+			if (op.isOnline() || !op.hasPlayedBefore()) {
 				s.sendMessage(ChatUtil.basicErrorMsg(op.getName() + " has never logged on the server and is not qualified for member."));
 				return true;
 				

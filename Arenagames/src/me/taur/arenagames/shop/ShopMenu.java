@@ -9,11 +9,11 @@ import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.IconMenu;
 
-public class Shop {
-	public static IconMenu shopMenu = null;
+public class ShopMenu {
+	public static IconMenu menu = null;
 
 	public static void enable() {
-		shopMenu = new IconMenu(ChatColor.BLUE + "" + ChatColor.BOLD + "Shop Menu", 3 * 9, new IconMenu.OptionClickEventHandler() {
+		menu = new IconMenu(ChatColor.BLUE + "" + ChatColor.BOLD + "Shop Menu", 3 * 9, new IconMenu.OptionClickEventHandler() {
 			@Override
 			public void onOptionClick(IconMenu.OptionClickEvent menuevt) {
 				Player p = menuevt.getPlayer();
@@ -54,9 +54,9 @@ public class Shop {
 			}
 		}, Arenagames.plugin);
 
-		shopMenu.setOption(11, new ItemStack(Material.MAP, 1), ChatColor.RESET + "" + ChatColor.BOLD + "Shop Effects");
-		shopMenu.setOption(13, new ItemStack(Material.EGG, 1), ChatColor.RESET + "" + ChatColor.BOLD + "Shop Pets");
-		shopMenu.setOption(15, new ItemStack(Material.IRON_HELMET, 1), ChatColor.RESET + "" + ChatColor.BOLD + "Shop Hats");
+		menu.setOption(11, new ItemStack(Material.MAP, 1), ChatColor.RESET + "" + ChatColor.BOLD + "Shop Effects");
+		menu.setOption(13, new ItemStack(Material.EGG, 1), ChatColor.RESET + "" + ChatColor.BOLD + "Shop Pets");
+		menu.setOption(15, new ItemStack(Material.IRON_HELMET, 1), ChatColor.RESET + "" + ChatColor.BOLD + "Shop Hats");
 
 	}
 }

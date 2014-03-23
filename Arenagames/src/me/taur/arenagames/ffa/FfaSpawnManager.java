@@ -1,6 +1,6 @@
 package me.taur.arenagames.ffa;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import me.taur.arenagames.Arenagames;
 import me.taur.arenagames.Config;
@@ -15,7 +15,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class FfaSpawnManager {
-	public static HashMap<Player, Integer> RESPAWN_TIMER = new HashMap<Player, Integer>();
+	public static ConcurrentHashMap<Player, Integer> RESPAWN_TIMER = new ConcurrentHashMap<Player, Integer>();
 	
 	public static void spawn(final Player p, Location tp) {
 		p.teleport(tp);

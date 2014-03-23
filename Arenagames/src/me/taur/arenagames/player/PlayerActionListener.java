@@ -48,7 +48,10 @@ public class PlayerActionListener implements Listener {
 		
 		p.setLevel(0);
 		p.setExp((float) 0.0);
-		p.teleport(Config.getGlobalLobby()); // Teleport people to lobby when they join
+		
+		if (!p.getLocation().getWorld().equals(Config.getGlobalLobby().getWorld())) {
+			p.teleport(Config.getGlobalLobby()); // Teleport people to lobby when they join
+		}
 		
 	}
 	
@@ -67,6 +70,10 @@ public class PlayerActionListener implements Listener {
 	public void playerDropItemInSpawn(PlayerDropItemEvent evt) {
 		Player p = evt.getPlayer();
 		
+		if (!p.getWorld().equals(Config.getGlobalLobby().getWorld())) {
+			return;
+		}
+		
 		if (Room.PLAYERS.containsKey(p)) {
 			return;
 		}
@@ -81,22 +88,24 @@ public class PlayerActionListener implements Listener {
 		if (amt > 1) {
 			evt.setCancelled(true);
 		} else {
-			evt.getItemDrop().remove();
 			inv.setItem(slot, is);
+			evt.getItemDrop().remove();
 			
-			for (int i = 0; i < inv.getContents().length; i++) {
+			for (int i = 0; i < isc.length; i++) {				
 				if (i > slot) {
 					break;
 				}
 				
-				if (isc[i].getAmount() > 0) {
+				if (isc[i] == null || isc[i].getAmount() > 0) {
 					continue;
 				}
 				
 				inv.setItem(i, new ItemStack(Material.AIR, 1));
-				InvUtil.updatePlayerInv(p);
-
+				
 			}
+			
+			InvUtil.updatePlayerInv(p);
+
 		}
 	}
 }

@@ -6,7 +6,6 @@ import me.taur.arenagames.ffa.FfaRoom;
 import me.taur.arenagames.item.InvUtil;
 import me.taur.arenagames.tdm.TdmConfig;
 import me.taur.arenagames.tdm.TdmRoom;
-import me.taur.arenagames.tdm.TdmTeams;
 import me.taur.arenagames.util.ParticleUtil;
 import me.taur.arenagames.util.RoomType;
 
@@ -145,17 +144,13 @@ public class RoomCommand implements CommandExecutor {
 									
 								}
 							} else {
-								if (r.getTeamtrackboard().get(p.getName()).intValue() == TdmTeams.RED.getId()) {
-									r.removePlayerFromRed(p);
-								} else if (r.getTeamtrackboard().get(p.getName()).intValue() == TdmTeams.BLUE.getId()) {
-									r.removePlayerFromBlue(p);
-								}
-								
+								r.removePlayerFromTeam(p);
 							}
 							
 							r.updateSigns(); // Update signs.
 							r.updateScoreboard(); // Update scoreboard
 							r.removePlayerScoreboard(p);
+							r.playerTeamboardCheck();
 							
 							Location[] blocs = TdmConfig.getSignsStored(room.getRoomId());
 							for (Location bloc : blocs) {

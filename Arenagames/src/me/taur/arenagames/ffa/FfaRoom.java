@@ -296,7 +296,7 @@ public class FfaRoom extends Room {
 			data = new PlayerData(killer);
 		}
 		
-		data.setTdmTotalKills(data.getTdmTotalKills() + 1); // Increase kill count
+		data.setFfaTotalKills(data.getFfaTotalKills() + 1); // Increase kill count
 		
 		int add = 3;
 		int kill = this.pointboard.get(killer.getName());

@@ -121,14 +121,6 @@ public class PlayerData {
 					conf.addDefault("user.tdm.deaths", 0);
 					conf.addDefault("user.tdm.currency-earned", 0);
 					
-					conf.addDefault("user.crk.games-won", 0);
-					conf.addDefault("user.crk.games-played", 0);
-					conf.addDefault("user.crk.ranking", 1000);
-					conf.addDefault("user.crk.record", 0);
-					conf.addDefault("user.crk.kills", 0);
-					conf.addDefault("user.crk.deaths", 0);
-					conf.addDefault("user.crk.currency-earned", 0);
-					
 					conf.addDefault("user.perk.effect", "@");
 					conf.addDefault("user.perk.hat", "@");
 					

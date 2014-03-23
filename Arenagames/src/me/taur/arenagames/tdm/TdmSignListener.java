@@ -126,6 +126,8 @@ public class TdmSignListener implements Listener {
 
 			}
 			
+			room.playerTeamboardCheck();
+			
 			// Reminder for players to choose their kits.
 			p.sendMessage(ChatColor.GOLD + "" + ChatColor.ITALIC + "Remember to pick your kit by right clicking on the Kit Selector (Nether Star) item!");
 			

@@ -158,8 +158,18 @@ public class InvUtil {
 	public static ItemStack getPerkItem() {
 		ItemStack i = new ItemStack(Material.DIAMOND, 1);
 		ItemMeta im = i.getItemMeta();
-		im.setDisplayName(ChatColor.BLUE + "" + ChatColor.BOLD + "Perks");
+		im.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Perks");
 		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to open your perks."));
+		i.setItemMeta(im);
+		return i;
+		
+	}
+	
+	public static ItemStack getMasteryItem() {
+		ItemStack i = new ItemStack(Material.ENCHANTED_BOOK, 1);
+		ItemMeta im = i.getItemMeta();
+		im.setDisplayName(ChatColor.BLUE + "" + ChatColor.BOLD + "Masteries");
+		im.setLore(Arrays.asList(ChatColor.GRAY + "" + ChatColor.ITALIC + "Right click to open your masteries."));
 		i.setItemMeta(im);
 		return i;
 		
@@ -188,6 +198,10 @@ public class InvUtil {
 		i0.setItemMeta(bm0);
 		
 		inv.setItem(0, i0);
+
+		if (p.getName().equals("Tauryuu")) {
+			inv.setItem(1, InvUtil.getMasteryItem());
+		}
 		
 		inv.setItem(4, InvUtil.getWarpItem());
 		inv.setItem(8, InvUtil.getPerkItem());

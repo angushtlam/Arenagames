@@ -13,6 +13,7 @@ import me.taur.arenagames.player.PlayerData;
 import me.taur.arenagames.room.Room;
 import me.taur.arenagames.util.RoomType;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -146,22 +147,31 @@ public class TdmRoom extends Room {
 	}
 	
 	public void wipeTeamboard() {
-		for (String name : this.getTeamtrackboard().keySet()) {
+		for (String name : this.getPointboard().keySet()) {
 			if (name.startsWith("&")) { // Filter out team scores.
 				continue;
 			}
 			
 			for (int i = 0; i < this.getPlayers().length; i++) {
 				if (this.getPlayers()[i].getName().equalsIgnoreCase(name)) {
-					if (this.getTeamtrackboard().get(name).intValue() == TdmTeams.RED.getId()) {
-						removePlayerFromRed(this.getPlayers()[i]);
-					} else if (this.getTeamtrackboard().get(name).intValue() == TdmTeams.BLUE.getId()) {
-						removePlayerFromBlue(this.getPlayers()[i]);
-					}
-					
-					break;
+					removePlayerFromTeam(this.getPlayers()[i]);
+					continue;
 					
 				}
+			}
+		}
+		
+	}
+	
+	public void playerTeamboardCheck() {
+		if (this.isGameInProgress()) {
+			return;
+		}
+		
+		Scoreboard board = Room.SCOREBOARDS.get(this.getRoomId());
+		for (Player p : Bukkit.getOnlinePlayers()) {
+			if (p != null && board.getPlayers().contains(p)) {
+				board.getPlayerTeam(p).removePlayer(p);
 			}
 		}
 		
@@ -176,15 +186,6 @@ public class TdmRoom extends Room {
 		}
 	}
 	
-	public void removePlayerFromRed(Player p) {
-		Scoreboard board = Room.SCOREBOARDS.get(this.getRoomId());
-		if (board.getTeam(this.getRoomId() + "-red") != null) {
-			Team t = board.getTeam(this.getRoomId() + "-red");
-			t.removePlayer(p);
-			
-		}
-	}
-	
 	public void addPlayerToBlue(Player p) {
 		Scoreboard board = Room.SCOREBOARDS.get(this.getRoomId());
 		if (board.getTeam(this.getRoomId() + "-blue") != null) {
@@ -194,12 +195,10 @@ public class TdmRoom extends Room {
 		}
 	}
 	
-	public void removePlayerFromBlue(Player p) {
+	public void removePlayerFromTeam(Player p) {
 		Scoreboard board = Room.SCOREBOARDS.get(this.getRoomId());
-		if (board.getTeam(this.getRoomId() + "-blue") != null) {
-			Team t = board.getTeam(this.getRoomId() + "-blue");
-			t.removePlayer(p);
-			
+		if (board.getPlayerTeam(p) != null) {
+			board.getPlayerTeam(p).removePlayer(p);
 		}
 	}
 	
